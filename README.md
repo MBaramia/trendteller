@@ -51,7 +51,7 @@
 - [ ] A nuanced evaluation that discusses the strengths and weakness of both the team and the product
 - [ ] Evidence and justification of claims
 
-# Marking criteria
+## Marking criteria
 
 - Readability (20%)
 - Project management discussion (20%)
@@ -59,7 +59,7 @@
 - Suitability of product discussion (20%)
 - Product validation (20%)
 
-# Tips and tricks
+## Tips and tricks
 
 - [ ] No contents page needed
 - [ ] No need for glossaries
@@ -69,14 +69,6 @@
 - [ ] Give overviews instead of line by line detail (method or component level instead of line level)
 - [ ] Justify claims using your data or data from study/paper
 - Need an assigned tester for TDD
-
-# Submission
-
-- [ ] Report: Each member submits final report and contribution sheet
-- [ ] One team member should submit code base and video presentation (does not need to be the same team member)
-- [ ] If code base or video is too large for tabula, email it to James (outlook sharepoint). Title the email "Group 11 - Submission"
-- [ ] Do not send github links (they need code base for archives)
-
 
 # Video presentations
 
@@ -111,3 +103,10 @@
 - [ ] Don't go overboard with editing
 - [ ] Not interested in unit tests
 - [ ] Show you have met requirments
+
+# Submission
+
+- [ ] Report: Each member submits final report and contribution sheet
+- [ ] One team member should submit code base and video presentation (does not need to be the same team member)
+- [ ] If code base or video is too large for tabula, email it to James (outlook sharepoint). Title the email "Group 11 - Submission"
+- [ ] Do not send github links (they need code base for archives)
