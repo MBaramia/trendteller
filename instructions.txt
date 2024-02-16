@@ -7,6 +7,6 @@ Start flask server:
   2. Run "cd flask-server"
   3. Run "source venv/bin/activate"
   4. Run "python3 server.py"
-Start Eeact:
+Start React:
   1. Go back to terminal where you installed React dependencies
   2. Run "npm start"
