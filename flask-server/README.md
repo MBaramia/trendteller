@@ -1,7 +1,13 @@
 # Installing React dependencies
   1. Open terminal
-  3. Run "cd client"
-  2. Run "npm install"
+  2. Run `cd client`
+      ```
+      cd client
+      ```
+  3. Run `npm install`
+     ```
+     npm install
+     ```  
 # Start flask server
   1. Open another terminal
   2. Run "cd flask-server"
