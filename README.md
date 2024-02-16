@@ -1,3 +1,7 @@
+# Getting Started
+To install all the dependencies, please refer to this
+[README file](https://github.com/Josia2/CS261-Coursework/blob/main/flask-server/README.md).
+
 # Workflow
 To view and assign tasks please use the Kanban board on the
 [project page](https://github.com/users/Josia2/projects/1).
