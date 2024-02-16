@@ -1,3 +1,10 @@
+# Workflow
+To view and assign tasks please use the Kanban board on the
+[project page](https://github.com/users/Josia2/projects/1).
+
+# Documentation
+To store documentation to be referenced later, pleae add them to the [Notion page](https://www.notion.so/d430ebaf4bda48de93a6824d0dbfc1bb?v=0ea256dd6b2144dfb1f5bdf24a04acb7&pvs=4).
+
 # Final report requirements
 
 - [ ] A small/brief intro of the problem
@@ -12,7 +19,7 @@
 - [ ] Why was that change made?
 - [ ] How did it improve the final product?
 - [ ] If you changed requirements - why? How would you solve it in the future?
-- [ ] Does your new system still fulfil the customer's needs
+- [ ] Does your new system still fulfill the customer's needs
 
 ## Discussing development
 
@@ -25,7 +32,7 @@
 
 ## Evaluating the product
 
-- [ ] Show that your met the requirements
+- [ ] Show that you met the requirements
 - How do you do this?
     - [ ] By testing
     - [ ] Discuss testing - show test logs (don't need printouts of every test)
@@ -43,7 +50,7 @@
 - [ ] What worked really well, and what would you improve?
 - [ ] Team discussion should be general, not personal
 
-## High quality reports
+## High-quality reports
 
 - [ ] A good product is not necessary for a good report
 - [ ] Professional language, good structure, readable diagrams
@@ -66,18 +73,18 @@
 - [ ] Don't include code snippets. Use pseudocode if needed.
 - [ ] Be consistent in what you are saying (especially in evaluation)
 - [ ] Don't repeat yourself
-- [ ] Give overviews instead of line by line detail (method or component level instead of line level)
-- [ ] Justify claims using your data or data from study/paper
+- [ ] Give overviews instead of line-by-line detail (method or component level instead of line level)
+- [ ] Justify claims using your data or data from the study/paper
 - Need an assigned tester for TDD
 
 # Video presentations
 
-- [ ] About 5 mins long. 10 is hard limit.
+- [ ] About 5 minutes long. 10 is the hard limit.
 - [ ] Showcase the key features of the product
 - [ ] Highlight how these features meet the customer's needs
-- [ ] Ideally it should show the software running
-- [ ] Core features should be discussed in reasonable depth (may need to go into the nitty girrty of algorithms)
-- [ ] How are is sentiment analysis/prediction evaluated? Why did you choose this?
+- [ ] Ideally, it should show the software running
+- [ ] Core features should be discussed in reasonable depth (may need to go into the nitty gritty of algorithms)
+- [ ] How is sentiment analysis/prediction evaluated? Why did you choose this?
 - [ ] What kind of suggestions (sentiment analysis/prediction) do you include? How?
 - [ ] Show off what makes your product unique
 - [ ] May want to include slides to go over key content
