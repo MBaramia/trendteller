@@ -1,0 +1,17 @@
+.login-box {
+    margin: auto;
+    height: fit-content;
+    max-width: var(--maxw);
+    position: absolute;
+    padding: 0.2rem;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--light);
+    text-align: center;
+}
+
+#login-pg {
+    height: 100vh;
+    width: 100vw;
+}
