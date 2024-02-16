@@ -86,3 +86,8 @@ button {
   border-radius: var(--radius);
   color: var(--light-txt);
 }
+
+.content-section {
+  padding: 10rem;
+  margin: auto;
+}

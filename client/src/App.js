@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from "react";
-import Login from './pages/Login';
+// import React, { useState, useEffect } from "react";
+// import Login from './pages/Login';
 import './App.css';
+import CompanyListView from "./components/CompanyListView";
 
 function App() {
-  const [data, setData] = useState([{}]);
+  // const [data, setData] = useState([{}]);
 
-  useEffect(() => {
-    fetch("/members")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        console.log(data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("/members")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setData(data);
+  //       console.log(data);
+  //     });
+  // }, []);
 
   return (
     <>
-    <Login />
+    <div className='content-section'>
+      <CompanyListView title={"Companies"} />
+    </div>
     </>
     // <div>
     //   <h1>The Title</h1>
