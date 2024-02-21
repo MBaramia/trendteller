@@ -1,6 +1,7 @@
 // import React, { useState, useEffect } from "react";
 // import Login from './pages/Login';
-import './App.css';
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CompanyListView from "./components/CompanyListView";
 
 function App() {
@@ -17,9 +18,13 @@ function App() {
 
   return (
     <>
-    <div className='content-section'>
-      <CompanyListView title={"Companies"} />
-    </div>
+      <div className="content-section">
+        <Router>
+          <Routes>
+            <Route path="/" element={<CompanyListView title={"Companies"} />} />
+          </Routes>
+        </Router>
+      </div>
     </>
     // <div>
     //   <h1>The Title</h1>
