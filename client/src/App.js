@@ -4,7 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CompanyListView from "./components/CompanyListView";
 import Header from "./components/Header";
-import RecommendedCompanies from "./components/RecommendedCompanies";
+import RecommendedCompanyView from "./components/RecommendedCompanyView";
 import NewsListView from "./components/NewsListView";
 import NavMenu from "./components/NavMenu";
 
@@ -29,7 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<CompanyListView title={"Companies"} />} />
           </Routes>
-          <RecommendedCompanies title={"Recommended Companies"} />
+          <RecommendedCompanyView title={"Recommended Companies"} />
           <NewsListView title={"News"} />
         </div>
 

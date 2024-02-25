@@ -16,7 +16,24 @@
     min-width: fit-content;
 }
 
-.company-list-view .list-section >* >*:last-child {
+.company-list-view .list-header {
+    background-color: var(--dark-bg);
+    color: var(--light-txt);
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+} 
+
+.company-list-view .list-content {
+    width: 100%;
+    text-align: left;
+}
+
+.company-list-view .list-content :hover {
+    cursor: pointer;
+    background-color: var(--light-bg);
+}
+
+.company-list-view .list-header :last-child, .company-list-view .list-section >* >* >*:last-child {
     text-align: center;
 }
 
@@ -27,23 +44,11 @@
     text-overflow: ellipsis;
 }
 
-.company-list-view .list-header {
-    background-color: var(--dark-bg);
-    color: var(--light-txt);
-    border-top-left-radius: var(--radius);
-    border-top-right-radius: var(--radius);
-} 
-
 .company-list-view .list-row {
     background-color: var(--light-txt);
     color: var(--dark-txt);
     border: 0.01rem solid var(--neutral);
 } 
-
-.company-list-view .list-row :hover {
-    cursor: pointer;
-    /* opacity: 0.5; */
-}
 
 .company-list-view .heart >* {
     height: 1rem;

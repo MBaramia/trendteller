@@ -7,8 +7,14 @@ import { useState } from "react";
 function CompanyListRow({ company }) {
   let [isFollowing, setIsFollowing] = useState(company.following);
 
-  const toggleCompanyFollow = () => {
+  const goToCompanyPage = () => {
+    // nothing here yet
+    console.log(company.id);
+  }
+
+  const toggleCompanyFollow = (e) => {
     setIsFollowing(!isFollowing);
+    e.stopPropagation();
     // company.follow = !company.follow;
   }
 
@@ -24,20 +30,20 @@ function CompanyListRow({ company }) {
 
   const followingToComponent = (f) => {
     if (f) {
-      return <HeartFill />
+      return <HeartFill onClick={toggleCompanyFollow} />
     } else {
-      return <HeartEmpty />
+      return <HeartEmpty onClick={toggleCompanyFollow} />
     }
   }
 
   return (
     <>
-      <div className="list-row">
+      <div onClick={goToCompanyPage} className="list-row">
         <p>{company.name} ({company.code})</p>
         <p>£{company.price}</p>
         <p>{company.change}</p>
         <>{perceptionToComponent(company.perception)}</>
-        <p className="heart" onClick={toggleCompanyFollow}>{followingToComponent(isFollowing)}</p>
+        <p className="heart">{followingToComponent(isFollowing)}</p>
       </div>
     </>
   );

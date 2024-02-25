@@ -19,7 +19,11 @@
 
 .recommended-company-view .grid-item :hover {
     cursor: pointer;
-    /* filter: brightness(0.9); */
+    filter: brightness(0.7);
+}
+
+.recommended-company-view .grid-item >* >* {
+    pointer-events: none;
 }
 
 .recommended-company-view .item-text {

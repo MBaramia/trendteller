@@ -186,16 +186,6 @@ function CompanyListView({ title }) {
     },
   ];
 
-  const perceptionToComponent = (p) => {
-    if (p === 2) {
-      return <p style={{ color: "var(--positive)" }}>Good</p>;
-    } else if (p === 1) {
-      return <p style={{ color: "var(--neutral)" }}>Neutral</p>;
-    } else {
-      return <p style={{ color: "var(--negative)" }}>Bad</p>;
-    }
-  };
-
   return (
     <>
       <div className="company-list-view">
@@ -208,9 +198,11 @@ function CompanyListView({ title }) {
             <p>Perception</p>
             <p>Following</p>
           </div>
-          {data.map((item) => (
-            <CompanyListRow key={item.id} company={item} />
-          ))}
+          <div className="list-content">
+            {data.map((item) => (
+              <CompanyListRow key={item.id} company={item} />
+            ))}
+          </div>  
         </div>
       </div>
     </>
