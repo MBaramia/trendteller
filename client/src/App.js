@@ -3,6 +3,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CompanyListView from "./components/CompanyListView";
+import Header from "./components/Header";
 
 function App() {
   // const [data, setData] = useState([{}]);
@@ -17,15 +18,15 @@ function App() {
   // }, []);
 
   return (
-    <>
+    <Router>
+      <Header />
       <div className="content-section">
-        <Router>
-          <Routes>
-            <Route path="/" element={<CompanyListView title={"Companies"} />} />
-          </Routes>
-        </Router>
+        <Routes>
+          <Route path="/" element={<CompanyListView title={"Companies"} />} />
+        </Routes>
       </div>
-    </>
+    </Router>
+  
     // <div>
     //   <h1>The Title</h1>
     //   {typeof data.members === "undefined" ? (
