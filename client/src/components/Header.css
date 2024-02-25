@@ -11,8 +11,8 @@ header {
 }
 
 .header-logo {
-  width: 178px;
-  height: 44px;
+  width: 11.125rem;
+  height: 2.75rem;
 }
 
 .left {
@@ -28,12 +28,12 @@ header {
 }
 
 .placeholder {
-  width: 0px;
+  width: 0rem;
 }
 
 .bell-text {
   color: var(--bell);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: var(--roboto-black);
 }
 
@@ -42,5 +42,10 @@ nav {
   flex-direction: row;
   align-items: center;
   justify-content: end;
-  gap: 30px;
+  gap: 1.875rem;
+}
+
+.profile-icon {
+  width: 2.625rem;
+  height: 2.625rem;
 }
