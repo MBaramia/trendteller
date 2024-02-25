@@ -1,12 +1,13 @@
 header {
   padding-left: 60px;
   padding-right: 60px;
-  height: 80px;
+  height: 5rem;
   width: 100%;
   background-color: var(--dark-bg);
   display: flex;
   flex-direction: row;
   align-items: center;
+  z-index: 2;
 }
 
 .header-logo {
