@@ -6,7 +6,7 @@ function Bell() {
   return (
     <Link to="/" className="bell-header">
       <p className="bell-text">5</p>
-      <BellIcon />
+      <BellIcon className="bell-icon" />
     </Link>
   );
 }

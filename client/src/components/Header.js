@@ -3,6 +3,7 @@ import HeaderLogo from "../images/header_logo.svg";
 import ProfileIcon from "../images/profile_icon_header.svg";
 import SearchBar from "./SearchBar";
 import Bell from "./Bell";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
@@ -15,9 +16,9 @@ function Header() {
         <SearchBar />
         <nav aria-label="header navigation">
           <Bell />
-          <a href="/">
+          <Link to="/">
             <img src={ProfileIcon} alt="Profile icon" />
-          </a>
+          </Link>
         </nav>
       </div>
     </header>
