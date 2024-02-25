@@ -1,11 +1,11 @@
 // import React, { useState, useEffect } from "react";
-// import Login from './pages/Login';
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CompanyListView from "./components/CompanyListView";
 import Header from "./components/Header";
-import RecommendedCompanyView from "./components/RecommendedCompanyView";
-import NewsListView from "./components/NewsListView";
+import Home from "./pages/Home";
+import Browse from "./pages/Browse";
+import Search from "./pages/Search";
+import Notifications from "./pages/Notifications";
 import NavMenu from "./components/NavMenu";
 
 function App() {
@@ -28,10 +28,11 @@ function App() {
         <main>
           <div className="content-section">
             <Routes>
-              <Route path="/" element={<CompanyListView title={"Companies"} />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/browse" element={<Browse />} />
+              <Route path="/search" element={<Search query={"Microsoft"}/>} />
+              <Route path="/notifications" element={<Notifications/>} />
             </Routes>
-            <RecommendedCompanyView title={"Recommended Companies"} />
-            <NewsListView title={"News"} />
           </div>
         </main>
       </div>

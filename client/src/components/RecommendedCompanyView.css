@@ -1,4 +1,4 @@
-.recommended-company-view h1 {
+.recommended-company-view h2 {
     margin-bottom: 2rem;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -17,6 +17,9 @@
     box-shadow: var(--shadow);
 }
 
+.recommended-company-view .grid-item >* {
+    transition: opacity var(--hover-transition);
+}
 .recommended-company-view .grid-item :hover {
     cursor: pointer;
     opacity: var(--hover-opacity);
