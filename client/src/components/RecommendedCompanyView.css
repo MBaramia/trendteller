@@ -44,14 +44,14 @@
 }
 
 .recommended-company-view .item-text >* {
-    margin: 0.7rem auto;
+    margin: 0.5rem auto;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .recommended-company-view .item-text h3 {
-    margin: 1.5rem auto;
+    margin: 1.2rem auto;
 }
 
 .recommended-company-view .item-text .smiley {
