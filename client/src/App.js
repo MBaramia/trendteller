@@ -4,6 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CompanyListView from "./components/CompanyListView";
 import Header from "./components/Header";
+import RecommendedCompanies from "./components/RecommendedCompanies";
 
 function App() {
   // const [data, setData] = useState([{}]);
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<CompanyListView title={"Companies"} />} />
         </Routes>
+        <RecommendedCompanies title={"Recommended Companies"}/>
       </div>
     </Router>
   
