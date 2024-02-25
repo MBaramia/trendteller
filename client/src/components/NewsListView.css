@@ -26,6 +26,11 @@
   border-bottom-left-radius: var(--radius);
 }
 
+.news-list-view .item-left :hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
 .news-list-view .item-left p {
   font-size: 1.5rem;
   margin: auto 0;
@@ -39,6 +44,11 @@
   color: var(--dark-txt);
   white-space: nowrap;
   overflow: hidden;
+}
+
+.news-list-view .item-text :hover {
+  cursor: pointer;
+  /* opacity: 0.8; */
 }
 
 .news-list-view .text-top p {

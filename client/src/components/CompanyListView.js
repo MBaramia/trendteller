@@ -209,7 +209,7 @@ function CompanyListView({ title }) {
           </div>
           {data.map((item) => (
             <div key={item.id} className="list-row">
-              <p>{item.name}</p>
+              <p>{item.name} ({item.code})</p>
               <p>£{item.price}</p>
               <p>{item.change}</p>
               <>{perceptionToComponent(item.perception)}</>

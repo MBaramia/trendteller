@@ -13,6 +13,12 @@
 
 .recommended-company-view .grid-item {
     width: 100%;
+    box-shadow: var(--shadow);
+}
+
+.recommended-company-view .grid-item :hover {
+    cursor: pointer;
+    /* filter: brightness(0.9); */
 }
 
 .recommended-company-view .item-text {
@@ -45,8 +51,11 @@
     background-color: var(--neutral);
     border-bottom-left-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
-    padding: 1rem 1.5rem;
     font-weight: 100;
     text-align: center;
     color: var(--light-txt);
+}
+
+.recommended-company-view .item-btn {
+    padding: 1rem 1.5rem;
 }

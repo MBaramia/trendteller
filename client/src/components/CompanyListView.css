@@ -10,7 +10,7 @@
 
 .company-list-view .list-header, .company-list-view .list-row {
     display: grid;
-    grid-template-columns: repeat(5, minmax(6rem, 1fr));
+    grid-template-columns: minmax(6rem, 1.4fr) repeat(4, minmax(6rem, 1fr));
     gap: 1rem;
     padding: 0.2rem;
     min-width: fit-content;
@@ -22,6 +22,7 @@
 
 .company-list-view p {
     padding: 1rem;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -38,3 +39,8 @@
     color: var(--dark-txt);
     border: 0.01rem solid var(--neutral);
 } 
+
+.company-list-view .list-row :hover {
+    cursor: pointer;
+    /* opacity: 0.5; */
+}
