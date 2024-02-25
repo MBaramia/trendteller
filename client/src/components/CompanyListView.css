@@ -26,6 +26,8 @@
 .company-list-view .list-content {
     width: 100%;
     text-align: left;
+    max-height: 75vh;
+    overflow-y: scroll;
 }
 
 .company-list-view .list-content :hover {
@@ -50,10 +52,11 @@
     border: 0.01rem solid var(--neutral);
 } 
 
+.company-list-view .heart :hover {
+    opacity: var(--hover-opacity);
+}
+
 .company-list-view .heart >* {
     height: 1rem;
 }
 
-.company-list-view .heart :hover {
-    opacity: 0.8;
-}

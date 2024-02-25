@@ -17,7 +17,7 @@
 
 .news-list-view .list-item :hover {
   cursor: pointer;
-  opacity: 0.8;
+  opacity: var(--hover-opacity);
 }
 
 .news-list-view .list-item >* >* {
