@@ -1,11 +1,9 @@
 import CompanyListView from '../components/CompanyListView';
-import NewsListView from '../components/NewsListView';
-import RecommendedCompanyView from '../components/RecommendedCompanyView';
-// import './Home.css'
+// import './Search.css'
 
-function Home() {
-
-  const followedCompanies = [
+function Search({ query }) {
+  
+  const searchResults = [
     {
       id: 15,
       name: "Oracle",
@@ -188,93 +186,13 @@ function Home() {
     },
   ];
 
-  const recommendedCompanies = [
-    {
-      id: 15,
-      name: "Oracle",
-      code: "ORCL",
-      price: "82.49",
-      change: "+9.3%",
-      perception: 0,
-      following: true,
-    },
-    {
-      id: 7,
-      name: "PayPal",
-      code: "PYPL",
-      price: "220.61",
-      change: "-14.9%",
-      perception: 2,
-      following: true,
-    },
-    {
-      id: 9,
-      name: "Adobe",
-      code: "ADBE",
-      price: "632.24",
-      change: "+21.3%",
-      perception: 1,
-      following: false,
-    }
-  ];
-
-  const news = [
-    {
-      id: 1,
-      title: "Microsoft unveils new Windows 12 operating system",
-      companyID: 7,
-      companyCode: "MSFT",
-      author: "BBC",
-      date: "20/02/2024",
-      perception: 1
-    },
-    {
-      id: 2,
-      title: "Tesla's stock price hits all-time high",
-      companyID: 20,
-      companyCode: "TSLA",
-      author: "The Guardian",
-      date: "18/02/2024",
-      perception: 1
-    },
-    {
-      id: 3,
-      title: "Oracle is a really bad company",
-      companyID: 12,
-      companyCode: "ORCL",
-      author: "Sky",
-      date: "27/01/2024",
-      perception: 0
-    },
-    {
-      id: 4,
-      title: "Google announces expansion into new AI research lab",
-      companyID: 9,
-      companyCode: "GOOGL",
-      author: "BBC",
-      date: "18/01/2024",
-      perception: 2
-    },
-    {
-      id: 5,
-      title: "Amazon faces backlash over workplace conditions",
-      companyID: 5,
-      companyCode: "AMZN",
-      author: "The Independent",
-      date: "10/01/2024",
-      perception: 0
-    }
-  ];
-
   return (
     <>
-    <div id='home-pg'>
-      <CompanyListView title={"Followed Companies"} data={followedCompanies} />
-      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies}/>
-      <NewsListView title={"News"} data={news} />
+    <div id='search-pg'>
+      <CompanyListView title={'Search results for "' + query + '"'} data={searchResults} />
     </div>
     </>
   );
 }
   
-export default Home;
+export default Search;

@@ -3,6 +3,9 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import Browse from "./pages/Browse";
+import Search from "./pages/Search";
+import Notifications from "./pages/Notifications";
 
 function App() {
   // const [data, setData] = useState([{}]);
@@ -24,6 +27,9 @@ function App() {
         <div className="content-section">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/browse" element={<Browse />} />
+            <Route path="/search" element={<Search query={"Microsoft"}/>} />
+            <Route path="/notifications" element={<Notifications/>} />
           </Routes>
         </div>
 

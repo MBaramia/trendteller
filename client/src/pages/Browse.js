@@ -1,11 +1,10 @@
-import CompanyListView from '../components/CompanyListView';
-import NewsListView from '../components/NewsListView';
 import RecommendedCompanyView from '../components/RecommendedCompanyView';
-// import './Home.css'
+import CompanyListView from '../components/CompanyListView';
+// import './Browse.css'
 
-function Home() {
+function Browse() {
 
-  const followedCompanies = [
+  const allCompanies = [
     {
       id: 15,
       name: "Oracle",
@@ -217,64 +216,15 @@ function Home() {
       following: false,
     }
   ];
-
-  const news = [
-    {
-      id: 1,
-      title: "Microsoft unveils new Windows 12 operating system",
-      companyID: 7,
-      companyCode: "MSFT",
-      author: "BBC",
-      date: "20/02/2024",
-      perception: 1
-    },
-    {
-      id: 2,
-      title: "Tesla's stock price hits all-time high",
-      companyID: 20,
-      companyCode: "TSLA",
-      author: "The Guardian",
-      date: "18/02/2024",
-      perception: 1
-    },
-    {
-      id: 3,
-      title: "Oracle is a really bad company",
-      companyID: 12,
-      companyCode: "ORCL",
-      author: "Sky",
-      date: "27/01/2024",
-      perception: 0
-    },
-    {
-      id: 4,
-      title: "Google announces expansion into new AI research lab",
-      companyID: 9,
-      companyCode: "GOOGL",
-      author: "BBC",
-      date: "18/01/2024",
-      perception: 2
-    },
-    {
-      id: 5,
-      title: "Amazon faces backlash over workplace conditions",
-      companyID: 5,
-      companyCode: "AMZN",
-      author: "The Independent",
-      date: "10/01/2024",
-      perception: 0
-    }
-  ];
-
+  
   return (
     <>
-    <div id='home-pg'>
-      <CompanyListView title={"Followed Companies"} data={followedCompanies} />
-      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies}/>
-      <NewsListView title={"News"} data={news} />
+    <div id='browse-pg'>
+      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} />
+      <CompanyListView title={"All Companies"} data={allCompanies} />
     </div>
     </>
   );
 }
   
-export default Home;
+export default Browse;
