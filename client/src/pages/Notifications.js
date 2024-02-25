@@ -54,7 +54,7 @@ function Notifications() {
   return (
     <>
     <div id='notifications-pg'>
-      <NewsListView title={"Notifications"} data={notifications} />
+        <NewsListView title={"Notifications"} data={notifications} />
     </div>
     </>
   );

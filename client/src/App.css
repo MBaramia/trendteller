@@ -118,3 +118,7 @@ button {
 .content-section >* >*{
   margin-bottom: 5rem;
 }
+
+.narrow-content {
+  padding: 0 8rem;
+}

@@ -6,7 +6,7 @@ function NewsListView({ title, data }) {
 
   return (
     <>
-      <div className="news-list-view">
+      <div className="news-list-view narrow-content">
         <h2>{title}</h2>
         <div className="list-section">
           {data.map((item) => (
