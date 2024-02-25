@@ -13,6 +13,7 @@
 
 .recommended-company-view .grid-item {
     width: 100%;
+    border-radius: var(--radius);
     box-shadow: var(--shadow);
 }
 

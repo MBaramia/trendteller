@@ -1,11 +1,14 @@
 import "./CompanyListView.css";
 import { ReactComponent as HeartFill } from "../images/heart_filled.svg";
 import { ReactComponent as HeartEmpty } from "../images/heart_empty.svg";
+import { useState } from "react";
 
 
 function CompanyListRow({ company }) {
+  let [isFollowing, setIsFollowing] = useState(company.following);
 
   const toggleCompanyFollow = () => {
+    setIsFollowing(!isFollowing);
     // company.follow = !company.follow;
   }
 
@@ -34,7 +37,7 @@ function CompanyListRow({ company }) {
         <p>£{company.price}</p>
         <p>{company.change}</p>
         <>{perceptionToComponent(company.perception)}</>
-        <p className="heart" onClick={toggleCompanyFollow}>{followingToComponent(company.following)}</p>
+        <p className="heart" onClick={toggleCompanyFollow}>{followingToComponent(isFollowing)}</p>
       </div>
     </>
   );

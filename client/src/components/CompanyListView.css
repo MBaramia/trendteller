@@ -48,3 +48,7 @@
 .company-list-view .heart >* {
     height: 1rem;
 }
+
+.company-list-view .heart :hover {
+    opacity: 0.8;
+}
