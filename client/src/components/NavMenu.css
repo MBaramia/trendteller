@@ -1,0 +1,28 @@
+.nav-menu {
+  max-width: fit-content;
+  background-color: var(--dark-bg);
+  color: var(--light-txt);
+  padding: 2rem;
+  padding-top: 5rem;
+  position: fixed;
+  height: 100%;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+
+.nav-menu .list-section {
+  margin-top: 3rem;
+}
+
+.nav-menu p, .nav-menu li {
+  font-size: 2rem;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  width: 20rem;
+  /* background-color: aqua; */
+}
