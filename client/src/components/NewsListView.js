@@ -1,4 +1,7 @@
 import "./NewsListView.css";
+import { ReactComponent as SmileyGood } from "../images/smiley_good_green.svg";
+import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_grey.svg";
+import { ReactComponent as SmileyBad } from "../images/smiley_bad_red.svg";
 
 function NewsListView({ title }) {
   // view will also take news data as a parameter
@@ -55,6 +58,16 @@ function NewsListView({ title }) {
     }
   };
 
+  const perceptionToSmiley = (p) => {
+    if (p === 2) {
+      return <SmileyGood className="smiley" />;
+    } else if (p === 1) {
+      return <SmileyNeutral className="smiley" />;
+    } else {
+      return <SmileyBad className="smiley" />;
+    }
+  }
+
   return (
     <>
       <div className="news-list-view">
@@ -75,7 +88,7 @@ function NewsListView({ title }) {
                 </div>                
               </div>
               <div className="item-right">
-                <>{perceptionToComponent(item.perception)}</>
+                <>{perceptionToSmiley(item.perception)}</>
               </div>
             </div>
           ))}

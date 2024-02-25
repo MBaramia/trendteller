@@ -1,3 +1,4 @@
+import CompanyListRow from "./CompanyListRow";
 import "./CompanyListView.css";
 
 function CompanyListView({ title }) {
@@ -208,13 +209,7 @@ function CompanyListView({ title }) {
             <p>Following</p>
           </div>
           {data.map((item) => (
-            <div key={item.id} className="list-row">
-              <p>{item.name} ({item.code})</p>
-              <p>£{item.price}</p>
-              <p>{item.change}</p>
-              <>{perceptionToComponent(item.perception)}</>
-              <p>{item.following.toString()}</p>
-            </div>
+            <CompanyListRow key={item.id} company={item} />
           ))}
         </div>
       </div>

@@ -31,7 +31,7 @@
 }
 
 .recommended-company-view .item-text :first-child {
-    font-size: 1.4rem;
+    font-size: 1.7rem;
     opacity: 1;
 }
 
@@ -44,6 +44,11 @@
 
 .recommended-company-view .item-text h3 {
     margin: 1.5rem auto;
+}
+
+.recommended-company-view .item-text .smiley {
+    height: 5rem;
+    width: auto;
 }
 
 .recommended-company-view .item-btn {

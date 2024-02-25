@@ -79,3 +79,9 @@
   text-overflow: ellipsis;
   margin: auto;
 }
+
+.news-list-view .smiley {
+  height: 100%;
+  width: auto;
+  margin: auto;
+}

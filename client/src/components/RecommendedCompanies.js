@@ -1,4 +1,8 @@
 import "./RecommendedCompanies.css";
+import { ReactComponent as SmileyGood } from "../images/smiley_good_white.svg";
+import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_white.svg";
+import { ReactComponent as SmileyBad } from "../images/smiley_bad_white.svg";
+
 
 function RecommendedCompanies({ title }) {
   // view will also take company data as a parameter
@@ -52,6 +56,16 @@ function RecommendedCompanies({ title }) {
     }
   }
 
+  const perceptionToSmiley = (p) => {
+    if (p === 2) {
+      return <SmileyGood className="smiley" />;
+    } else if (p === 1) {
+      return <SmileyNeutral className="smiley" />;
+    } else {
+      return <SmileyBad className="smiley" />;
+    }
+  }
+
 
   // style={{backgroundImage: 'linear-gradient(to bottom, ' + perceptionToBgColour(item.perception) + ', var(--dark-txt))' }}
 
@@ -70,10 +84,10 @@ function RecommendedCompanies({ title }) {
                 }} 
                 className="item-text">
                 <p>{item.code}</p>
-                <p>{perceptionToString(item.perception)}</p>
-                <h3>£{item.price}</h3>
-                <p>{item.change}</p>
                 <p>{item.name}</p>
+                <h3>{perceptionToSmiley(item.perception)}</h3>
+                <p>£{item.price}</p>
+                <p>{item.change}</p>
               </div>
               <div className="item-btn"><p>Follow</p></div>
             </div>
