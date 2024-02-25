@@ -54,7 +54,7 @@ function NewsListView({ title }) {
   return (
     <>
       <div className="news-list-view">
-        <h1>{title}</h1>
+        <h2>{title}</h2>
         <div className="list-section">
           {data.map((item) => (
             <NewsListItem key={item.id} article={item} />

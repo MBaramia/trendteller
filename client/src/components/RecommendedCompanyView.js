@@ -36,7 +36,7 @@ function RecommendedCompanyView({ title }) {
   return (
     <>
       <div className="recommended-company-view">
-        <h1>{title}</h1>
+        <h2>{title}</h2>
         <div className="grid-section">
           {data.map((item) => (
             <RecommendedCompanyItem key={item.id} company={item} />

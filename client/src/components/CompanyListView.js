@@ -189,7 +189,7 @@ function CompanyListView({ title }) {
   return (
     <>
       <div className="company-list-view">
-        <h1>{title}</h1>
+        <h2>{title}</h2>
         <div className="list-section">
           <div className="list-header">
             <p>Name</p>

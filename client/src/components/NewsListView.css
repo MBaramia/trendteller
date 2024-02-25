@@ -1,4 +1,4 @@
-.news-list-view h1 {
+.news-list-view h2 {
   margin-bottom: 2rem;
 }
 
@@ -13,8 +13,8 @@
 
 .news-list-view .list-item >* {
   box-shadow: none;
+  transition: opacity var(--hover-transition);
 }
-
 .news-list-view .list-item :hover {
   cursor: pointer;
   opacity: var(--hover-opacity);
