@@ -30,7 +30,7 @@
   --hover-shadow: 0.2rem 0.4rem 0.6rem rgba(35, 131, 239, 0.1);
   --hover-opacity: 0.8;
 
-  --sidebar-width: 336px;
+  --sidebar-width: 21rem;
 
   --title-text: "Cabin", sans-serif;
   --regular-text: "Roboto", sans-serif;
@@ -116,6 +116,6 @@ button {
   max-width: var(--maxw);
 }
 
-.content-section >* {
+.content-section > * {
   margin-bottom: 5rem;
 }

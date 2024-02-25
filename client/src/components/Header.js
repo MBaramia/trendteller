@@ -17,7 +17,7 @@ function Header() {
         <nav aria-label="header navigation">
           <Bell />
           <Link to="/">
-            <img src={ProfileIcon} alt="Profile icon" />
+            <img class="profile-icon" src={ProfileIcon} alt="Profile icon" />
           </Link>
         </nav>
       </div>

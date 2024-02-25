@@ -3,10 +3,10 @@
   flex-direction: row;
   align-items: center;
   justify-content: start;
-  gap: 7.5px;
+  gap: 0.46rem;
 }
 
 .bell-icon {
-  width: 29px;
-  height: 29px;
+  width: 1.8125rem;
+  height: 1.8125rem;
 }
