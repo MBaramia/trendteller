@@ -8,6 +8,7 @@ header {
   flex-direction: row;
   align-items: center;
   z-index: 2;
+  border-bottom: 2px solid var(--light-bg);
 }
 
 .header-logo {
@@ -16,7 +17,7 @@ header {
 }
 
 .left {
-  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
 }
 
 .right {

@@ -22,6 +22,7 @@
 
   --heart: #980651;
   --bell: #f9e784;
+  --logout: #a20800;
 
   --maxw: 1640px;
   --radius: 0.4rem;
@@ -59,6 +60,7 @@ html {
 
 body {
   height: 100%;
+  overflow-y: hidden;
 }
 
 #root {
@@ -95,7 +97,7 @@ a {
   font-weight: inherit;
 }
 
-a :hover {
+a:hover {
   opacity: var(--hover-opacity);
 }
 
@@ -109,6 +111,12 @@ button {
   color: var(--light-txt);
 }
 
+main {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
 .content-section {
   padding: 3rem 10rem;
   margin: auto;
@@ -117,4 +125,10 @@ button {
 
 .content-section > * {
   margin-bottom: 5rem;
+}
+
+.main-view {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 5rem);;
 }

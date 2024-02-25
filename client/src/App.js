@@ -24,15 +24,16 @@ function App() {
     <Router>
       <Header />
       <div className="main-view">
-        {/* <NavMenu /> */}
-        <div className="content-section">
-          <Routes>
-            <Route path="/" element={<CompanyListView title={"Companies"} />} />
-          </Routes>
-          <RecommendedCompanyView title={"Recommended Companies"} />
-          <NewsListView title={"News"} />
-        </div>
-
+        <NavMenu />
+        <main>
+          <div className="content-section">
+            <Routes>
+              <Route path="/" element={<CompanyListView title={"Companies"} />} />
+            </Routes>
+            <RecommendedCompanyView title={"Recommended Companies"} />
+            <NewsListView title={"News"} />
+          </div>
+        </main>
       </div>
     </Router>
   
