@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import CompanyListView from '../components/CompanyListView';
+import { useState } from 'react';
 // import './Search.css'
 
 function Search() {
@@ -189,10 +190,28 @@ function Search() {
     },
   ];
 
+  const produceInitialAllFollowing = () => {
+    let idToFollowing = {};
+    for (const company of searchResults) {
+      idToFollowing[company.id] = company.following;
+    }
+    return idToFollowing;
+  }
+
+  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
+
+  const toggleFollowing = (id) => {
+    let newIdToFollowing = { ...idToFollowing };
+    newIdToFollowing[id] = !idToFollowing[id];
+    setIdToFollowing(newIdToFollowing);
+    // console.log(idToFollowing);
+    // make server request
+  }
+
   return (
     <>
     <div id='search-pg'>
-      <CompanyListView title={'Search results for "' + query + '"'} data={searchResults} />
+      <CompanyListView title={'Search results for "' + query + '"'} data={searchResults} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing} />
     </div>
     </>
   );
