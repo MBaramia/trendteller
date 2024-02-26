@@ -42,6 +42,8 @@
   width: 100%;
   color: var(--light_txt);
   text-decoration: none;
+
+  transition: opacity var(--hover-transition);
 }
 
 .logout-btn {
@@ -50,10 +52,13 @@
   width: 100%;
   font-weight: var(--roboto-bold);
   font-size: 1rem;
+  
+  transition: opacity var(--hover-transition);
 }
 
 .logout-btn:hover {
   opacity: var(--hover-opacity);
+  cursor: pointer;
 }
 
 .nav-icon {
