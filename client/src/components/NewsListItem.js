@@ -35,7 +35,7 @@ function NewsListItem({ article }) {
               <p>{article.title}</p>
             </div>
             <div className="text-bottom">
-              <p>{article.author}</p>
+              <p>{article.source}</p>
               <p>{article.date}</p>
             </div>                
           </div>
