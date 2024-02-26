@@ -9,6 +9,15 @@ To view and assign tasks please use the Kanban board on the
 # Documentation
 To store documentation to be referenced later, pleae add them to the [Notion page](https://www.notion.so/d430ebaf4bda48de93a6824d0dbfc1bb?v=0ea256dd6b2144dfb1f5bdf24a04acb7&pvs=4).
 
+# Links to write-ups
+$\color{olive}\tt Ongoing:$
+- [Final Report](https://www.notion.so/eba820d76bca42a58a8401ca71ce41e5?pvs=25)
+- [Video Script](https://www.notion.so/84031910346c44828dcd553f1f537ea6?pvs=25)
+
+$\color{green}\tt Completed:$
+- [Requirement Analysis Report](https://www.notion.so/ab2ca98633864fa182a31f43efb26145?pvs=25)
+- [Planning and Design Document](https://www.notion.so/9facb73eae91470b8528999de85e7f1e?pvs=25)
+ 
 # Final report requirements
 
 - [ ] A small/brief intro of the problem
