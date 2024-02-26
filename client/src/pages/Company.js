@@ -101,7 +101,7 @@ function Company() {
           <div className='company-info'>
             <div className='info-left'>
               <h1>{company.code}</h1>
-              <p>{company.name}</p>
+              <h3>{company.name}</h3>
             </div>
             <div className='info-right'>
               <p>Stock price: £{stockData.price}</p>
