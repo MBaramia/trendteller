@@ -31,17 +31,18 @@ function Article() {
   return (
     <>
     <div id='article-pg'>
-      <div className='article-info narrow-content'>
-          <h1>{article.title}</h1>
-          <p>Source: {article.source}</p>
-          <p>Company: {article.companyName} ({article.companyCode})</p>
-          <p>Published: {article.date}</p>
+      <div id="pg-content">
+        <div className='article-info narrow-content'>
+            <h1>{article.title}</h1>
+            <p>Source: {article.source}</p>
+            <p>Company: {article.companyName} ({article.companyCode})</p>
+            <p>Published: {article.date}</p>
+        </div>
+
+        <SummaryTextView title={"Summary"} text={article.summary} />
+
+        <AnalysisTextView title={"Analysis"} perception={article.perception} text={article.analysis} />
       </div>
-
-      <SummaryTextView title={"Summary"} text={article.summary} />
-
-      <AnalysisTextView title={"Analysis"} perception={article.perception} text={article.analysis} />
-
       {/* change action to visit website link */}
       <FloatingButton on={"See full article"} off={""} isOn={true} action={goToArticleLink} />
     </div>

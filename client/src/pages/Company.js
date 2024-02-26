@@ -46,31 +46,36 @@ function Company() {
   return (
     <>
     <div id='company-pg'>
-      <div className='chart-area'>
-        <div className='company-info'>
-          <div className='info-left'>
-            <h1>{company.code}</h1>
-            <p>{company.name}</p>
+      <div id='pg-content'>
+        <div className='chart-area'>
+          <div className='company-info'>
+            <div className='info-left'>
+              <h1>{company.code}</h1>
+              <p>{company.name}</p>
+            </div>
+            <div className='info-right'>
+              <p>Stock price: £{stockData.price}</p>
+              <p>{stockData.weekChangeNum > 0 ? "+" : "-"}£{Math.abs(stockData.weekChangeNum)} ({stockData.weekChangePer}%) from last week</p>
+              <p>Public opinion: {perceptionToComponent(company.perception)}</p>
+            </div>
           </div>
-          <div className='info-right'>
-            <p>Stock price: £{stockData.price}</p>
-            <p>{stockData.weekChangeNum > 0 ? "+" : "-"}£{Math.abs(stockData.weekChangeNum)} ({stockData.weekChangePer}%) from last week</p>
-            <p>Public opinion: {perceptionToComponent(company.perception)}</p>
+
+          <div id='chart'>
+
           </div>
+
         </div>
 
-        <div id='chart'>
+        <SummaryTextView title={"Overview"} text={company.overview} />
 
-        </div>
-
+        <AnalysisTextView title={"Analysis"} perception={company.perception} text={company.analysis} />
+        
       </div>
 
-      <SummaryTextView title={"Overview"} text={company.overview} />
-
-      <AnalysisTextView title={"Analysis"} perception={company.perception} text={company.analysis} />
-
       <FloatingButton on={"Unfollow"} off={"Follow"} isOn={isFollowing} action={toggleCompanyFollow} />
+
     </div>
+    
     </>
   );
 }

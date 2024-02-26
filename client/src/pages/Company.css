@@ -1,9 +1,18 @@
 #company-pg {
   position: relative;
   box-sizing: content-box;
+  max-height: calc(100vh - var(--header-height) - 3rem);
+  display: flex;
+  flex-direction: column;
 }
 
-#company-pg > :not(:last-child) {
+#company-pg #pg-content {
+  max-height: 60%;
+  overflow: scroll;
+  margin-bottom: 0;
+}
+
+#company-pg #pg-content >* {
   margin-bottom: 5rem;
 }
 

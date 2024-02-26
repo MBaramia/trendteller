@@ -31,6 +31,7 @@
   --hover-shadow: 0.2rem 0.4rem 0.6rem rgba(35, 131, 239, 0.1);
   --hover-opacity: 0.7;
   --hover-transition: 0.4s ease-out;
+  --header-height: 5rem;
 
   --sidebar-width: 21rem;
 

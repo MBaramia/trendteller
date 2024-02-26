@@ -1,9 +1,18 @@
 #article-pg {
   position: relative;
   box-sizing: content-box;
+  max-height: calc(100vh - var(--header-height) - 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-#article-pg > :not(:last-child) {
+#article-pg #pg-content {
+  overflow: scroll;
+  margin-bottom: 0;
+}
+
+#article-pg #pg-content >* {
   margin-bottom: 5rem;
 }
 
