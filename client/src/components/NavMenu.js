@@ -15,17 +15,17 @@ function NavMenu() {
         <div className="list-section">
           <ul>
             <li>
-              <NavItem url="/" navIcon={<HomeIcon className="nav-icon" />}>
+              <NavItem url="/" navIcon={<HomeIcon />}>
                 Home
               </NavItem>
             </li>
             <li>
-              <NavItem url="/browse" navIcon={<BrowseIcon className="nav-icon" />}>
+              <NavItem url="/browse" navIcon={<BrowseIcon />}>
                 Browse
               </NavItem>
             </li>
             <li>
-              <NavItem url="/notifications" navIcon={<NotificationsIcon className="nav-icon" />}>
+              <NavItem url="/notifications" navIcon={<NotificationsIcon />}>
                 Notifications
               </NavItem>
             </li>
@@ -33,12 +33,12 @@ function NavMenu() {
 
           <ul>
             <li>
-              <NavItem url="/profile" navIcon={<ProfileIcon className="nav-icon" />}>
+              <NavItem url="/profile" navIcon={<ProfileIcon />}>
                 Profile
               </NavItem>
             </li>
             <li>
-              <NavItem url="/tutorial" navIcon={<TutorialIcon className="nav-icon" />}>
+              <NavItem url="/tutorial" navIcon={<TutorialIcon />}>
                 Tutorial
               </NavItem>
             </li>

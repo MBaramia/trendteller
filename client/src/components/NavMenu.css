@@ -19,13 +19,6 @@
   gap: 2.8125rem;
 }
 
-.nav-menu p {
-  font-size: 1.75rem;
-  font-family: var(--title-text);
-  font-weight: var(--cabin-regular);
-  color: var(--light_txt);
-}
-
 .nav-menu li {
   list-style: none;
   margin-bottom: 1.25rem;
