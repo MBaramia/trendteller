@@ -1,7 +1,7 @@
 import CompanyListRow from "./CompanyListRow";
 import "./CompanyListView.css";
 
-function CompanyListView({ title, data, toggleFollowing }) {
+function CompanyListView({ title, data, idToFollowing, toggleFollowing }) {
 
   return (
     <>
@@ -17,7 +17,7 @@ function CompanyListView({ title, data, toggleFollowing }) {
           </div>
           <div className="list-content">
             {data.map((company) => (
-              <CompanyListRow key={company.id} company={company} toggleFollowing={toggleFollowing} />
+              <CompanyListRow key={company.id} company={company} following={idToFollowing[company.id]} toggleFollowing={toggleFollowing} />
             ))}
           </div>  
         </div>

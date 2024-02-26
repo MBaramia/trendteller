@@ -19,8 +19,10 @@
   border-radius: var(--radius);
   font-size: 1rem;
   padding: 0.6rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   width: 100%;
+  /* border-style: none; */
+  border: 0.05rem solid var(--dark-txt);
 }
 
 #profile-pg span {

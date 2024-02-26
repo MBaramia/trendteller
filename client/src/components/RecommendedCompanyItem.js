@@ -4,15 +4,14 @@ import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_white.s
 import { ReactComponent as SmileyBad } from "../images/smiley_bad_white.svg";
 import { useState } from "react";
 
-function RecommendedCompanyItem({ company }) {
-  let [isFollowing, setIsFollowing] = useState(company.following);
+function RecommendedCompanyItem({ company, following, toggleFollowing }) {
 
   const goToCompanyPage = () => {
     window.location.href = `/company/${company.id}`;
   }
 
   const toggleFollow = (e) => {
-    setIsFollowing(!isFollowing);
+    toggleFollowing(company.id);
     e.stopPropagation();
     // make server request
   }
@@ -61,7 +60,7 @@ function RecommendedCompanyItem({ company }) {
           <p>£{company.price}</p>
           <p>{company.change}</p>
         </div>
-        <div className="item-btn" onClick={toggleFollow}><p>{buttonText(isFollowing)}</p></div>
+        <div className="item-btn" onClick={toggleFollow}><p>{buttonText(following)}</p></div>
       </div>
     </>
   );

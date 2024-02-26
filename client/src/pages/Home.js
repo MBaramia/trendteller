@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import CompanyListView from '../components/CompanyListView';
 import NewsListView from '../components/NewsListView';
 import RecommendedCompanyView from '../components/RecommendedCompanyView';
@@ -190,30 +191,30 @@ function Home() {
 
   const recommendedCompanies = [
     {
-      id: 15,
-      name: "Oracle",
-      code: "ORCL",
-      price: "82.49",
-      change: "+9.3%",
-      perception: 0,
-      following: true,
-    },
-    {
-      id: 7,
-      name: "PayPal",
-      code: "PYPL",
-      price: "220.61",
-      change: "-14.9%",
+      id: 5,
+      name: "Facebook",
+      code: "FB",
+      price: "323.19",
+      change: "+20.6%",
       perception: 2,
       following: true,
     },
     {
-      id: 9,
-      name: "Adobe",
-      code: "ADBE",
-      price: "632.24",
-      change: "+21.3%",
-      perception: 1,
+      id: 16,
+      name: "Shopify",
+      code: "SHOP",
+      price: "1244.86",
+      change: "-32.5%",
+      perception: 0,
+      following: false,
+    },
+    {
+      id: 13,
+      name: "Cisco",
+      code: "CSCO",
+      price: "53.42",
+      change: "+5.6%",
+      perception: 0,
       following: false,
     }
   ];
@@ -266,11 +267,32 @@ function Home() {
     }
   ];
 
+  const produceInitialAllFollowing = () => {
+    let idToFollowing = {};
+    for (const company of followedCompanies) {
+      idToFollowing[company.id] = company.following;
+    }
+    for (const company of recommendedCompanies) {
+      idToFollowing[company.id] = company.following;
+    }
+    return idToFollowing;
+  }
+
+  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
+
+  const toggleFollowing = (id) => {
+    let newIdToFollowing = { ...idToFollowing };
+    newIdToFollowing[id] = !idToFollowing[id];
+    setIdToFollowing(newIdToFollowing);
+    // console.log(idToFollowing);
+    // make server request
+  }
+
   return (
     <>
     <div id='home-pg'>
-      <CompanyListView title={"Followed Companies"} data={followedCompanies} />
-      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies}/>
+      <CompanyListView title={"Followed Companies"} data={followedCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing}/>
+      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing}/>
       <NewsListView title={"News"} data={news} />
     </div>
     </>

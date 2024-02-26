@@ -165,7 +165,7 @@ function Browse() {
       code: "CSCO",
       price: "53.42",
       change: "+5.6%",
-      perception: 0,
+      perception: 2,
       following: false,
     },
     {
@@ -190,31 +190,31 @@ function Browse() {
 
   const recommendedCompanies = [
     {
-      id: 15,
-      name: "Oracle",
-      code: "ORCL",
-      price: "82.49",
-      change: "+9.3%",
+      id: 16,
+      name: "Shopify",
+      code: "SHOP",
+      price: "1244.86",
+      change: "-32.5%",
       perception: 0,
-      following: true,
-    },
-    {
-      id: 7,
-      name: "PayPal",
-      code: "PYPL",
-      price: "220.61",
-      change: "-14.9%",
-      perception: 2,
-      following: true,
-    },
-    {
-      id: 9,
-      name: "Adobe",
-      code: "ADBE",
-      price: "632.24",
-      change: "+21.3%",
-      perception: 1,
       following: false,
+    },
+    {
+      id: 13,
+      name: "Cisco",
+      code: "CSCO",
+      price: "53.42",
+      change: "+5.6%",
+      perception: 2,
+      following: false,
+    },
+    {
+      id: 2,
+      name: "Amazon",
+      code: "AMZN",
+      price: "3182.7",
+      change: "-15.2%",
+      perception: 1,
+      following: true,
     }
   ];
 
@@ -226,22 +226,21 @@ function Browse() {
     return idToFollowing;
   }
 
-  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing)
+  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
 
   const toggleFollowing = (id) => {
-    let newIdToFollowing = idToFollowing;
+    let newIdToFollowing = { ...idToFollowing };
     newIdToFollowing[id] = !idToFollowing[id];
     setIdToFollowing(newIdToFollowing);
-    console.log(idToFollowing);
-    // this.forceUpdate();
+    // console.log(idToFollowing);
     // make server request
   }
   
   return (
     <>
     <div id='browse-pg'>
-      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} toggleFollowing={toggleFollowing} />
-      <CompanyListView title={"All Companies"} data={allCompanies} toggleFollowing={toggleFollowing} />
+      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing} />
+      <CompanyListView title={"All Companies"} data={allCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing} />
     </div>
     </>
   );
