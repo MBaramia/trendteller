@@ -9,7 +9,9 @@ function Header() {
   return (
     <header>
       <div className="left">
-        <img className="header-logo" src={HeaderLogo} alt="Trendteller logo" />
+        <Link to="/">
+          <img className="header-logo" src={HeaderLogo} alt="Trendteller logo" />
+        </Link>
       </div>
       <div className="right">
         <div className="placeholder" />
@@ -22,7 +24,7 @@ function Header() {
               <img class="profile-icon" src={ProfileIcon} alt="Profile icon" />
             </Link>
           </div>   
-          
+
         </nav>
       </div>
     </header>

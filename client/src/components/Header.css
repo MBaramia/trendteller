@@ -1,7 +1,7 @@
 header {
   padding-left: 30px;
   padding-right: 30px;
-  height: 5rem;
+  height: var(--header-height);
   width: 100%;
   min-width: fit-content;
   background-color: var(--dark-bg);
@@ -21,6 +21,14 @@ header .header-logo {
 header .left {
   width: minmax(var(--sidebar-width), 100%);
   /* min-width: var(--sidebar-width); */
+}
+
+header .left :hover {
+  opacity: var(--hover-opacity);
+  cursor: pointer;
+}
+header .left >* {
+  transition: opacity var(--hover-transition);
 }
 
 header .right {
