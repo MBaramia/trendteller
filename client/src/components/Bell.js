@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 
 function Bell() {
   return (
-    <Link to="/" className="bell-header">
-      <p className="bell-text">5</p>
-      <BellIcon className="bell-icon" />
-    </Link>
+    <div id="bell-container">
+      <Link to="/notifications" className="bell-header">
+        <p className="bell-text">5</p>
+        <BellIcon className="bell-icon" />
+      </Link>
+    </div>
   );
 }
 

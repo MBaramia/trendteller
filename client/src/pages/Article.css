@@ -1,0 +1,45 @@
+#article-pg {
+  position: relative;
+  box-sizing: content-box;
+  max-height: calc(100vh - var(--header-height) - (var(--content-v)*2));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#article-pg #pg-content {
+  overflow: scroll;
+  margin-bottom: 0;
+}
+
+#article-pg #pg-content >* {
+  margin-bottom: 5rem;
+}
+
+#article-pg .article-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#article-pg .article-info > :not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+#article-pg .info-right, #company-pg .info-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#article-pg #fade-overlay {
+  height: calc(var(--content-v) + 3rem);
+  background: linear-gradient(to bottom, transparent 0%, var(--light-txt) 30%);
+  width: 100%;
+  position: absolute;
+  bottom: 0; 
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  margin-bottom: 0;
+}

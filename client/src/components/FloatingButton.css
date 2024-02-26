@@ -1,0 +1,34 @@
+#floating-btn {
+  /* background-color: var(--light-bg); */
+  padding: 0;
+  margin: 0 auto;
+  width: 100%;
+  z-index: 2;
+  background-color: transparent;
+  border-radius: var(--radius);
+}
+
+#floating-btn .btn {
+  background-color: var(--dark-bg);
+  color: var(--light-txt);
+  border-radius: var(--radius);
+  height: 3.5rem;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-shadow: var(--shadow);
+  /* width: 100%; */
+}
+
+#floating-btn :hover {
+  cursor: pointer;
+  opacity: var(--hover-opacity);
+
+  transition: opacity var(--hover-transition);
+}
+
+#floating-btn p {
+  margin: auto;
+  font-weight: var(--roboto-bold);
+}

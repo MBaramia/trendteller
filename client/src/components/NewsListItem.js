@@ -6,13 +6,11 @@ import { ReactComponent as SmileyBad } from "../images/smiley_bad_red.svg";
 function NewsListItem({ article }) {
 
   const goToCompanyPage = () => {
-    // change at some point
-    console.log(article.companyID);
+    window.location.href = `/company/${article.companyID}`;
   }
 
   const goToArticlePage = () => {
-    // change at some point
-    console.log(article.id);
+    window.location.href = `/article/${article.id}/${article.companyID}`;
   }
 
   const perceptionToSmiley = (p) => {
@@ -37,7 +35,7 @@ function NewsListItem({ article }) {
               <p>{article.title}</p>
             </div>
             <div className="text-bottom">
-              <p>{article.author}</p>
+              <p>{article.source}</p>
               <p>{article.date}</p>
             </div>                
           </div>

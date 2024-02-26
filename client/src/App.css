@@ -31,9 +31,12 @@
     0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
   --hover-shadow: 0.2rem 0.4rem 0.6rem rgba(35, 131, 239, 0.1);
   --hover-opacity: 0.7;
-  --hover-transition: 0.4s ease;
+  --hover-transition: 0.4s ease-out;
 
+  --header-height: 5rem;
   --sidebar-width: 21rem;
+  --content-v: 3rem;
+  --content-h: 2rem;
 
   --title-text: "Cabin", sans-serif;
   --regular-text: "Roboto", sans-serif;
@@ -80,7 +83,7 @@ h2 {
 
 h3 {
   font-weight: 100;
-  font-size: 2rem;
+  font-size: 1.4rem;
 }
 
 p,
@@ -118,11 +121,29 @@ main {
   overflow-y: scroll;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .content-section {
-  padding: 3rem 5rem;
+  padding: var(--content-v) var(--content-h);
   padding-bottom: 0;
   margin: auto;
-  max-width: var(--maxw);
+  min-width: fit-content;
+  min-width: calc(var(--header-minw) - var(--sidebar-width));
+  overflow-x: visible;
+
+  opacity: 0.9; 
+  animation: fadeIn 0.7s ease-out forwards; 
+}
+
+.content-section.show {
+  opacity: 1;
 }
 
 .content-section >* >*{
@@ -130,7 +151,8 @@ main {
 }
 
 .narrow-content {
-  padding: 0 8rem;
+  max-width: calc(var(--maxw) * 0.5);
+  margin: auto;
 }
 
 .main-view {

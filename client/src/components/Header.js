@@ -9,16 +9,22 @@ function Header() {
   return (
     <header>
       <div className="left">
-        <img className="header-logo" src={HeaderLogo} alt="Trendteller logo" />
+        <Link to="/">
+          <img className="header-logo" src={HeaderLogo} alt="Trendteller logo" />
+        </Link>
       </div>
       <div className="right">
         <div className="placeholder" />
         <SearchBar />
         <nav aria-label="header navigation">
           <Bell />
-          <Link to="/">
-            <img className="profile-icon" src={ProfileIcon} alt="Profile icon" />
-          </Link>
+
+          <div id="profile-container">
+            <Link to="/profile">
+              <img className="profile-icon" src={ProfileIcon} alt="Profile icon" />
+            </Link>
+          </div>   
+
         </nav>
       </div>
     </header>
