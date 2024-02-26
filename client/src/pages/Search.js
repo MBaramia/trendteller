@@ -1,7 +1,9 @@
 import CompanyListView from '../components/CompanyListView';
 // import './Search.css'
 
-function Search({ query }) {
+function Search({ }) {
+
+  const query="Microsoft";
   
   const searchResults = [
     {

@@ -1,0 +1,24 @@
+#article-pg {
+  position: relative;
+  box-sizing: content-box;
+}
+
+#article-pg > :not(:last-child) {
+  margin-bottom: 5rem;
+}
+
+#article-pg .article-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#article-pg .article-info > :not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+#article-pg .info-right, #company-pg .info-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

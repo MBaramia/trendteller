@@ -1,7 +1,6 @@
 import './Login.css'
 
 function Login() {
-
   const error = "Error message";
   // const error = "";
   
@@ -21,4 +20,4 @@ function Login() {
   );
 }
   
-  export default Login;
+export default Login;

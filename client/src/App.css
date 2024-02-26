@@ -79,7 +79,7 @@ h2 {
 
 h3 {
   font-weight: 100;
-  font-size: 2rem;
+  font-size: 1.4rem;
 }
 
 p,
@@ -129,7 +129,8 @@ main {
 }
 
 .narrow-content {
-  padding: 0 8rem;
+  max-width: calc(var(--maxw) * 0.5);
+  margin: auto;
 }
 
 .main-view {
