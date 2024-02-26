@@ -1,9 +1,14 @@
+.news-list-view {
+  overflow-x: scroll;
+}
+
 .news-list-view h2 {
   margin-bottom: 2rem;
 }
 
 .news-list-view .list-item {
   width: 100%;
+  min-width: 40rem;
   display: grid;
   grid-template-columns: 1.2fr 6fr;
   margin-bottom: 1.2rem;
