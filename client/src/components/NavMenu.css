@@ -44,7 +44,7 @@
   text-decoration: none;
 }
 
-.nav-menu button {
+.logout-btn {
   background-color: var(--logout);
   height: 3.5rem;
   width: 100%;
@@ -52,13 +52,11 @@
   font-size: 1rem;
 }
 
-.nav-menu button:hover {
+.logout-btn:hover {
   opacity: var(--hover-opacity);
 }
 
-/*
-li { 
-  
-  background-color: aqua;
+.nav-icon {
+  width: 2.25rem;
+  height: 2.25rem;
 }
-*/
