@@ -2,7 +2,7 @@
   min-width: var(--sidebar-width);
   background-color: var(--dark-bg);
   color: var(--light-txt);
-  padding: var(--content-v) 2rem;
+  padding: var(--content-v) var(--content-h);
   /* padding-left: 30px;
   padding-right: 30px;
   padding-bottom: 60px;

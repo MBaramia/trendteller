@@ -1,8 +1,6 @@
 import "./CompanyListView.css";
 import { ReactComponent as HeartFill } from "../images/heart_filled.svg";
 import { ReactComponent as HeartEmpty } from "../images/heart_empty.svg";
-import { useState } from "react";
-
 
 function CompanyListRow({ company, following, toggleFollowing }) {
 

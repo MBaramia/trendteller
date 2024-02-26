@@ -1,6 +1,6 @@
 header {
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: var(--content-h);
+  padding-right: var(--content-h);
   height: var(--header-height);
   width: 100%;
   min-width: fit-content;

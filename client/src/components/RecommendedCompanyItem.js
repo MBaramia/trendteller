@@ -2,7 +2,6 @@ import "./RecommendedCompanyView.css";
 import { ReactComponent as SmileyGood } from "../images/smiley_good_white.svg";
 import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_white.svg";
 import { ReactComponent as SmileyBad } from "../images/smiley_bad_white.svg";
-import { useState } from "react";
 
 function RecommendedCompanyItem({ company, following, toggleFollowing }) {
 

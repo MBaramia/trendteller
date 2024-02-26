@@ -35,6 +35,7 @@
   --header-height: 5rem;
   --sidebar-width: 21rem;
   --content-v: 3rem;
+  --content-h: 2rem;
 
   --title-text: "Cabin", sans-serif;
   --regular-text: "Roboto", sans-serif;
@@ -129,10 +130,12 @@ main {
 }
 
 .content-section {
-  padding: var(--content-v) 5rem;
+  padding: var(--content-v) var(--content-h);
   padding-bottom: 0;
   margin: auto;
-  max-width: var(--maxw);
+  min-width: fit-content;
+  min-width: calc(var(--header-minw) - var(--sidebar-width));
+  overflow-x: visible;
 
   opacity: 0.9; 
   animation: fadeIn 0.7s ease-out forwards; 
