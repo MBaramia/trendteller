@@ -43,8 +43,11 @@ function Article() {
 
         <AnalysisTextView title={"Analysis"} perception={article.perception} text={article.analysis} />
       </div>
+      
+      <div id="fade-overlay" />
+
       {/* change action to visit website link */}
-      <FloatingButton on={"See full article"} off={""} isOn={true} action={goToArticleLink} />
+      <FloatingButton on={"Read full article"} off={""} isOn={true} action={goToArticleLink} />
     </div>
     </>
   );

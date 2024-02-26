@@ -4,6 +4,7 @@ import FloatingButton from '../components/FloatingButton';
 import SummaryTextView from '../components/SummaryTextView';
 import './Company.css'
 import { useParams } from 'react-router-dom';
+import NewsListView from '../components/NewsListView';
 
 function Company() {
   let { companyID } = useParams();
@@ -26,6 +27,55 @@ function Company() {
     weekChangeNum: -23,
     weekChangePer: -13.8,
   }
+
+  const news = [
+    {
+      id: 1,
+      title: "Microsoft unveils new Windows 12 operating system",
+      companyID: 20, 
+      companyCode: "TSLA", 
+      source: "BBC",
+      date: "20/02/2024",
+      perception: 1
+    },
+    {
+      id: 2,
+      title: "Tesla's stock price hits all-time high",
+      companyID: 20,
+      companyCode: "TSLA",
+      source: "The Guardian",
+      date: "18/02/2024",
+      perception: 1
+    },
+    {
+      id: 3,
+      title: "Oracle is a really bad company",
+      companyID: 20,
+      companyCode: "TSLA",
+      source: "Sky",
+      date: "27/01/2024",
+      perception: 0
+    },
+    {
+      id: 4,
+      title: "Google announces expansion into new AI research lab",
+      companyID: 20,
+      companyCode: "TSLA",
+      source: "BBC",
+      date: "18/01/2024",
+      perception: 2
+    },
+    {
+      id: 5,
+      title: "Amazon faces backlash over workplace conditions",
+      companyID: 20,
+      companyCode: "TSLA",
+      source: "The Independent",
+      date: "10/01/2024",
+      perception: 0
+    }
+  ];
+  
 
   let [isFollowing, setIsFollowing] = useState(true);
 
@@ -70,7 +120,10 @@ function Company() {
 
         <AnalysisTextView title={"Analysis"} perception={company.perception} text={company.analysis} />
         
+        <NewsListView title={"Recent News"} data={news} />
       </div>
+
+      <div id="fade-overlay" />
 
       <FloatingButton on={"Unfollow"} off={"Follow"} isOn={isFollowing} action={toggleCompanyFollow} />
 
