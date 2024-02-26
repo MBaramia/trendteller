@@ -1,0 +1,40 @@
+#profile-pg {
+
+}
+
+#profile-pg .form-area {
+  max-width: calc(var(--maxw) * 0.2);
+}
+
+#profile-pg h2 {
+  margin-bottom: 2rem;
+}
+
+#profile-pg input, #profile-pg span {
+  display: block;
+  margin: auto;
+}
+
+#profile-pg input  {
+  border-radius: var(--radius);
+  font-size: 1rem;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+#profile-pg span {
+  display: flex;
+  justify-content: space-around;
+}
+
+#profile-pg span :hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+#profile-pg button {
+  margin: 0 auto;
+
+  transition: opacity var(--hover-transition);
+}

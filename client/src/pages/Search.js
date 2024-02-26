@@ -1,9 +1,10 @@
+import { useParams } from 'react-router-dom';
 import CompanyListView from '../components/CompanyListView';
 // import './Search.css'
 
-function Search({ }) {
+function Search() {
 
-  const query="Microsoft";
+  let { query } = useParams();
   
   const searchResults = [
     {

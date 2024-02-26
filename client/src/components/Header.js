@@ -16,9 +16,13 @@ function Header() {
         <SearchBar />
         <nav aria-label="header navigation">
           <Bell />
-          <Link to="/">
-            <img class="profile-icon" src={ProfileIcon} alt="Profile icon" />
-          </Link>
+
+          <div id="profile-container">
+            <Link to="/profile">
+              <img class="profile-icon" src={ProfileIcon} alt="Profile icon" />
+            </Link>
+          </div>   
+          
         </nav>
       </div>
     </header>

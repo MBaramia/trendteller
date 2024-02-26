@@ -4,18 +4,17 @@ import { ReactComponent as HeartEmpty } from "../images/heart_empty.svg";
 import { useState } from "react";
 
 
-function CompanyListRow({ company }) {
+function CompanyListRow({ company, toggleFollowing }) {
   let [isFollowing, setIsFollowing] = useState(company.following);
 
   const goToCompanyPage = () => {
-    // nothing here yet
-    console.log(company.id);
+    window.location.href = `/company/${company.id}`;
   }
 
   const toggleCompanyFollow = (e) => {
+    toggleFollowing(company.id);
     setIsFollowing(!isFollowing);
     e.stopPropagation();
-    // company.follow = !company.follow;
   }
 
   const perceptionToComponent = (p) => {

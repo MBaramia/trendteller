@@ -3,24 +3,27 @@ header {
   padding-right: 30px;
   height: 5rem;
   width: 100%;
+  min-width: fit-content;
   background-color: var(--dark-bg);
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   z-index: 2;
   border-bottom: 2px solid var(--light-bg);
 }
 
-.header-logo {
+header .header-logo {
   width: 11.125rem;
   height: 2.75rem;
 }
 
-.left {
-  min-width: var(--sidebar-width);
+header .left {
+  width: minmax(var(--sidebar-width), 100%);
+  /* min-width: var(--sidebar-width); */
 }
 
-.right {
+header .right {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -28,17 +31,11 @@ header {
   align-items: center;
 }
 
-.placeholder {
+header .placeholder {
   width: 0rem;
-}
+} 
 
-.bell-text {
-  color: var(--bell);
-  font-size: 1rem;
-  font-weight: var(--roboto-black);
-}
-
-nav {
+header nav {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -46,7 +43,18 @@ nav {
   gap: 1.875rem;
 }
 
-.profile-icon {
+header #profile-container :hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+header #profile-container >* {
+  transition: opacity var(--hover-transition);
+}
+header #profile-container >* :hover {
+  opacity: 1;
+}
+
+header .profile-icon {
   width: 2.625rem;
   height: 2.625rem;
 }

@@ -8,13 +8,13 @@ function RecommendedCompanyItem({ company }) {
   let [isFollowing, setIsFollowing] = useState(company.following);
 
   const goToCompanyPage = () => {
-    // change eventually
-    console.log(company.id);
+    window.location.href = `/company/${company.id}`;
   }
 
   const toggleFollow = (e) => {
     setIsFollowing(!isFollowing);
     e.stopPropagation();
+    // make server request
   }
 
   const perceptionToBgColour = (p) => {

@@ -1,5 +1,6 @@
 import RecommendedCompanyView from '../components/RecommendedCompanyView';
 import CompanyListView from '../components/CompanyListView';
+import { useState } from 'react';
 // import './Browse.css'
 
 function Browse() {
@@ -216,12 +217,31 @@ function Browse() {
       following: false,
     }
   ];
+
+  const produceInitialAllFollowing = () => {
+    let idToFollowing = {};
+    for (const company of allCompanies) {
+      idToFollowing[company.id] = company.following;
+    }
+    return idToFollowing;
+  }
+
+  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing)
+
+  const toggleFollowing = (id) => {
+    let newIdToFollowing = idToFollowing;
+    newIdToFollowing[id] = !idToFollowing[id];
+    setIdToFollowing(newIdToFollowing);
+    console.log(idToFollowing);
+    // this.forceUpdate();
+    // make server request
+  }
   
   return (
     <>
     <div id='browse-pg'>
-      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} />
-      <CompanyListView title={"All Companies"} data={allCompanies} />
+      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} toggleFollowing={toggleFollowing} />
+      <CompanyListView title={"All Companies"} data={allCompanies} toggleFollowing={toggleFollowing} />
     </div>
     </>
   );

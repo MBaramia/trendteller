@@ -9,6 +9,8 @@ import Notifications from "./pages/Notifications";
 import NavMenu from "./components/NavMenu";
 import Company from "./pages/Company";
 import Article from "./pages/Article";
+import Profile from "./pages/Profile";
+import Tutorial from "./pages/Tutorial";
 
 function App() {
   // const [data, setData] = useState([{}]);
@@ -32,10 +34,12 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/browse" element={<Browse />} />
-              <Route path="/search" element={<Search />} />
+              <Route path="/search/:query" element={<Search />} />
               <Route path="/notifications" element={<Notifications/>} />
-              <Route path="/company" element={<Company />} />
-              <Route path="/article" element={<Article />} />
+              <Route path="/company/:companyID" element={<Company />} />
+              <Route path="/article/:articleID/:companyID" element={<Article />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/tutorial" element={<Tutorial />} />
             </Routes>
           </div>
         </main>
