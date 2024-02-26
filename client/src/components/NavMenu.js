@@ -1,6 +1,12 @@
 import "./NavMenu.css";
-import { ReactComponent as BellIcon } from "../images/bell_icon_header.svg";
 import { Link } from "react-router-dom";
+import { ReactComponent as BellIcon } from "../images/bell_icon_header.svg";
+import { ReactComponent as HomeIcon } from "../images/home_icon_navmenu.svg";
+import { ReactComponent as BrowseIcon } from "../images/browse_icon_navmenu.svg";
+import { ReactComponent as NotificationsIcon } from "../images/bell_icon_white.svg";
+import { ReactComponent as ProfileIcon } from "../images/profile_icon_navmenu.svg";
+import { ReactComponent as TutorialIcon } from "../images/tutorial_icon_navmenu.svg";
+import NavItem from "./NavItem";
 
 function NavMenu() {
   return (
@@ -9,43 +15,38 @@ function NavMenu() {
         <div className="list-section">
           <ul>
             <li>
-              <Link className="nav-link" to="/">
-                <p>Home</p>
-                <BellIcon className="icon" />
-              </Link>
+              <NavItem url="/" navIcon={<HomeIcon className="nav-icon" />}>
+                Home
+              </NavItem>
             </li>
             <li>
-              <Link className="nav-link" to="/browse">
-                <p>Browse</p>
-                <BellIcon className="icon" />
-              </Link>
+              <NavItem url="/browse" navIcon={<BrowseIcon className="nav-icon" />}>
+                Browse
+              </NavItem>
             </li>
             <li>
-              <Link className="nav-link" to="/notifications">
-                <p>Notifications</p>
-                <BellIcon className="icon" />
-              </Link>
+              <NavItem url="/notifications" navIcon={<NotificationsIcon className="nav-icon" />}>
+                Notifications
+              </NavItem>
             </li>
           </ul>
 
           <ul>
             <li>
-              <Link className="nav-link" to="/profile">
-                <p>Profile</p>
-                <BellIcon className="icon" />
-              </Link>
+              <NavItem url="/profile" navIcon={<ProfileIcon className="nav-icon" />}>
+                Profile
+              </NavItem>
             </li>
             <li>
-              <Link className="nav-link" to="/tutorial">
-                <p>Tutorial</p>
-                <BellIcon className="icon" />
-              </Link>
+              <NavItem url="/tutorial" navIcon={<TutorialIcon className="nav-icon" />}>
+                Tutorial
+              </NavItem>
             </li>
           </ul>
         </div>
 
         <div>
-          <button>Logout</button>
+          <button class="logout-btn">Logout</button>
         </div>
       </div>
     </>

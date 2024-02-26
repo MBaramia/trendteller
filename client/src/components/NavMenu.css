@@ -35,18 +35,7 @@
   width: 100%;
 }
 
-.nav-link {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  color: var(--light_txt);
-  text-decoration: none;
-
-  transition: opacity var(--hover-transition);
-}
-
-.nav-menu button {
+.logout-btn {
   background-color: var(--logout);
   height: 3.5rem;
   width: 100%;
@@ -56,14 +45,7 @@
   transition: opacity var(--hover-transition);
 }
 
-.nav-menu button:hover {
+.logout-btn:hover {
   opacity: var(--hover-opacity);
   cursor: pointer;
 }
-
-/*
-li { 
-  
-  background-color: aqua;
-}
-*/
