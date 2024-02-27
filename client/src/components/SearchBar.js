@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./SearchBar.css";
-import { ReactComponent as Cross } from "../images/smiley_bad_red.svg";
+import { ReactComponent as Cross } from "../images/close_icon.svg";
 
 
 function SearchBar() {
