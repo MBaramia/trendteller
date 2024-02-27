@@ -24,6 +24,8 @@
   margin: auto 0;
   height: 100%;
   width: 10%;
+  display: flex;
+  justify-content: space-around;
 }
 
 #search-bar .search-btn :hover {
@@ -35,8 +37,10 @@
 }
 
 #search-bar .search-btn >* {
-  height: 100%;
-  width: 100%;
+  height: 50%;
+  width: 50%;
+  margin: auto;
+  opacity: 0.5;
 
   transition: opacity var(--hover-transition);
 }
