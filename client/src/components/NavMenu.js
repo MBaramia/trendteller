@@ -54,7 +54,7 @@ function NavMenu({ logOutUser }) {
         </div>
 
         <div>
-          <button onClick={logOutUser} className="logout-btn">
+          <button onClick={handleLogout} className="logout-btn">
             Logout
           </button>
         </div>

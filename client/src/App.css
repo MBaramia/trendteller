@@ -41,18 +41,17 @@
   --title-text: "Cabin", sans-serif;
   --regular-text: "Roboto", sans-serif;
 
+  --cabin-regular: 400;
+  --cabin-medium: 500;
+  --cabin-semibold: 600;
+  --cabin-bold: 700;
+
   --roboto-thin: 100;
   --roboto-light: 300;
   --roboto-regular: 400;
   --roboto-medium: 500;
   --roboto-bold: 700;
   --roboto-black: 900;
-
-  --cabin-regular: 400;
-  --cabin-medium: 500;
-  --cabin-semibold: 600;
-  --cabin-bold: 700;
-
 }
 
 html {
@@ -76,31 +75,35 @@ body {
 h1 {
   font-family: var(--title-text);
   font-size: 3.5rem;
+  font-weight: var(--cabin-bold);
 }
 
 h2 {
   font-family: var(--title-text);
   font-size: 2.2rem;
+  font-weight: var(--cabin-bold);
 }
 
 h3 {
-  font-weight: 100;
   font-size: 1.4rem;
+  font-weight: var(--roboto-regular);
 }
 
 p,
 li {
-  font-weight: 100;
   font-size: 1rem;
+  font-weight: var(--roboto-thin);
 }
 
 strong {
   color: var(--dark-bg);
+  font-weight: var(--roboto-medium);
 }
 
 a {
   color: var(--dark-bg);
   font-weight: inherit;
+  font-size: inherit;
 
   transition: opacity var(--hover-transition);
 }
@@ -113,7 +116,6 @@ button {
   background-color: var(--positive);
   padding: 1rem 1.5rem;
   font-size: inherit;
-  font-weight: 100;
   border-style: none;
   border-radius: var(--radius);
   color: var(--light-txt);
