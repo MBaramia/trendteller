@@ -41,18 +41,12 @@
 }
 
 
-.company-list-view .list-content >*{
+.company-list-view .list-row {
     transition: background-color var(--hover-transition);
 }
-.company-list-view .list-content :hover {
+.company-list-view .list-row:hover {
     cursor: pointer;
     background-color: var(--light-bg);
-}
-.company-list-view .list-content >*>* {
-    background-color: transparent;
-}
-.company-list-view .list-content >* :hover {
-    background-color: transparent;
 }
 
 .company-list-view .list-header :last-child, .company-list-view .list-section >* >* >*:last-child {
@@ -73,12 +67,15 @@
     overflow-x: visible;
 } 
 
-.company-list-view .heart :hover {
+.company-list-view .heart {
+    transition: opacity var(--hover-transition);
+}
+.company-list-view .heart >*:hover {
     opacity: var(--hover-opacity);
 }
-.company-list-view .heart >* :hover {
+/* .company-list-view .heart >* :hover {
     opacity: 1;
-}
+} */
 
 .company-list-view .heart >* {
     height: 1rem;

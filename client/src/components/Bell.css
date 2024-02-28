@@ -22,6 +22,10 @@
   font-weight: var(--roboto-black);
 }
 
+#bell-container .bell-text.white {
+  color: var(--light-txt);
+}
+
 #bell-container .bell-icon {
   width: 1.8125rem;
   height: 1.8125rem;

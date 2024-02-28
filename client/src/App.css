@@ -99,6 +99,8 @@ strong {
 a {
   color: var(--dark-bg);
   font-weight: inherit;
+
+  transition: opacity var(--hover-transition);
 }
 
 a:hover {

@@ -20,13 +20,9 @@
 .recommended-company-view .grid-item >* {
     transition: opacity var(--hover-transition);
 }
-.recommended-company-view .grid-item :hover {
+.recommended-company-view .grid-item >*:hover {
     cursor: pointer;
     opacity: var(--hover-opacity);
-}
-
-.recommended-company-view .grid-item >* >* {
-    pointer-events: none;
 }
 
 .recommended-company-view .item-text {

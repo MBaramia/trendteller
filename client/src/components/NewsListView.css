@@ -22,13 +22,9 @@
   box-shadow: none;
   transition: opacity var(--hover-transition);
 }
-.news-list-view .list-item :hover {
+.news-list-view .list-item >*:hover {
   cursor: pointer;
   opacity: var(--hover-opacity);
-}
-
-.news-list-view .list-item >* >* {
-  pointer-events: none;
 }
 
 .news-list-view .item-left {
