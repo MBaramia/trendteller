@@ -5,6 +5,7 @@ import { useState } from "react";
 function Login({ logInUser }) {
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
+  let [errors, setErrors] = useState([]);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -21,6 +22,7 @@ function Login({ logInUser }) {
       logInUser();
     } else {
       console.log(logIn.data);
+      setErrors([logIn.data.message]);
     }
   };
 
@@ -30,7 +32,7 @@ function Login({ logInUser }) {
     }
   };
 
-  const errors = ["Error Message 1", "Error Message 2"];
+  // const errors = ["Error Message 1", "Error Message 2"];
   // const error = "";
 
   return (
