@@ -1,5 +1,5 @@
 export function processLogin(username, password) {
-  fetch("/processLogin", {
+  return fetch("/processLogin", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

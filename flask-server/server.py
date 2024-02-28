@@ -19,6 +19,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
 
 db.init_app(app)
 
@@ -37,7 +38,7 @@ def processLogin():
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")
-    
+
     qrytext = text("SELECT * FROM UserData WHERE username=:username;")
     qry = qrytext.bindparams(username = username)
     resultset = db.session.execute(qry)
