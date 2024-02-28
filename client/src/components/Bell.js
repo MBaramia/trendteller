@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function Bell() {
-  let [num, setNum] = useState(0);
+  let [num, ] = useState(0);
 
   return (
     <div id="bell-container">
       <Link to="/notifications" className="bell-header">
-        <p className={"bell-text" + (num == 0 ? " white" : "")}>{num}</p>
-        {num == 0 ? <StillBell className="bell-icon" /> : <RingingBell className="bell-icon" />}
+        <p className={"bell-text" + (num === 0 ? " white" : "")}>{num}</p>
+        {num === 0 ? <StillBell className="bell-icon" /> : <RingingBell className="bell-icon" />}
       </Link>
     </div>
   );
