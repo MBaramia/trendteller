@@ -1,6 +1,6 @@
 import './Login.css'
 
-function Login() {
+function Login({ logInUser }) {
   const errors = ["Error Message 1", "Error Message 2"];
   // const error = "";
   

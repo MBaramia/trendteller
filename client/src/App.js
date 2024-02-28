@@ -26,7 +26,11 @@ function App() {
   //     });
   // }, []);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const logInUser = () => {
+    setIsLoggedIn(true);
+  }
 
   return (
     <Router>
@@ -52,7 +56,7 @@ function App() {
           </div>
         </>
       ) : (
-        <Login />
+        <Login logInUser={logInUser} />
       )};
     </Router>
   
