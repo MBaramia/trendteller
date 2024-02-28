@@ -13,9 +13,6 @@ import random
 from flask import Flask, render_template,request,session,redirect,flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
-from markupsafe import escape
-import os
 
 
 app = Flask(__name__)
@@ -34,6 +31,23 @@ if resetdb:
         dbinit()
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+@app.route('/processLogin', methods=['GET','POST'])
+def processLogin():
+    username = request.form["username"]
+    password = request.form["password"]
+    qrytext = text("SELECT * FROM UserData WHERE username=:username;")
+    qry = qrytext.bindparams(username = username)
+    resultset = db.session.execute(qry)
+    values = resultset.fetchall()
+    if len(values) == 0:
+        return redirect('/')
+    if not check_password_hash(values[0][2],password): # this means that the password provided upon registering and the password entered are different
+        return redirect('/')
+    user = UserData(values[0][0], values[0][1], values[0][2]) # setting all the information about the user
+    login_user(user)
+    session["loggedOn"] = True
+    return redirect('/home')
 
 
 # Members API route - delete
