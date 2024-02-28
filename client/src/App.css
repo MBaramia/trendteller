@@ -74,11 +74,13 @@ body {
 }
 
 h1 {
+  font-family: var(--title-text);
   font-size: 3.5rem;
 }
 
 h2 {
-  font-size: 2rem;
+  font-family: var(--title-text);
+  font-size: 2.2rem;
 }
 
 h3 {

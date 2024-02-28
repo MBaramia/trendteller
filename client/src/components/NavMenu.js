@@ -1,6 +1,4 @@
 import "./NavMenu.css";
-import { Link } from "react-router-dom";
-import { ReactComponent as BellIcon } from "../images/bell_icon_header.svg";
 import { ReactComponent as HomeIcon } from "../images/home_icon_navmenu.svg";
 import { ReactComponent as BrowseIcon } from "../images/browse_icon_navmenu.svg";
 import { ReactComponent as NotificationsIcon } from "../images/bell_icon_white.svg";

@@ -1,7 +1,3 @@
-#profile-pg {
-
-}
-
 #profile-pg .form-area {
   max-width: calc(var(--maxw) * 0.2);
 }
