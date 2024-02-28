@@ -6,7 +6,8 @@ import { ReactComponent as ProfileIcon } from "../images/profile_icon_navmenu.sv
 import { ReactComponent as TutorialIcon } from "../images/tutorial_icon_navmenu.svg";
 import NavItem from "./NavItem";
 
-function NavMenu() {
+function NavMenu({ logOutUser }) {
+
   return (
     <>
       <div className="nav-menu">
@@ -44,7 +45,7 @@ function NavMenu() {
         </div>
 
         <div>
-          <button className="logout-btn">Logout</button>
+          <button onClick={logOutUser} className="logout-btn">Logout</button>
         </div>
       </div>
     </>

@@ -32,13 +32,17 @@ function App() {
     setIsLoggedIn(true);
   }
 
+  const logOutUser = () => {
+    setIsLoggedIn(false);
+  }
+
   return (
     <Router>
       { isLoggedIn ? (
         <>
           <Header />
           <div className="main-view">
-            <NavMenu />
+            <NavMenu logOutUser={logOutUser} />
             <main>
               <div className="content-section">
                 <Routes>
