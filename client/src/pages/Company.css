@@ -19,20 +19,13 @@
 #company-pg .company-info {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 #company-pg .info-right, #company-pg .info-left {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-#company-pg #chart {
-  height: 20rem;
-  width: 100%;
-  background-color: var(--dark-bg);
-
 }
 
 #company-pg #fade-overlay {
