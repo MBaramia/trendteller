@@ -139,8 +139,9 @@ main {
   padding-bottom: 0;
   margin: auto;
   min-width: fit-content;
-  min-width: calc(var(--header-minw) - var(--sidebar-width));
+  /* min-width: calc(var(--header-minw) - var(--sidebar-width)); */
   overflow-x: visible;
+  max-width: var(--maxw);
 
   opacity: 0.9; 
   animation: fadeIn 0.7s ease-out forwards; 
