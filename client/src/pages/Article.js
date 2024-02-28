@@ -15,6 +15,7 @@ function Article() {
   const article = {
     title: "Tesla is in very big trouble",
     source: "BBC",
+    companyID: "7",
     companyName: "Tesla",
     companyCode: "TSLA",
     date: "20/01/2024",
@@ -35,7 +36,7 @@ function Article() {
         <div className='article-info narrow-content'>
             <h1>{article.title}</h1>
             <p>Source: {article.source}</p>
-            <p>Company: {article.companyName} ({article.companyCode})</p>
+            <p>Company: <a href={`/company/${article.companyID}`} >{article.companyName} ({article.companyCode})</a></p>
             <p>Published: {article.date}</p>
         </div>
 
@@ -43,7 +44,7 @@ function Article() {
 
         <AnalysisTextView title={"Analysis"} perception={article.perception} text={article.analysis} />
       </div>
-      
+
       <div id="fade-overlay" />
 
       {/* change action to visit website link */}

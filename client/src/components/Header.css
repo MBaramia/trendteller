@@ -16,6 +16,8 @@ header {
 header .header-logo {
   width: 11.125rem;
   height: 2.75rem;
+
+  transition: opacity var(--hover-transition);
 }
 
 header .left {
@@ -23,12 +25,9 @@ header .left {
   /* min-width: var(--sidebar-width); */
 }
 
-header .left :hover {
+header .header-logo:hover {
   opacity: var(--hover-opacity);
   cursor: pointer;
-}
-header .left >* {
-  transition: opacity var(--hover-transition);
 }
 
 header .right {
@@ -51,15 +50,12 @@ header nav {
   gap: 1.875rem;
 }
 
-header #profile-container :hover {
+header #profile-container >*:hover {
   opacity: 0.8;
   cursor: pointer;
 }
 header #profile-container >* {
   transition: opacity var(--hover-transition);
-}
-header #profile-container >* :hover {
-  opacity: 1;
 }
 
 header .profile-icon {

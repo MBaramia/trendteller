@@ -19,13 +19,13 @@
   justify-content: space-around;
   box-shadow: var(--shadow);
   /* width: 100%; */
-}
-
-#floating-btn :hover {
-  cursor: pointer;
-  opacity: var(--hover-opacity);
 
   transition: opacity var(--hover-transition);
+}
+
+#floating-btn .btn:hover {
+  cursor: pointer;
+  opacity: var(--hover-opacity);
 }
 
 #floating-btn p {
