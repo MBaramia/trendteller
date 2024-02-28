@@ -1,12 +1,12 @@
-export function setUpAuth() {
-  fetch("/login", {
+export function loginUser(username, password) {
+  fetch("/processLogin", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username: "username@email.com",
-      password: "password123",
+      username: username,
+      password: password,
     }),
   })
     .then((response) => {

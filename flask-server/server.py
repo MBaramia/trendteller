@@ -34,8 +34,10 @@ login_manager.init_app(app)
 
 @app.route('/processLogin', methods=['POST'])
 def processLogin():
-    username = request.form["username"]
-    password = request.form["password"]
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+    
     qrytext = text("SELECT * FROM UserData WHERE username=:username;")
     qry = qrytext.bindparams(username = username)
     resultset = db.session.execute(qry)
