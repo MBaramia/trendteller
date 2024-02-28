@@ -1,4 +1,4 @@
-export function loginUser(username, password) {
+export function processLogin(username, password) {
   fetch("/processLogin", {
     method: "POST",
     headers: {
