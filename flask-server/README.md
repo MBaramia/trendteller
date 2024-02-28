@@ -10,6 +10,8 @@
     npm install
     ```  
 
+Recreate venv: python3.11 -m venv venv
+
 # Installing flask dependencies
 1. Open another terminal
 2. Run `cd flask-server`
