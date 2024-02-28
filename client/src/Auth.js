@@ -1,4 +1,5 @@
 export function processLogin(username, password) {
+  let status = true;
   return fetch("/processLogin", {
     method: "POST",
     headers: {
@@ -11,22 +12,15 @@ export function processLogin(username, password) {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Error logging in");
+        status = false;
       }
       return response.json();
     })
     .then((data) => {
       console.log(data);
       return {
-        status: true,
+        status: status,
         data: data,
-      };
-    })
-    .catch((error) => {
-      console.log(error);
-      return {
-        status: false,
-        data: error,
       };
     });
 }
