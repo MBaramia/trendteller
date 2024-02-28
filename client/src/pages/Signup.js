@@ -2,7 +2,7 @@ import "./Login.css";
 import { processLogin } from "../Auth";
 import { useState } from "react";
 
-function Login({ logInUser }) {
+function Signup({ logInUser }) {
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
   let [errors, setErrors] = useState([]);
@@ -39,7 +39,7 @@ function Login({ logInUser }) {
     <>
       <div id="login-pg">
         <div className="login-box">
-          <h1>Log In</h1>
+          <h1>Sign up</h1>
           <div className="errors">
             {errors.map((error, index) => (
               <p key={index} className="login-error">
@@ -62,10 +62,10 @@ function Login({ logInUser }) {
             placeholder="Password"
           />
           <div className="btn-container">
-            <button onClick={submitChanges}>Log In</button>
+            <button onClick={submitChanges}>Sign Up</button>
           </div>
           <p>
-            New? <a href="/signup">Sign up</a>
+            Already have an account? <a href="/singup">Log In</a>
           </p>
         </div>
       </div>
@@ -73,4 +73,4 @@ function Login({ logInUser }) {
   );
 }
 
-export default Login;
+export default Signup;

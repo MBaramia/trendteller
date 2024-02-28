@@ -1,6 +1,6 @@
 // import React, { useState, useEffect } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Browse from "./pages/Browse";
@@ -13,6 +13,7 @@ import Profile from "./pages/Profile";
 import Tutorial from "./pages/Tutorial";
 import Login from "./pages/Login";
 import { useState } from "react";
+import Signup from "./pages/Signup";
 
 function App() {
   // const [data, setData] = useState([{}]);
@@ -54,13 +55,21 @@ function App() {
                   <Route path="/article/:articleID/:companyID" element={<Article />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/tutorial" element={<Tutorial />} />
+
+                  <Route path="/login" element={<Navigate to='/'/>}/>
+                  <Route path="/signup" element={<Navigate to='/'/>}/>
+
                 </Routes>
               </div>
             </main>
           </div>
         </>
       ) : (
-        <Login logInUser={logInUser} />
+        <Switch>
+          <Route path="/signup" element={<Signup logInUser={logInUser} />} />
+          <Route path='/login' element={<Login logInUser={logInUser} />} />
+        </Switch>
+        
       )};
     </Router>
   
