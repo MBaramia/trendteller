@@ -47,3 +47,27 @@ export function processLogout() {
       };
     });
 }
+
+export function checkLoggedIn() {
+  let status = true;
+  return fetch("/checkLoggedIn", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      console.log(response);
+      if (!response.ok) {
+        status = false;
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

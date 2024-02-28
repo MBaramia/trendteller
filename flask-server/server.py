@@ -33,6 +33,10 @@ if resetdb:
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@login_manager.user_loader
+def load_user(user_id):
+    return UserData.query.get(int(user_id))
+
 @app.route('/processLogin', methods=['POST'])
 def processLogin():
     data = request.get_json()
@@ -53,9 +57,14 @@ def processLogin():
 
 @app.route("/processLogout", methods=["POST"])
 @login_required
-def logout():
+def processLogout():
     logout_user()
     return jsonify({"message": "Logout successful"})
+
+@app.route("/checkLoggedIn", methods=["POST"])
+@login_required
+def checkLoggedIn():
+    return jsonify({"message": "Is logged in"})
 
 # Members API route - delete
 @app.route("/members")
