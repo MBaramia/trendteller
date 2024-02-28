@@ -4,26 +4,26 @@
     overflow-x: scroll;
 }
 
-.company-list-view h1 {
+.company-list-view h2 {
     margin-bottom: 2rem;
+}
+
+.company-list-view .list-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.company-list-view .list-header, .company-list-view .list-content {
+    min-width: fit-content;
 }
 
 .company-list-view .list-header, .company-list-view .list-row {
     display: grid;
-    grid-template-columns: repeat(5, minmax(6rem, 1fr));
-    gap: 1rem;
+    grid-template-columns: minmax(8rem, 1.4fr) repeat(3, minmax(6rem, 1fr)) minmax(6rem, 0.8fr);
+    gap: 0.2rem;
     padding: 0.2rem;
     min-width: fit-content;
-}
-
-.company-list-view .list-section >* >*:last-child {
-    text-align: center;
-}
-
-.company-list-view p {
-    padding: 1rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .company-list-view .list-header {
@@ -33,8 +33,51 @@
     border-top-right-radius: var(--radius);
 } 
 
+.company-list-view .list-content {
+    text-align: left;
+    max-height: 75vh;
+    overflow-y: scroll;
+    overflow-x: visible;
+}
+
+
+.company-list-view .list-row {
+    transition: background-color var(--hover-transition);
+}
+.company-list-view .list-row:hover {
+    cursor: pointer;
+    background-color: var(--light-bg);
+}
+
+.company-list-view .list-header :last-child, .company-list-view .list-section >* >* >*:last-child {
+    text-align: center;
+}
+
+.company-list-view p {
+    padding: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .company-list-view .list-row {
     background-color: var(--light-txt);
     color: var(--dark-txt);
     border: 0.01rem solid var(--neutral);
+    overflow-x: visible;
 } 
+
+.company-list-view .heart {
+    transition: opacity var(--hover-transition);
+}
+.company-list-view .heart >*:hover {
+    opacity: var(--hover-opacity);
+}
+/* .company-list-view .heart >* :hover {
+    opacity: 1;
+} */
+
+.company-list-view .heart >* {
+    height: 1rem;
+}
+

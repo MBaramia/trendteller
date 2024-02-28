@@ -1,0 +1,64 @@
+header {
+  padding-left: var(--content-h);
+  padding-right: var(--content-h);
+  height: var(--header-height);
+  width: 100%;
+  min-width: fit-content;
+  background-color: var(--dark-bg);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  border-bottom: 2px solid var(--light-bg);
+}
+
+header .header-logo {
+  width: 11.125rem;
+  height: 2.75rem;
+
+  transition: opacity var(--hover-transition);
+}
+
+header .left {
+  width: minmax(var(--sidebar-width), 100%);
+  /* min-width: var(--sidebar-width); */
+}
+
+header .header-logo:hover {
+  opacity: var(--hover-opacity);
+  cursor: pointer;
+}
+
+header .right {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .placeholder {
+  width: 0rem;
+} 
+
+header nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  gap: 1.875rem;
+}
+
+header #profile-container >*:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+header #profile-container >* {
+  transition: opacity var(--hover-transition);
+}
+
+header .profile-icon {
+  width: 2.625rem;
+  height: 2.625rem;
+}

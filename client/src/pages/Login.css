@@ -30,21 +30,34 @@
 .login-box input {
     font-size: 1rem;
     width: 17rem;
-    padding: 0.5rem;
+    padding: 0.7rem;
+    border-radius: var(--radius);
+    border: solid 0.1rem var(--dark-txt);
+    outline: none;
 }
 
-.login-box > :not(:first-child, :last-child) {
+.login-box input, .login-box button, .login-box .errors {
     margin-bottom: 1.5rem;
+    max-width: 17rem;
 }
 
 .login-box h1 {
     font-size: 3rem;
 }
 
+.login-box .btn-container :hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
 .login-box button {
     width: 100%;
+
+    transition: opacity var(--hover-transition);
 }
 
 .login-box .login-error {
     color: var(--negative);
+    margin-top: 0.3rem;
+    overflow-wrap: break-word;
 }

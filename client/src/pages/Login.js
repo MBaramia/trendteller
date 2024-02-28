@@ -1,8 +1,7 @@
 import './Login.css'
 
 function Login() {
-
-  const error = "Error message";
+  const errors = ["Error Message 1", "Error Message 2"];
   // const error = "";
   
   return (
@@ -10,10 +9,16 @@ function Login() {
     <div id='login-pg'>
       <div className='login-box'>
         <h1>Log In</h1>
-        <p className='login-error'>{error}</p>
+        <div className='errors'>
+          {errors.map((error, index) => (
+            <p key={index} className='login-error'>{error}</p>
+          ))}
+        </div>
         <input type='text' placeholder='Email'/>
         <input type='password' placeholder='Password'/>
-        <button>Log In</button>
+        <div className='btn-container'>
+          <button>Log In</button>
+        </div>
         <p>New? <a href='/'>Sign up</a></p>
       </div>
     </div>
@@ -21,4 +26,4 @@ function Login() {
   );
 }
   
-  export default Login;
+export default Login;

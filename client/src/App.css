@@ -1,33 +1,62 @@
+@import-normalize; /*Normalise CSS*/
+@import url("https://fonts.googleapis.com/css2?family=Cabin&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
 *,
 *::before,
-*::after{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-:root{
-  --dark-txt: #1F1F1F;
-  --dark-bg: #0D1F2D;
-  --light-txt: #FFFFFF;
-  --light-bg: #E9EBED;
+:root {
+  --dark-txt: #1f1f1f;
+  --dark-bg: #0d1f2d;
+  --light-txt: #ffffff;
+  --light-bg: #e9ebed;
 
   --positive: #085934;
-  --neutral: #40494F;
-  --negative: #A30800;
+  --neutral: #40494f;
+  --negative: #a30800;
 
   --heart: #980651;
-  --bell: #F9E784;
+  --bell: #f9e784;
+  --logout: #a20800;
+  --nav-unselected: #D8D9DB;
 
   --maxw: 1640px;
-  --radius: 0.2rem;
-  --shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.1), 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  --radius: 0.4rem;
+  --shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.1),
+    0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
   --hover-shadow: 0.2rem 0.4rem 0.6rem rgba(35, 131, 239, 0.1);
-  --hover-opacity: 0.8;
+  --hover-opacity: 0.7;
+  --hover-transition: 0.4s ease-out;
+
+  --header-height: 5rem;
+  --sidebar-width: 21rem;
+  --content-v: 3rem;
+  --content-h: 2rem;
+
+  --title-text: "Cabin", sans-serif;
+  --regular-text: "Roboto", sans-serif;
+
+  --roboto-thin: 100;
+  --roboto-light: 300;
+  --roboto-regular: 400;
+  --roboto-medium: 500;
+  --roboto-bold: 700;
+  --roboto-black: 900;
+
+  --cabin-regular: 400;
+  --cabin-medium: 500;
+  --cabin-semibold: 600;
+  --cabin-bold: 700;
+
 }
 
 html {
-  font-family: sans-serif;
+  font-family: var(--regular-text);
   margin: 0;
   padding: 0;
   background-color: white;
@@ -37,6 +66,7 @@ html {
 
 body {
   height: 100%;
+  overflow-y: hidden;
 }
 
 #root {
@@ -44,24 +74,22 @@ body {
 }
 
 h1 {
-  font-size: 4rem;
+  font-size: 3.5rem;
 }
 
 h2 {
-  font-weight: 100;
-  opacity: 0.9;
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 h3 {
   font-weight: 100;
-  font-size: 2rem;
+  font-size: 1.4rem;
 }
 
-p, li {
+p,
+li {
   font-weight: 100;
   font-size: 1rem;
-  opacity: 0.8;
 }
 
 strong {
@@ -71,9 +99,11 @@ strong {
 a {
   color: var(--dark-bg);
   font-weight: inherit;
+
+  transition: opacity var(--hover-transition);
 }
 
-a :hover {
+a:hover {
   opacity: var(--hover-opacity);
 }
 
@@ -87,7 +117,48 @@ button {
   color: var(--light-txt);
 }
 
+main {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .content-section {
-  padding: 10rem;
+  padding: var(--content-v) var(--content-h);
+  padding-bottom: 0;
   margin: auto;
+  min-width: fit-content;
+  min-width: calc(var(--header-minw) - var(--sidebar-width));
+  overflow-x: visible;
+
+  opacity: 0.9; 
+  animation: fadeIn 0.7s ease-out forwards; 
+}
+
+.content-section.show {
+  opacity: 1;
+}
+
+.content-section >* >*{
+  margin-bottom: 5rem;
+}
+
+.narrow-content {
+  max-width: calc(var(--maxw) * 0.5);
+  margin: auto;
+}
+
+.main-view {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 5rem);
 }

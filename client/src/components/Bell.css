@@ -1,0 +1,34 @@
+#bell-container :hover {
+  opacity: 0.8;
+}
+#bell-container >* :hover {
+  opacity: 1;
+}
+#bell-container >* {
+  transition: opacity var(--hover-transition);
+}
+
+#bell-container .bell-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 0.46rem;
+}
+
+#bell-container .bell-text {
+  color: var(--bell);
+  font-size: 1rem;
+  font-weight: var(--roboto-black);
+}
+
+#bell-container .bell-text.white {
+  color: var(--light-txt);
+}
+
+#bell-container .bell-icon {
+  width: 1.8125rem;
+  height: 1.8125rem;
+}
+
+
