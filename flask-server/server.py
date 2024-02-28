@@ -10,7 +10,7 @@ from sqlalchemy import text
 import random
 
 # create the Flask app
-from flask import Flask, render_template,request,session,redirect,flash
+from flask import Flask, render_template,request,session,redirect,flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -32,7 +32,7 @@ if resetdb:
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-@app.route('/processLogin', methods=['GET','POST'])
+@app.route('/processLogin', methods=['POST'])
 def processLogin():
     username = request.form["username"]
     password = request.form["password"]
@@ -41,13 +41,12 @@ def processLogin():
     resultset = db.session.execute(qry)
     values = resultset.fetchall()
     if len(values) == 0:
-        return redirect('/')
+        return jsonify({"message": "No such user exists"}), 401
     if not check_password_hash(values[0][2],password): # this means that the password provided upon registering and the password entered are different
-        return redirect('/')
+        return jsonify({"message": "Incorrect password"}), 401
     user = UserData(values[0][0], values[0][1], values[0][2]) # setting all the information about the user
     login_user(user)
-    session["loggedOn"] = True
-    return redirect('/home')
+    return jsonify({"message": "Login successful"})
 
 
 # Members API route - delete
