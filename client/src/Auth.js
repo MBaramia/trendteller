@@ -1,4 +1,4 @@
-function setUpAuth() {
+export function setUpAuth() {
   fetch("/login", {
     method: "POST",
     headers: {
@@ -7,17 +7,18 @@ function setUpAuth() {
     body: JSON.stringify({
       username: "username@email.com",
       password: "password123",
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error logging in");
+      }
+      return response.json();
     })
-  }).then(response => {
-    if (!response.ok) {
-      throw new Error("Error logging in");
-    }
-    return response.json();
-  }).then(data => {
-    console.log(data);
-  }).catch(error => {
-    console.log(error);
-  });
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
-
-export default setUpAuth;

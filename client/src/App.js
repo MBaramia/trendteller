@@ -11,6 +11,8 @@ import Company from "./pages/Company";
 import Article from "./pages/Article";
 import Profile from "./pages/Profile";
 import Tutorial from "./pages/Tutorial";
+import Login from "./pages/Login";
+import { useState } from "react";
 
 function App() {
   // const [data, setData] = useState([{}]);
@@ -24,26 +26,34 @@ function App() {
   //     });
   // }, []);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   return (
     <Router>
-      <Header />
-      <div className="main-view">
-        <NavMenu />
-        <main>
-          <div className="content-section">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/browse" element={<Browse />} />
-              <Route path="/search/:query" element={<Search />} />
-              <Route path="/notifications" element={<Notifications/>} />
-              <Route path="/company/:companyID" element={<Company />} />
-              <Route path="/article/:articleID/:companyID" element={<Article />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/tutorial" element={<Tutorial />} />
-            </Routes>
+      { isLoggedIn ? (
+        <>
+          <Header />
+          <div className="main-view">
+            <NavMenu />
+            <main>
+              <div className="content-section">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/browse" element={<Browse />} />
+                  <Route path="/search/:query" element={<Search />} />
+                  <Route path="/notifications" element={<Notifications/>} />
+                  <Route path="/company/:companyID" element={<Company />} />
+                  <Route path="/article/:articleID/:companyID" element={<Article />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/tutorial" element={<Tutorial />} />
+                </Routes>
+              </div>
+            </main>
           </div>
-        </main>
-      </div>
+        </>
+      ) : (
+        <Login />
+      )};
     </Router>
   
     // <div>

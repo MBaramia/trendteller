@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from server import UserData
 
 app = Flask(__name__)
 app.secret_key = "ddf4354fhdsuh4534534"
@@ -27,7 +28,7 @@ def login():
 
     if username in users and users[username] == password:
         #Replace with actual user table
-        user = User()
+        user = UserData()
         user.id = username
 
         login_user(user)
