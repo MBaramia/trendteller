@@ -51,6 +51,11 @@ def processLogin():
     login_user(user)
     return jsonify({"message": "Login successful"})
 
+@app.route("/processLogout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({"message": "Logout successful"})
 
 # Members API route - delete
 @app.route("/members")

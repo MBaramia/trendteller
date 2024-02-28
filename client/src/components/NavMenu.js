@@ -5,8 +5,17 @@ import { ReactComponent as NotificationsIcon } from "../images/bell_icon_white.s
 import { ReactComponent as ProfileIcon } from "../images/profile_icon_navmenu.svg";
 import { ReactComponent as TutorialIcon } from "../images/tutorial_icon_navmenu.svg";
 import NavItem from "./NavItem";
+import { processLogout } from "../Auth";
 
 function NavMenu({ logOutUser }) {
+  const handleLogout = async () => {
+    const logOut = await processLogout();
+    if (logOut.status) {
+      logOutUser();
+    } else {
+      console.log(logOut.data);
+    }
+  };
 
   return (
     <>
@@ -45,7 +54,9 @@ function NavMenu({ logOutUser }) {
         </div>
 
         <div>
-          <button onClick={logOutUser} className="logout-btn">Logout</button>
+          <button onClick={logOutUser} className="logout-btn">
+            Logout
+          </button>
         </div>
       </div>
     </>
