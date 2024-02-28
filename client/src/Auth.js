@@ -17,8 +17,16 @@ export function processLogin(username, password) {
     })
     .then((data) => {
       console.log(data);
+      return {
+        status: true,
+        data: data,
+      };
     })
     .catch((error) => {
       console.log(error);
+      return {
+        status: false,
+        data: error,
+      };
     });
 }
