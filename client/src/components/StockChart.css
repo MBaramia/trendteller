@@ -1,0 +1,41 @@
+#stock-chart {
+    padding: 1rem;
+    width: 100%;
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+#stock-chart .btn-area {
+    width: 80%;
+    margin: auto;
+    padding: 0rem 3rem;
+    display: flex;
+    min-height: fit-content;
+    justify-content: space-evenly;
+    font-size: 0.9rem;
+}
+
+#stock-chart .btn-area >* >*:hover {
+    opacity: var(--hover-opacity);
+    cursor: pointer;
+}
+
+#stock-chart .btn-area >* >* {
+    background-color: var(--dark-bg);
+    padding: 0.9rem;
+    width: 4rem;
+
+    transition: opacity var(--hover-transition);
+}
+
+#stock-chart .chart-area {
+    height: 20rem;
+    width: 100%;
+    padding: 1rem;
+    /* background-color: var(--dark-bg); */
+}
+
+#stock-chart .chart-area >* {
+    margin: auto;
+}

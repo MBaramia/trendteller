@@ -31,6 +31,8 @@
     color: var(--light-txt);
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
+
+    font-weight: var(--roboto-bold);
 } 
 
 .company-list-view .list-content {

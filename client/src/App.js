@@ -20,6 +20,7 @@ import Login from "./pages/Login";
 import { useState, useEffect } from "react";
 import Signup from "./pages/Signup";
 import { processLogin, checkLoggedIn } from "./Auth";
+import Loading from "./components/Loading";
 
 function App() {
   // const [data, setData] = useState([{}]);
@@ -33,14 +34,19 @@ function App() {
   //     });
   // }, []);
 
-  useEffect(() => {
-    checkLoggedIn().then((result) => {
-      setIsLoggedIn(result.status);
-      console.log(result.status);
-    });
-  }, []);
+  // console.log(hasLoaded);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // useEffect(() => {
+  //   checkLoggedIn().then((result) => {
+  //     setIsLoggedIn(result.status);
+  //     setHasLoaded(true);
+  //     console.log(`loaded: ${hasLoaded}`);
+  //     // console.log(result.status);
+  //   });
+  // }, []);
+
+  const [hasLoaded, setHasLoaded] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const logInUser = () => {
     setIsLoggedIn(true);
@@ -49,55 +55,50 @@ function App() {
 
   const logOutUser = () => {
     setIsLoggedIn(false);
-  };
+  };  
 
   return (
-    <Router>
-      {isLoggedIn ? (
-        <>
-          <Header />
-          <div className="main-view">
-            <NavMenu logOutUser={logOutUser} />
-            <main>
-              <div className="content-section">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/browse" element={<Browse />} />
-                  <Route path="/search/:query" element={<Search />} />
-                  <Route path="/notifications" element={<Notifications />} />
-                  <Route path="/company/:companyID" element={<Company />} />
-                  <Route
-                    path="/article/:articleID/:companyID"
-                    element={<Article />}
-                  />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/tutorial" element={<Tutorial />} />
+    <>
+    {/* {hasLoaded ? ( */}
+      <Router>
+        {isLoggedIn ? (
+          <>
+            <Header />
+            <div className="main-view">
+              <NavMenu logOutUser={logOutUser} />
+              <main>
+                <div className="content-section">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/browse" element={<Browse />} />
+                    <Route path="/search/:query" element={<Search />} />
+                    <Route path="/notifications" element={<Notifications />} />
+                    <Route path="/company/:companyID" element={<Company />} />
+                    <Route
+                      path="/article/:articleID/:companyID"
+                      element={<Article />}
+                    />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/tutorial" element={<Tutorial />} />
 
-                  <Route path="/login" element={<Navigate to="/" />} />
-                  <Route path="/signup" element={<Navigate to="/" />} />
-                </Routes>
-              </div>
-            </main>
-          </div>
-        </>
-      ) : (
-        <Routes>
-          <Route path="/signup" element={<Signup logInUser={logInUser} />} />
-          <Route path="/*" element={<Login logInUser={logInUser} />} />
-        </Routes>
-      )}
-      ;
-    </Router>
-
-    // <div>
-    //   <h1>The Title</h1>
-    //   {typeof data.members === "undefined" ? (
-    //     <p>"Loading..."</p>
-    //   ) : (
-    //     <p>{data.members}</p>
-    //   )}
-    // </div>
+                  </Routes>
+                </div>
+              </main>
+            </div>
+          </>
+        ) : (
+          <Routes>
+            <Route path="/signup" element={<Signup logInUser={logInUser} />} />
+            <Route path="/" element={<Login logInUser={logInUser} />} />
+            <Route path="/*" element={<Navigate to="/" />} />
+          </Routes>
+        )};
+      </Router>
+    {/* ) : (
+       <Loading />
+    )};  */}
+  </>
   );
-}
+};
 
 export default App;

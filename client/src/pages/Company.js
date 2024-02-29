@@ -5,6 +5,7 @@ import SummaryTextView from '../components/SummaryTextView';
 import './Company.css'
 import { useParams } from 'react-router-dom';
 import NewsListView from '../components/NewsListView';
+import StockChart from '../components/StockChart';
 
 function Company() {
   let { companyID } = useParams();
@@ -97,7 +98,7 @@ function Company() {
     <>
     <div id='company-pg'>
       <div id='pg-content'>
-        <div className='chart-area'>
+        <div className='top-area'>
           <div className='company-info'>
             <div className='info-left'>
               <h1>{company.code}</h1>
@@ -110,9 +111,8 @@ function Company() {
             </div>
           </div>
 
-          <div id='chart'>
-
-          </div>
+          
+          <StockChart companyID={company.id} />
 
         </div>
 
