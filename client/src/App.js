@@ -21,8 +21,10 @@ import { useState, useEffect } from "react";
 import Signup from "./pages/Signup";
 import { processLogin, checkLoggedIn } from "./Auth";
 import Loading from "./components/Loading";
+import NavButton from "./components/NavButton";
 
 function App() {
+  const [navHidden, setNavHidden] = useState(false);
   // const [data, setData] = useState([{}]);
 
   // useEffect(() => {
@@ -64,9 +66,12 @@ function App() {
             <>
               <Header />
               <div className="main-view">
-                <NavMenu logOutUser={logOutUser} />
+                <div className={"nav-section" + (navHidden ? " hide" : "")}>
+                  <NavMenu logOutUser={logOutUser} />
+                  <NavButton navHidden={navHidden} setNavHidden={setNavHidden} />
+                </div>
                 <main>
-                  <div className="content-section">
+                  <div onClick={()=>{setNavHidden(false)}} className="content-section">
                     <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/browse" element={<Browse />} />
@@ -97,12 +102,10 @@ function App() {
               <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
           )}
-          ;
         </>
       ) : (
         <Loading />
       )}
-      ;
     </>
   );
 }

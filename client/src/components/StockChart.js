@@ -1,7 +1,6 @@
 import './StockChart.css';
 import { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 const fetched = {
     0: {
         "2024-02-27 19:55:00": {
@@ -159,185 +158,243 @@ const fetched = {
             "5. volume": "10951"
         } 
     }, 1: {
+        "2024-02-28": {
+            "1. open": "184.6300",
+            "2. high": "185.3700",
+            "3. low": "183.5500",
+            "4. close": "185.3000",
+            "5. volume": "3216345"
+        },
         "2024-02-27": {
-            "1. open": "278.1",
-            "2. high": "280.3",
-            "3. low": "275.9",
-            "4. close": "277.6",
-            "5. adjusted close": "277.6",
-            "6. volume": "9635382",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "184.1600",
+            "2. high": "185.1300",
+            "3. low": "182.6200",
+            "4. close": "184.8700",
+            "5. volume": "3641378"
         },
         "2024-02-26": {
-            "1. open": "279.5",
-            "2. high": "280.0",
-            "3. low": "277.4",
-            "4. close": "278.5",
-            "5. adjusted close": "278.5",
-            "6. volume": "14325750",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "185.6000",
+            "2. high": "186.1250",
+            "3. low": "184.0600",
+            "4. close": "184.1300",
+            "5. volume": "4620815"
         },
         "2024-02-23": {
-            "1. open": "276.8",
-            "2. high": "279.7",
-            "3. low": "276.8",
-            "4. close": "279.7",
-            "5. adjusted close": "279.7",
-            "6. volume": "15990330",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "184.9000",
+            "2. high": "186.4550",
+            "3. low": "184.5700",
+            "4. close": "185.7200",
+            "5. volume": "3433800"
         },
         "2024-02-22": {
-            "1. open": "284.0",
-            "2. high": "284.3",
-            "3. low": "275.9",
-            "4. close": "276.8",
-            "5. adjusted close": "276.8",
-            "6. volume": "20826789",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "182.4500",
+            "2. high": "184.5500",
+            "3. low": "181.9300",
+            "4. close": "184.2100",
+            "5. volume": "5078398"
         },
         "2024-02-21": {
-            "1. open": "285.6",
-            "2. high": "288.8",
-            "3. low": "283.1",
-            "4. close": "285.5",
-            "5. adjusted close": "285.5",
-            "6. volume": "18231400",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "182.5600",
+            "2. high": "183.0300",
+            "3. low": "178.7500",
+            "4. close": "179.7000",
+            "5. volume": "4728473"
         },
         "2024-02-20": {
-            "1. open": "281.2",
-            "2. high": "285.3",
-            "3. low": "281.2",
-            "4. close": "284.5",
-            "5. adjusted close": "284.5",
-            "6. volume": "11066120",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
-        },
-        "2024-02-19": {
-            "1. open": "279.5",
-            "2. high": "281.5",
-            "3. low": "278.6",
-            "4. close": "281.1",
-            "5. adjusted close": "281.1",
-            "6. volume": "27436670",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "187.6400",
+            "2. high": "188.7700",
+            "3. low": "183.0600",
+            "4. close": "183.4400",
+            "5. volume": "4247181"
         },
         "2024-02-16": {
-            "1. open": "276.6",
-            "2. high": "280.1",
-            "3. low": "275.636",
-            "4. close": "279.6",
-            "5. adjusted close": "279.6",
-            "6. volume": "40962738",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "186.6300",
+            "2. high": "188.9500",
+            "3. low": "185.9452",
+            "4. close": "187.6400",
+            "5. volume": "4842840"
         },
         "2024-02-15": {
-            "1. open": "278.1",
-            "2. high": "278.4",
-            "3. low": "274.0",
-            "4. close": "276.2",
-            "5. adjusted close": "276.2",
-            "6. volume": "22333750",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "183.6200",
+            "2. high": "186.9800",
+            "3. low": "183.6200",
+            "4. close": "186.8700",
+            "5. volume": "4714301"
         },
         "2024-02-14": {
-            "1. open": "275.7",
-            "2. high": "278.8",
-            "3. low": "275.7",
-            "4. close": "277.2",
-            "5. adjusted close": "277.2",
-            "6. volume": "17059900",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "185.0000",
+            "2. high": "185.0000",
+            "3. low": "182.2600",
+            "4. close": "183.5700",
+            "5. volume": "3173391"
         },
         "2024-02-13": {
-            "1. open": "278.8",
-            "2. high": "279.2",
-            "3. low": "272.3",
-            "4. close": "273.7",
-            "5. adjusted close": "273.7",
-            "6. volume": "24051109",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "184.2800",
+            "2. high": "184.7700",
+            "3. low": "182.3600",
+            "4. close": "183.7000",
+            "5. volume": "4290453"
         },
         "2024-02-12": {
-            "1. open": "281.3",
-            "2. high": "281.8",
-            "3. low": "278.0",
-            "4. close": "279.6",
-            "5. adjusted close": "279.6",
-            "6. volume": "13404100",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "185.9000",
+            "2. high": "186.4800",
+            "3. low": "184.0300",
+            "4. close": "186.1600",
+            "5. volume": "4724021"
         },
         "2024-02-09": {
-            "1. open": "284.5",
-            "2. high": "287.2",
-            "3. low": "279.9",
-            "4. close": "280.5",
-            "5. adjusted close": "280.5",
-            "6. volume": "14468320",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "184.4400",
+            "2. high": "187.1800",
+            "3. low": "183.8500",
+            "4. close": "186.3400",
+            "5. volume": "5064641"
         },
         "2024-02-08": {
-            "1. open": "280.1",
-            "2. high": "282.9",
-            "3. low": "278.9",
-            "4. close": "280.4",
-            "5. adjusted close": "280.4",
-            "6. volume": "14538140",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "182.6300",
+            "2. high": "184.5500",
+            "3. low": "181.4900",
+            "4. close": "184.3600",
+            "5. volume": "5161185"
         },
         "2024-02-07": {
-            "1. open": "290.2",
-            "2. high": "290.6",
-            "3. low": "280.0",
-            "4. close": "280.0",
-            "5. adjusted close": "280.0",
-            "6. volume": "20561150",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "183.3400",
+            "2. high": "184.0200",
+            "3. low": "182.6250",
+            "4. close": "183.7400",
+            "5. volume": "4841188"
         },
         "2024-02-06": {
-            "1. open": "291.2",
-            "2. high": "293.2",
-            "3. low": "287.9",
-            "4. close": "289.9",
-            "5. adjusted close": "289.9",
-            "6. volume": "10955420",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "183.5500",
+            "2. high": "184.6800",
+            "3. low": "183.0400",
+            "4. close": "183.4100",
+            "5. volume": "3338196"
         },
         "2024-02-05": {
-            "1. open": "290.8",
-            "2. high": "294.2",
-            "3. low": "289.7",
-            "4. close": "289.8",
-            "5. adjusted close": "289.8",
-            "6. volume": "27142580",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "185.5100",
+            "2. high": "185.7800",
+            "3. low": "183.2550",
+            "4. close": "183.4200",
+            "5. volume": "4379602"
         },
         "2024-02-02": {
-            "1. open": "287.0",
-            "2. high": "293.0",
-            "3. low": "285.5873",
-            "4. close": "290.8",
-            "5. adjusted close": "290.8",
-            "6. volume": "47106801",
-            "7. dividend amount": "0.0000",
-            "8. split coefficient": "1.0"
+            "1. open": "187.1000",
+            "2. high": "187.3900",
+            "3. low": "185.6150",
+            "4. close": "185.7900",
+            "5. volume": "4055411"
+        },
+        "2024-02-01": {
+            "1. open": "183.6300",
+            "2. high": "187.5100",
+            "3. low": "182.7100",
+            "4. close": "186.9000",
+            "5. volume": "4669444"
+        },
+        "2024-01-31": {
+            "1. open": "187.0500",
+            "2. high": "187.6500",
+            "3. low": "183.1400",
+            "4. close": "183.6600",
+            "5. volume": "8876055"
+        },
+        "2024-01-30": {
+            "1. open": "187.7100",
+            "2. high": "188.6500",
+            "3. low": "186.7700",
+            "4. close": "187.8700",
+            "5. volume": "4575058"
+        },
+        "2024-01-29": {
+            "1. open": "187.4600",
+            "2. high": "189.4600",
+            "3. low": "186.0500",
+            "4. close": "187.1400",
+            "5. volume": "6107908"
+        },
+        "2024-01-26": {
+            "1. open": "191.3100",
+            "2. high": "192.3896",
+            "3. low": "186.1600",
+            "4. close": "187.4200",
+            "5. volume": "9895941"
+        },
+        "2024-01-25": {
+            "1. open": "184.9600",
+            "2. high": "196.9000",
+            "3. low": "184.8300",
+            "4. close": "190.4300",
+            "5. volume": "29596239"
+        },
+        "2024-01-24": {
+            "1. open": "174.7600",
+            "2. high": "174.8600",
+            "3. low": "172.9000",
+            "4. close": "173.9300",
+            "5. volume": "7831157"
+        },
+        "2024-01-23": {
+            "1. open": "172.9000",
+            "2. high": "174.0200",
+            "3. low": "172.4800",
+            "4. close": "173.9400",
+            "5. volume": "3983461"
+        },
+        "2024-01-22": {
+            "1. open": "172.8200",
+            "2. high": "174.4500",
+            "3. low": "172.4000",
+            "4. close": "172.8300",
+            "5. volume": "4925964"
+        },
+        "2024-01-19": {
+            "1. open": "170.5900",
+            "2. high": "171.5791",
+            "3. low": "169.1800",
+            "4. close": "171.4800",
+            "5. volume": "6929079"
+        },
+        "2024-01-18": {
+            "1. open": "166.4900",
+            "2. high": "166.9900",
+            "3. low": "165.0400",
+            "4. close": "166.8400",
+            "5. volume": "3776990"
+        },
+        "2024-01-17": {
+            "1. open": "166.7900",
+            "2. high": "167.8200",
+            "3. low": "165.4950",
+            "4. close": "166.0800",
+            "5. volume": "4288604"
+        },
+        "2024-01-16": {
+            "1. open": "165.8000",
+            "2. high": "167.2500",
+            "3. low": "165.3400",
+            "4. close": "166.9600",
+            "5. volume": "4869635"
+        },
+        "2024-01-12": {
+            "1. open": "162.9700",
+            "2. high": "165.9800",
+            "3. low": "162.3550",
+            "4. close": "165.8000",
+            "5. volume": "4958261"
+        },
+        "2024-01-11": {
+            "1. open": "161.0200",
+            "2. high": "162.2300",
+            "3. low": "160.2900",
+            "4. close": "162.1600",
+            "5. volume": "3778395"
+        },
+        "2024-01-10": {
+            "1. open": "160.2800",
+            "2. high": "161.3400",
+            "3. low": "159.7400",
+            "4. close": "161.2300",
+            "5. volume": "2967852"
         }
     }, 2: {
         "2024-02-27": {
@@ -720,15 +777,37 @@ function StockChart({ companyID }) {
             const keys = Object.keys(fetched[i]);
             let dataArray = [];
 
-            for (const key of [...keys].reverse()) {
-                dataArray.push({date: key, price: parseFloat( fetched[i][key]["4. close"])});
+            for (const key of keys) {
+                dataArray.push({date: key, close: parseFloat(fetched[i][key]["4. close"])});
             }
             allData.push(dataArray);
         }
 
         return allData;
     }
-    const allData = produceAllData();
+    const allChartData = produceAllData();
+
+    const produceToolTipData = () => {
+        let allData = [];
+        for (let i=0; i<4; i++) {
+            const keys = Object.keys(fetched[i]);
+            let dateToInfo = {};
+
+            for (const key of keys) {
+                dateToInfo[key] = {
+                    open: (fetched[i][key]["1. open"]),
+                    high: (fetched[i][key]["2. high"]),
+                    low: (fetched[i][key]["3. low"]),
+                    close: (fetched[i][key]["4. close"]),
+                    volume: (fetched[i][key]["5. volume"])
+                }
+            }
+            allData.push(dateToInfo);
+        }
+
+        return allData;
+    }
+    const allToolTipData = produceToolTipData();
     // fetched data now stored in allData
 
     // const chartData = [
@@ -741,31 +820,64 @@ function StockChart({ companyID }) {
     // ];
 
     const getChartData = () => {
-        const data = allData[timeScaleToInfo[timeScale].type];
-        return data.slice(0, Math.min(data.length, timeScaleToInfo[timeScale].count));
+        const data = allChartData[timeScaleToInfo[timeScale].type];
+        return data.slice(0, Math.min(data.length, timeScaleToInfo[timeScale].count)).reverse();
     }
-
     const chartData = getChartData();
+
+    function CustomTooltip({ payload, label, active }) {
+        if (active) {
+            const data = allToolTipData[timeScaleToInfo[timeScale].type][label];
+            return (
+                <div className="custom-tooltip">
+                    <p className='tooltip-title'>{label}</p>
+                    <div className="tooltip-text">
+                        <div className='tooltip-left'>
+                            <p>{`Open:`}</p>
+                            <p>{`High:`}</p>
+                            <p>{`Low:`}</p>
+                            <p>{`Close:`}</p>
+                            <p>{`Volume:`}</p>
+                        </div>
+                        <div className='tooltip-right'>
+                            <p>{`£${data.open}`}</p>
+                            <p>{`£${data.high}`}</p>
+                            <p>{`£${data.low}`}</p>
+                            <p>{`£${data.close}`}</p>
+                            <p>{`${data.volume}`}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+      
+        return null;
+    }
 
     return (
         <>
         <div id='stock-chart'>
             <div className='chart-area'>
                 <ResponsiveContainer width="100%" height="100%">
-                    <LineChart width={800} height={400} data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <AreaChart width={800} height={400} data={chartData} margin={{ top: 5, right: 40, left: 0, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="date" />
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip content={<CustomTooltip />} />
                         {/* <Legend /> */}
-                        <Line type="monotone" dataKey="price" stroke="#0d1f2d" activeDot={{ r: 8 }} />
-                    </LineChart>
+                        <Area type="monotone" dataKey="close" stroke="#0d1f2d" fill="#4e606e"  activeDot={{ r: 8 }} />
+                    </AreaChart>
                 </ResponsiveContainer>
             </div>
             <div className='btn-area'>
                 {timeScaleToInfo.map((info, index) => (
-                    <div className='btn-container'>
-                        <button key={index} onClick={()=>{setTimeScale(index)}}>{info.name}</button>
+                    <div key={index} className='btn-container'>
+                        <button
+                            style={timeScale === index ? {backgroundColor: "var(--neutral)"} : {}}
+                            key={index}
+                            onClick={()=>{setTimeScale(index)}}>
+                                {info.name}
+                        </button>
                     </div>
                 ))}
             </div>
