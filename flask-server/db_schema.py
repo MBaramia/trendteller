@@ -16,6 +16,12 @@ class UserData(db.Model,UserMixin):
     def __init__(self,username,password): 
         self.username = username
         self.password = generate_password_hash(password)
+    
+    def updateDetails(self, username, password):
+        if username != "":
+            self.username = username
+        if password != "":
+            self.password = generate_password_hash(password)
 
 # this table stores all of the data relating to a company
 class CompanyData(db.Model):

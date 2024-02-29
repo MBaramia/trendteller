@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Profile.css'
+import { processUpdate } from '../Auth';
 
 function Profile() {
   const userData = {email: "myemail@gmail.com"}
@@ -19,9 +20,15 @@ function Profile() {
     return true;
   }
 
-  const submitChanges = () => {
+  const submitChanges = async () => {
     if (validatePassword()) {
       console.log(`${email} | ${password}`);
+      const update = await processUpdate(email, password);
+      if (update.status) {
+        console.log(update.data)
+      } else {
+        console.log(update.data);
+      }
     }
   }
 

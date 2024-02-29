@@ -17,12 +17,12 @@ function Signup({ logInUser }) {
 
   const submitChanges = async () => {
     console.log(`${username} | ${password}`);
-    const logIn = await processRegister(username, password);
-    if (logIn.status) {
+    const register = await processRegister(username, password);
+    if (register.status) {
       logInUser();
     } else {
-      console.log(logIn.data);
-      setErrors([logIn.data.message]);
+      console.log(register.data);
+      setErrors([register.data.message]);
     }
   };
 

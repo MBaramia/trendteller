@@ -73,6 +73,18 @@ def processRegister():
     
     return jsonify({"message": "Registration successful"})
 
+@app.route('/processUpdate', methods=['POST'])
+@login_required
+def processUpdate():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    user = UserData.query.filter(UserData.id == current_user.id).first()
+    user.updateDetails(username, password)
+    db.session.commit()
+    return jsonify({"message": "Update successful"})
+
 @app.route("/checkLoggedIn", methods=["POST"])
 @login_required
 def checkLoggedIn():

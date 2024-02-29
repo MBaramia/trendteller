@@ -92,3 +92,33 @@ export function checkLoggedIn() {
       }
     });
 }
+
+export function processUpdate(username, password) {
+  let status = true;
+  return fetch("/processUpdate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
