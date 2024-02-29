@@ -87,6 +87,8 @@ function App() {
                       />
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/tutorial" element={<Tutorial />} />
+
+                      <Route path="/*" element={<Navigate to="/" />} />
                     </Routes>
                   </div>
                 </main>
