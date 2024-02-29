@@ -8,7 +8,6 @@
 
 .news-list-view .list-item {
   width: 100%;
-  /* min-width: 40rem; */
   display: grid;
   min-width: fit-content;
   grid-template-columns: minmax(6.5rem, 1.2fr) minmax(30rem, 6fr);

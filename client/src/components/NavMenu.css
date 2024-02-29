@@ -14,7 +14,7 @@
 #nav-menu .list-section {
   display: flex;
   flex-direction: column;
-  gap: 2.8125rem;
+  gap: 2.5rem;
 }
 
 #nav-menu li {
@@ -41,8 +41,8 @@
   cursor: pointer;
 }
 
-#nav-menu .header-items {
-  margin-bottom: 4rem;
+#nav-menu .header-items, #nav-menu .list-section {
+  margin-bottom: 3rem;
 }
 
 #nav-menu .header-items {
