@@ -1,7 +1,6 @@
 .recommended-company-view h2 {
     margin-bottom: 2rem;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    text-wrap: wrap;
     max-width: fit-content;
 }
 

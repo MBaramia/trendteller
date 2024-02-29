@@ -138,12 +138,14 @@ main {
 
 .content-section {
   padding: var(--content-v) var(--content-h);
-  padding-bottom: 0;
+  /* padding-bottom: 0; */
+  min-height: fit-content;
   margin: auto;
   min-width: fit-content;
   /* min-width: calc(var(--header-minw) - var(--sidebar-width)); */
   overflow-x: visible;
   max-width: var(--maxw);
+  height: 100%;
 
   opacity: 0.9; 
   animation: fadeIn 0.7s ease-out forwards; 
@@ -151,6 +153,10 @@ main {
 
 .content-section.show {
   opacity: 1;
+}
+
+.content-section >* {
+  height: 100%;
 }
 
 .content-section >* >*{

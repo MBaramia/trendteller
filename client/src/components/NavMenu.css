@@ -3,10 +3,6 @@
   background-color: var(--dark-bg);
   color: var(--light-txt);
   padding: var(--content-v) var(--content-h);
-  /* padding-left: 30px;
-  padding-right: 30px;
-  padding-bottom: 60px;
-  padding-top: 45px; */
   height: 100%;
   z-index: 1;
   display: flex;
@@ -18,7 +14,7 @@
 #nav-menu .list-section {
   display: flex;
   flex-direction: column;
-  gap: 2.8125rem;
+  gap: 2.5rem;
 }
 
 #nav-menu li {
@@ -43,6 +39,10 @@
 #nav-menu .logout-btn:hover {
   opacity: var(--hover-opacity);
   cursor: pointer;
+}
+
+#nav-menu .header-items, #nav-menu .list-section {
+  margin-bottom: 3rem;
 }
 
 #nav-menu .header-items {
