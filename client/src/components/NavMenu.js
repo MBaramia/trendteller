@@ -19,7 +19,7 @@ function NavMenu({ logOutUser }) {
 
   return (
     <>
-      <div className="nav-menu">
+      <div id="nav-menu">
         <div className="list-section">
           <ul>
             <li>

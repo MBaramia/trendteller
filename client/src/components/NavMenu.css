@@ -1,4 +1,4 @@
-.nav-menu {
+#nav-menu {
   min-width: var(--sidebar-width);
   background-color: var(--dark-bg);
   color: var(--light-txt);
@@ -15,13 +15,13 @@
   overflow-y: scroll;
 }
 
-.nav-menu .list-section {
+#nav-menu .list-section {
   display: flex;
   flex-direction: column;
   gap: 2.8125rem;
 }
 
-.nav-menu li {
+#nav-menu li {
   list-style: none;
   margin-bottom: 1.25rem;
   display: flex;
@@ -30,7 +30,7 @@
   width: 100%;
 }
 
-.logout-btn {
+#nav-menu .logout-btn {
   background-color: var(--logout);
   height: 3.5rem;
   width: 100%;
@@ -40,7 +40,7 @@
   transition: opacity var(--hover-transition);
 }
 
-.logout-btn:hover {
+#nav-menu .logout-btn:hover {
   opacity: var(--hover-opacity);
   cursor: pointer;
 }

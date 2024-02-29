@@ -22,6 +22,7 @@ header .header-logo {
 
 header .left {
   width: minmax(var(--sidebar-width), 100%);
+  display: flex;
   /* min-width: var(--sidebar-width); */
 }
 
@@ -61,4 +62,29 @@ header #profile-container >* {
 header .profile-icon {
   width: 2.625rem;
   height: 2.625rem;
+}
+
+header #nav-btn {
+  display: none; 
+  margin: 0 1rem;
+  opacity: 0;
+
+  animation: fadeIn 0.7s ease-out forwards;
+}
+
+header #nav-btn >*:hover {
+  opacity: var(--hover-opacity);
+  cursor: pointer;
+}
+header #nav-btn >* {
+  height: 100%;
+  width: auto;
+
+  transition: opacity var(--hover-transition);
+}
+
+@media screen and (max-width: 60rem) {
+  header #nav-btn {
+    display: inline;
+  }
 }
