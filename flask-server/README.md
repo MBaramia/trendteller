@@ -10,19 +10,21 @@
     npm install
     ```  
 
-Recreate venv: python3.11 -m venv venv
-
 # Installing flask dependencies
 1. Open another terminal
 2. Run `cd flask-server`
     ```
     cd flask-server
     ```
-3. Run `source venv/bin/activate`
+3. Run `python3.11 -m venv venv`
+    ```
+    python3.11 -m venv venv
+    ```
+4. Run `source venv/bin/activate`
     ```
     source venv/bin/activate
     ```   
-4. Run `pip install -r ./requirements.txt`
+5. Run `pip install -r ./requirements.txt`
     ```
     pip install -r ./requirements.txt
     ``` 
