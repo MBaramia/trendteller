@@ -36,17 +36,17 @@ function App() {
 
   // console.log(hasLoaded);
 
-  // useEffect(() => {
-  //   checkLoggedIn().then((result) => {
-  //     setIsLoggedIn(result.status);
-  //     setHasLoaded(true);
-  //     console.log(`loaded: ${hasLoaded}`);
-  //     // console.log(result.status);
-  //   });
-  // }, []);
+  useEffect(() => {
+    checkLoggedIn().then((result) => {
+      setIsLoggedIn(result);
+      setHasLoaded(true);
+      console.log(`loaded: ${hasLoaded}`);
+      // console.log(result.status);
+    });
+  }, []);
 
-  const [hasLoaded, setHasLoaded] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const logInUser = () => {
     setIsLoggedIn(true);
@@ -59,7 +59,7 @@ function App() {
 
   return (
     <>
-    {/* {hasLoaded ? ( */}
+     {hasLoaded ? ( 
       <Router>
         {isLoggedIn ? (
           <>
@@ -94,9 +94,9 @@ function App() {
           </Routes>
         )};
       </Router>
-    {/* ) : (
+     ) : (
        <Loading />
-    )};  */}
+    )};
   </>
   );
 };

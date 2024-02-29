@@ -59,15 +59,9 @@ export function checkLoggedIn() {
     .then((response) => {
       console.log(response);
       if (!response.ok) {
-        status = false;
+        return false;
+      } else {
+        return true;
       }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      return {
-        status: status,
-        data: data,
-      };
     });
 }
