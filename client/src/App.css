@@ -139,6 +139,7 @@ main {
 .content-section {
   padding: var(--content-v) var(--content-h);
   /* padding-bottom: 0; */
+  min-height: fit-content;
   margin: auto;
   min-width: fit-content;
   /* min-width: calc(var(--header-minw) - var(--sidebar-width)); */
