@@ -1,5 +1,5 @@
 import "./Login.css";
-import { processLogin } from "../Auth";
+import { processLogin, processRegister } from "../Auth";
 import { useState } from "react";
 
 function Signup({ logInUser }) {
@@ -17,7 +17,7 @@ function Signup({ logInUser }) {
 
   const submitChanges = async () => {
     console.log(`${username} | ${password}`);
-    const logIn = await processLogin(username, password);
+    const logIn = await processRegister(username, password);
     if (logIn.status) {
       logInUser();
     } else {

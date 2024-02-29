@@ -43,15 +43,11 @@ def processLogin():
     username = data.get("username")
     password = data.get("password")
 
-    qrytext = text("SELECT * FROM UserData WHERE username=:username;")
-    qry = qrytext.bindparams(username = username)
-    resultset = db.session.execute(qry)
-    values = resultset.fetchall()
-    if len(values) == 0:
+    user = UserData.query.filter(UserData.username == username).first()
+    if (not user):
         return jsonify({"message": "No such user exists"}), 401
-    if not check_password_hash(values[0][2],password): # this means that the password provided upon registering and the password entered are different
+    if not check_password_hash(user.password,password): # this means that the password provided upon registering and the password entered are different
         return jsonify({"message": "Incorrect password"}), 401
-    user = UserData(values[0][0], values[0][1], values[0][2]) # setting all the information about the user
     login_user(user)
     return jsonify({"message": "Login successful"})
 
@@ -60,6 +56,22 @@ def processLogin():
 def processLogout():
     logout_user()
     return jsonify({"message": "Logout successful"})
+
+@app.route("/processRegister", methods=["POST"])
+def processRegister():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    try:
+        user = UserData(username, password)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+    except:
+        return jsonify({"message": "Username is taken"}), 401
+    
+    return jsonify({"message": "Registration successful"})
 
 @app.route("/checkLoggedIn", methods=["POST"])
 @login_required
