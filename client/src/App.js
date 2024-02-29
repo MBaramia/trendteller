@@ -36,6 +36,9 @@ function App() {
 
   // console.log(hasLoaded);
 
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
     checkLoggedIn().then((result) => {
       setIsLoggedIn(result);
@@ -43,62 +46,65 @@ function App() {
       console.log(`loaded: ${hasLoaded}`);
       // console.log(result.status);
     });
-  }, []);
-
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  });
 
   const logInUser = () => {
     setIsLoggedIn(true);
-    window.location.href = "/";
   };
 
   const logOutUser = () => {
     setIsLoggedIn(false);
-  };  
+  };
 
   return (
     <>
-     {hasLoaded ? ( 
-      <Router>
-        {isLoggedIn ? (
-          <>
-            <Header />
-            <div className="main-view">
-              <NavMenu logOutUser={logOutUser} />
-              <main>
-                <div className="content-section">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/browse" element={<Browse />} />
-                    <Route path="/search/:query" element={<Search />} />
-                    <Route path="/notifications" element={<Notifications />} />
-                    <Route path="/company/:companyID" element={<Company />} />
-                    <Route
-                      path="/article/:articleID/:companyID"
-                      element={<Article />}
-                    />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/tutorial" element={<Tutorial />} />
-
-                  </Routes>
-                </div>
-              </main>
-            </div>
-          </>
-        ) : (
-          <Routes>
-            <Route path="/signup" element={<Signup logInUser={logInUser} />} />
-            <Route path="/" element={<Login logInUser={logInUser} />} />
-            <Route path="/*" element={<Navigate to="/" />} />
-          </Routes>
-        )};
-      </Router>
-     ) : (
-       <Loading />
-    )};
-  </>
+      {hasLoaded ? (
+        <>
+          {isLoggedIn ? (
+            <>
+              <Header />
+              <div className="main-view">
+                <NavMenu logOutUser={logOutUser} />
+                <main>
+                  <div className="content-section">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/browse" element={<Browse />} />
+                      <Route path="/search/:query" element={<Search />} />
+                      <Route
+                        path="/notifications"
+                        element={<Notifications />}
+                      />
+                      <Route path="/company/:companyID" element={<Company />} />
+                      <Route
+                        path="/article/:articleID/:companyID"
+                        element={<Article />}
+                      />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/tutorial" element={<Tutorial />} />
+                    </Routes>
+                  </div>
+                </main>
+              </div>
+            </>
+          ) : (
+            <Routes>
+              <Route
+                path="/signup"
+                element={<Signup logInUser={logInUser} />}
+              />
+              <Route path="/" element={<Login logInUser={logInUser} />} />
+              <Route path="/*" element={<Navigate to="/" />} />
+            </Routes>
+          )}
+          ;
+        </>
+      ) : (
+        <Loading />
+      )}
+      ;
+    </>
   );
-};
+}
 
 export default App;
