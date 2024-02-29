@@ -23,44 +23,47 @@ function NavMenu({ logOutUser }) {
   return (
     <>
       <div id="nav-menu">
-        <div className="header-items">
-          <Link to="/">
-            <img className="header-logo" src={HeaderLogo} alt="Trendteller logo" />
-          </Link>
+        <div>
+          <div className="header-items">
+            <Link to="/">
+              <img className="header-logo" src={HeaderLogo} alt="Trendteller logo" />
+            </Link>
 
-          <SearchBar />
-        </div>
-        <div className="list-section">
-          <ul>
-            <li>
-              <NavItem url="/" navIcon={<HomeIcon />}>
-                Home
-              </NavItem>
-            </li>
-            <li>
-              <NavItem url="/browse" navIcon={<BrowseIcon />}>
-                Browse
-              </NavItem>
-            </li>
-            <li>
-              <NavItem url="/notifications" navIcon={<NotificationsIcon />}>
-                Notifications
-              </NavItem>
-            </li>
-          </ul>
+            <SearchBar />
+          </div>
+          
+          <div className="list-section">
+            <ul>
+              <li>
+                <NavItem url="/" navIcon={<HomeIcon />}>
+                  Home
+                </NavItem>
+              </li>
+              <li>
+                <NavItem url="/browse" navIcon={<BrowseIcon />}>
+                  Browse
+                </NavItem>
+              </li>
+              <li>
+                <NavItem url="/notifications" navIcon={<NotificationsIcon />}>
+                  Notifications
+                </NavItem>
+              </li>
+            </ul>
 
-          <ul>
-            <li>
-              <NavItem url="/profile" navIcon={<ProfileIcon />}>
-                Profile
-              </NavItem>
-            </li>
-            <li>
-              <NavItem url="/tutorial" navIcon={<TutorialIcon />}>
-                Tutorial
-              </NavItem>
-            </li>
-          </ul>
+            <ul>
+              <li>
+                <NavItem url="/profile" navIcon={<ProfileIcon />}>
+                  Profile
+                </NavItem>
+              </li>
+              <li>
+                <NavItem url="/tutorial" navIcon={<TutorialIcon />}>
+                  Tutorial
+                </NavItem>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div>
