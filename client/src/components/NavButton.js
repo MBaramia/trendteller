@@ -1,5 +1,5 @@
 import "./NavButton.css";
-import { ReactComponent as NavButtonIcon } from "../images/bell_icon_white.svg";
+import { ReactComponent as NavButtonIcon } from "../images/chevron_right_white.svg";
 
 function NavButton({ navHidden, setNavHidden }) {
 

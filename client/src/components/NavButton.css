@@ -18,7 +18,10 @@
   transition: opacity var(--hover-transition);
 }
 
-#nav-btn >*:hover {
-  opacity: var(--hover-opacity);
+#nav-btn:hover {
   cursor: pointer;
+}
+
+#nav-btn:hover >* {
+  opacity: var(--hover-opacity);
 }

@@ -102,12 +102,10 @@ function App() {
               <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
           )}
-          ;
         </>
       ) : (
         <Loading />
       )}
-      ;
     </>
   );
 }

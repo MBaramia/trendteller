@@ -4,8 +4,11 @@ import { ReactComponent as BrowseIcon } from "../images/browse_icon_navmenu.svg"
 import { ReactComponent as NotificationsIcon } from "../images/bell_icon_white.svg";
 import { ReactComponent as ProfileIcon } from "../images/profile_icon_navmenu.svg";
 import { ReactComponent as TutorialIcon } from "../images/tutorial_icon_navmenu.svg";
+import { Link } from "react-router-dom";
+import HeaderLogo from "../images/header_logo.svg";
 import NavItem from "./NavItem";
 import { processLogout } from "../Auth";
+import SearchBar from "./SearchBar";
 
 function NavMenu({ logOutUser }) {
   const handleLogout = async () => {
@@ -20,6 +23,13 @@ function NavMenu({ logOutUser }) {
   return (
     <>
       <div id="nav-menu">
+        <div className="header-items">
+          <Link to="/">
+            <img className="header-logo" src={HeaderLogo} alt="Trendteller logo" />
+          </Link>
+
+          <SearchBar />
+        </div>
         <div className="list-section">
           <ul>
             <li>

@@ -88,3 +88,9 @@ header #nav-btn >* {
     display: inline;
   }
 }
+
+@media (max-width: 50rem) {
+  header {
+    display: none;
+  }
+}

@@ -44,3 +44,13 @@
   opacity: var(--hover-opacity);
   cursor: pointer;
 }
+
+#nav-menu .header-items {
+  display: none;
+}
+
+@media (max-width: 50rem) {
+  #nav-menu .header-items {
+    display: block;
+  }
+}

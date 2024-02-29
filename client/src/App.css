@@ -185,3 +185,12 @@ main {
     left: 0;
   }
 }
+
+@media (max-width: 50rem) {
+  .main-view {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+}
+
