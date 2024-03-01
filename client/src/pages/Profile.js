@@ -3,9 +3,8 @@ import "./Profile.css";
 import { processUpdate, getUserData } from "../Auth";
 
 function Profile() {
-  const userData = { email: "myemail@gmail.com" };
 
-  let [email, setEmail] = useState(userData.email);
+  let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
 
   useEffect(() => {
