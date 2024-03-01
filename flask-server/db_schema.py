@@ -10,15 +10,21 @@ from sqlalchemy import text
 db = SQLAlchemy()
 
 # All of the data about a user
+# All of the data about a user
 class UserData(db.Model,UserMixin):
     __tablename__='UserData'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(20))
-    def __init__(self,id,username,password): 
-        self.id = id 
+    def __init__(self,username,password): 
         self.username = username
-        self.password = password
+        self.password = generate_password_hash(password)
+    
+    def updateDetails(self, username, password):
+        if username != "":
+            self.username = username
+        if password != "":
+            self.password = generate_password_hash(password)
 
 # this table stores all of the data relating to a company
 class CompanyData(db.Model):
@@ -231,14 +237,14 @@ def dbinit():
     ]
 
     userList = [
-        UserData(0,"user1",generate_password_hash("test")),
-        UserData(1,"user2",generate_password_hash("test")),
-        UserData(2,"user3",generate_password_hash("test")),
-        UserData(3,"user4",generate_password_hash("test")),
-        UserData(4,"user5",generate_password_hash("test")),
-        UserData(5,"user6",generate_password_hash("test")),
-        UserData(6,"user7",generate_password_hash("test")),
-        UserData(7,"uesr8",generate_password_hash("test"))
+        UserData("user1","test"),
+        UserData("user2","test"),
+        UserData("user3","test"),
+        UserData("user4","test"),
+        UserData("user5","test"),
+        UserData("user6","test"),
+        UserData("user7","test"),
+        UserData("uesr8","test")
     ]
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
