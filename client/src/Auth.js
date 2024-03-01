@@ -122,3 +122,29 @@ export function processUpdate(username, password) {
       };
     });
 }
+
+export function getUserData(username, password) {
+  let status = true;
+  return fetch("/getUserData", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

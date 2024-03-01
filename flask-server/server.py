@@ -85,6 +85,13 @@ def processUpdate():
     db.session.commit()
     return jsonify({"message": "Update successful"})
 
+@app.route('/getUserData', methods=['POST'])
+@login_required
+def getUserData():
+    user = UserData.query.filter(UserData.id == current_user.id).first()
+    username = user.username
+    return jsonify({"username": username})
+
 @app.route("/checkLoggedIn", methods=["POST"])
 @login_required
 def checkLoggedIn():
