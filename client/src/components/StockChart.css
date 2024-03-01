@@ -11,7 +11,7 @@
     margin: auto;
     padding: 0rem 3rem;
     display: flex;
-    min-height: fit-content;
+    /* min-height: fit-content; */
     justify-content: space-evenly;
     font-size: 0.9rem;
 }
@@ -31,7 +31,7 @@
 }
 
 #stock-chart .chart-area {
-    height: 20rem;
+    height: 25rem;
     width: 100%;
     padding: 1rem;
     /* background-color: var(--dark-bg); */

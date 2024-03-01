@@ -770,7 +770,6 @@ function StockChart({ companyID }) {
         {name: "6M", count: 30, type: 1},          //6M (daily)
         {name: "1Y", count: 52, type: 2},          //1Y (weekly)
         {name: "2Y", count: 104, type: 2},         //2Y (weekly)
-        {name: "5Y", count: 260, type: 2},         //5Y (weekly)
         {name: "MAX", count: Infinity, type: 3}    //MAX (monthly)
     ];
 
@@ -863,7 +862,7 @@ function StockChart({ companyID }) {
         <div id='stock-chart'>
             <div className='chart-area'>
                 <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart width={800} height={400} data={chartData} margin={{ top: 5, right: 40, left: 0, bottom: 5 }}>
+                    <AreaChart width={100} height={50} data={chartData} margin={{ top: 5, right: 40, left: 0, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="date" />
                         <YAxis />
