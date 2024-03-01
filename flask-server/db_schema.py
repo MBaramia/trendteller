@@ -4,6 +4,8 @@ from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy import event 
+import json
+from sqlalchemy import text
 # create the database interface
 db = SQLAlchemy()
 
@@ -13,15 +15,10 @@ class UserData(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(20))
-    def __init__(self,username,password): 
+    def __init__(self,id,username,password): 
+        self.id = id 
         self.username = username
-        self.password = generate_password_hash(password)
-    
-    def updateDetails(self, username, password):
-        if username != "":
-            self.username = username
-        if password != "":
-            self.password = generate_password_hash(password)
+        self.password = password
 
 # this table stores all of the data relating to a company
 class CompanyData(db.Model):
@@ -151,7 +148,77 @@ def getRecommendedCompanies(userID):
     # gets all the companies that a user follows
     #SELECT companyID FROM FollowedCompanies WHERE userID = userID;
     # SELECT relationOne, relationTwo FROM CompanyWeights ORDER BY mutualFollowers DESC
-    pass
+    # gets all companies that the user follows
+    recommended = []
+    qrytext = text("SELECT companyID FROM FollowedCompanies WHERE userID=:userID;")
+    qry = qrytext.bindparams(userID = userID)
+    resultset = db.session.execute(qry)
+    values = resultset.fetchall()
+
+    qrytwo = text("SELECT relationOne, relationTwo FROM CompanyWeights ORDER BY mutualFollowers DESC")
+    resultsetTwo = db.session.execute(qrytwo)
+    valuesTwo = resultsetTwo.fetchall()
+
+    count = 0
+    for i in range (0,len(valuesTwo)):
+        testing = valuesTwo[i]
+        if (testing[0] in values and testing[1] not in values):
+            count += 1
+            recommended.append(testing[0])
+        elif (testing[0] not in values and testing[1] in values):
+            count += 1
+            recommended.append(testing[1])
+        if count == 3:
+            return recommended
+    return recommended
+
+def getFollowedCompanies(userID):
+    gettingCompaniesQry = text("SELECT companyID FROM FollowedCompanies WHERE userID=:userID")
+    followedCompaniesQry = gettingCompaniesQry.bindparams(userID = userID)
+    resultset = db.session.execute(followedCompaniesQry)
+    values = resultset.fetchall()
+
+def getAllNews():
+    getNews = text("SELECT * FROM ORDER BY datetime DESC LIMIT = 15")
+    getNewsQry = getNews.bindparams()
+    resultset = db.session.execute(getNewsQry)
+    values = resultset.fetchall()
+
+def getAllCompanies():
+    getCompanies = text("SELECT * FROM Companies")
+    getCompaniesQry = getCompanies.bindparams()
+    resultset = db.session.execute(getCompaniesQry)
+    values = resultset.fetchall()
+
+def getNotifications(userID):
+    notifications = text("SELECT * FROM Notifications WHERE userID=:uerID AND viewed=False")
+    notificationsQry = notifications.bindparams(userID=userID)
+    resultset = db.session.execute(notificationsQry)
+    values = resultset.fetchall()
+
+def getCompanyInfo(companyID):
+    getCompanies = text("SELECT * FROM Companies WHERE companyID=:companyID")
+    getCompaniesQry = getCompanies.bindparams(companyID = companyID)
+    resultset = db.session.execute(getCompaniesQry)
+    values = resultset.fetchall()
+
+def getCompanyNews(companyID):
+    getCompaniesNews = text("SELECT * FROM Articles")
+    getCompaniesNewsQry = getCompaniesNews.bindparams()
+    resultset = db.session.execute(getCompaniesNewsQry)
+    values = resultset.fetchall()
+
+def getArticleInfo(articleID, companyID):
+    getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.ArticleID = AffectedCompanies.ArticleID WHERE AffectedCompanies.CompanyID=:companyID")
+    getArticlesQry = getArticles.bindparams(companyID = companyID)
+    resultset = db.session.execute(getArticlesQry)
+    values = resultset.fetchall()
+
+def searchCompanies(query):
+    query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
+    results = query.all()
+
+
 
 # put some data into the tables
 def dbinit():
@@ -164,14 +231,14 @@ def dbinit():
     ]
 
     userList = [
-        UserData("user1","test"),
-        UserData("user2","test"),
-        UserData("user3","test"),
-        UserData("user4","test"),
-        UserData("user5","test"),
-        UserData("user6","test"),
-        UserData("user7","test"),
-        UserData("uesr8","test")
+        UserData(0,"user1",generate_password_hash("test")),
+        UserData(1,"user2",generate_password_hash("test")),
+        UserData(2,"user3",generate_password_hash("test")),
+        UserData(3,"user4",generate_password_hash("test")),
+        UserData(4,"user5",generate_password_hash("test")),
+        UserData(5,"user6",generate_password_hash("test")),
+        UserData(6,"user7",generate_password_hash("test")),
+        UserData(7,"uesr8",generate_password_hash("test"))
     ]
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
