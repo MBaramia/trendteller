@@ -1,3 +1,43 @@
+#company-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+#company-info .info-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#company-info .left-title {
+    display: flex;
+    gap: 1rem;
+}
+
+#company-info .smiley {
+    height: 3.5rem;
+    width: auto;
+    margin: auto 0;
+}
+
+#company-info .info-right {
+    display: flex;
+    gap: 1rem;
+}
+
+#company-info .info-right >* {
+    display: flex;
+    gap: 0.2rem;
+}
+
+#company-info .info-right >* >* {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
 #stock-chart {
     padding: 1rem;
     width: 100%;

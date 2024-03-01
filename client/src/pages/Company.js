@@ -83,37 +83,14 @@ function Company() {
   const toggleCompanyFollow = () => {
     setIsFollowing(!isFollowing);
   }
-
-  const perceptionToComponent = (p) => {
-    if (p === 2) {
-      return <span style={{ color: "var(--positive)" }}>Good</span>;
-    } else if (p === 1) {
-      return <span style={{ color: "var(--neutral)" }}>Neutral</span>;
-    } else {
-      return <span style={{ color: "var(--negative)" }}>Bad</span>;
-    }
-  };
+  
 
   return (
     <>
     <div id='company-pg'>
       <div id='pg-content'>
         <div className='top-area'>
-          <div className='company-info'>
-            <div className='info-left'>
-              <h1>{company.code}</h1>
-              <h3>{company.name}</h3>
-            </div>
-            <div className='info-right'>
-              <p>Stock price: £{stockData.price}</p>
-              <p>{stockData.weekChangeNum > 0 ? "+" : "-"}£{Math.abs(stockData.weekChangeNum)} ({stockData.weekChangePer}%) from last week</p>
-              <p>Public opinion: {perceptionToComponent(company.perception)}</p>
-            </div>
-          </div>
-
-          
-          <StockChart companyID={company.id} />
-
+          <StockChart company={company} />
         </div>
 
         <SummaryTextView title={"Overview"} text={company.overview} />

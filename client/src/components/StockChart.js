@@ -1,6 +1,9 @@
 import './StockChart.css';
 import { useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { ReactComponent as SmileyGood } from "../images/smiley_good_green.svg";
+import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_grey.svg";
+import { ReactComponent as SmileyBad } from "../images/smiley_bad_red.svg";
 const fetched = {
     0: {
         "2024-02-27 19:55:00": {
@@ -758,7 +761,7 @@ const fetched = {
     }
 };
 
-function StockChart({ companyID }) {
+function StockChart({ company }) {
 
     const [timeScale, setTimeScale] = useState(0);
 
@@ -811,6 +814,20 @@ function StockChart({ companyID }) {
         return allData;
     }
     const allToolTipData = produceToolTipData();
+
+    const mainData = {
+        open: "145.4100",  
+        high: "148.1000", 
+        low: "145.2100", 
+        price: "147.9400", 
+        volume: "15198607"
+    }
+
+    const changes = [
+        "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)",
+        "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)"
+    ];
+
     // fetched data now stored in allData
 
     // const chartData = [
@@ -857,8 +874,56 @@ function StockChart({ companyID }) {
         return null;
     }
 
+    const perceptionToSmiley = (p) => {
+        if (p === 2) {
+          return <SmileyGood className="smiley" />;
+        } else if (p === 1) {
+          return <SmileyNeutral className="smiley" />;
+        } else {
+          return <SmileyBad className="smiley" />;
+        }
+    }
+
     return (
         <>
+        <div id='company-info'>
+            <div className='info-left'>
+                <div className='left-title'>
+                    <h1>{company.code}</h1>
+                    {perceptionToSmiley(company.perception)}
+                </div>
+              <h3>{company.name}</h3>
+            </div>
+            <div className='info-right'>
+                <div>
+                    <div className='left-side'>
+                        <p>Open:</p>
+                        <p>High:</p>
+                        <p>Low:</p>
+                        
+                    </div>
+                    <div className='right-side'>
+                        <p>£{mainData.open}</p>
+                        <p>£{mainData.high}</p>
+                        <p>£{mainData.low}</p>
+                       
+                    </div>
+                </div>
+                <div>
+                    <div className='left-side'>
+                        <p>Price:</p>
+                        <p>Change:</p>
+                        <p>Volume:</p>
+                    </div>
+                    <div className='right-side'>
+                        <p>£{mainData.price}</p>
+                        <p>{changes[timeScale]}</p>
+                        <p>{mainData.volume}</p>
+                    </div>
+                </div>
+              
+            </div>
+        </div>
         <div id='stock-chart'>
             <div className='chart-area'>
                 <ResponsiveContainer width="100%" height="100%">

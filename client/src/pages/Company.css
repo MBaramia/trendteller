@@ -15,18 +15,6 @@
   margin-bottom: 5rem;
 }
 
-#company-pg .company-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-#company-pg .info-right, #company-pg .info-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 #company-pg #fade-overlay {
   height: calc(var(--content-v) + 3rem);
   background: linear-gradient(to bottom, transparent 0%, var(--light-txt) 30%);
