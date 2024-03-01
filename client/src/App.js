@@ -23,8 +23,23 @@ import { processLogin, checkLoggedIn } from "./Auth";
 import Loading from "./components/Loading";
 import NavButton from "./components/NavButton";
 
+function getScrollbarWidth() {
+  const scrollDiv = document.createElement('div');
+  scrollDiv.style.width = '100px';
+  scrollDiv.style.height = '100px';
+  scrollDiv.style.overflow = 'scroll';
+  scrollDiv.style.position = 'absolute';
+  scrollDiv.style.top = '-9999px'; // Hide the div off-screen
+  document.body.appendChild(scrollDiv);
+
+  const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+  document.body.removeChild(scrollDiv);
+
+  return scrollbarWidth;
+}
+
 function App() {
-  const [navHidden, setNavHidden] = useState(false);
+  const [navHidden, setNavHidden] = useState(true);
   // const [data, setData] = useState([{}]);
 
   // useEffect(() => {
@@ -71,7 +86,7 @@ function App() {
                   <NavButton navHidden={navHidden} setNavHidden={setNavHidden} />
                 </div>
                 <main>
-                  <div onClick={()=>{setNavHidden(false)}} className="content-section">
+                  <div onClick={()=>{setNavHidden(true)}} className="content-section">
                     <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/browse" element={<Browse />} />

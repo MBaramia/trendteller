@@ -1,8 +1,13 @@
+.recommended-company-view {
+    min-width: fit-content;
+}
+
 .recommended-company-view h2 {
     margin-bottom: 2rem;
     text-wrap: wrap;
     max-width: fit-content;
 }
+
 
 .recommended-company-view .grid-section{
     display: grid;

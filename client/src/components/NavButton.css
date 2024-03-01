@@ -1,7 +1,7 @@
 #nav-btn {
   background-color: var(--dark-bg);
   height: 5rem;
-  width: 1.5rem;
+  width: var(--navbutton-width);
   display: flex;
   justify-content: space-around;
 }

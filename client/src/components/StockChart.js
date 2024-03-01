@@ -766,7 +766,11 @@ function StockChart({ companyID }) {
         {name: "1D", count: 100, type: 0},         //1D (intraday)
         {name: "1W", count: 7, type: 1},           //1W (daily)
         {name: "1M", count: 30, type: 1},          //1M (daily)
+        {name: "3M", count: 30, type: 1},          //3M (daily)
+        {name: "6M", count: 30, type: 1},          //6M (daily)
         {name: "1Y", count: 52, type: 2},          //1Y (weekly)
+        {name: "2Y", count: 104, type: 2},         //2Y (weekly)
+        {name: "5Y", count: 260, type: 2},         //5Y (weekly)
         {name: "MAX", count: Infinity, type: 3}    //MAX (monthly)
     ];
 

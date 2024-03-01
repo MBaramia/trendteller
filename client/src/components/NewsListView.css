@@ -1,5 +1,6 @@
 .news-list-view {
-  overflow-x: scroll;
+  min-width: fit-content
+  /* overflow-x: scroll; */
 }
 
 .news-list-view h2 {

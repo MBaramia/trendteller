@@ -21,9 +21,10 @@
     cursor: pointer;
 }
 
-#stock-chart .btn-area >* >* {
+#stock-chart .btn-area button {
     background-color: var(--dark-bg);
     padding: 0.9rem;
+    margin: 0 0.1rem;
     width: 4rem;
 
     transition: opacity var(--hover-transition), background-color var(--hover-transition);

@@ -1,5 +1,5 @@
 #nav-menu {
-  min-width: var(--sidebar-width);
+  width: var(--sidebar-width);
   background-color: var(--dark-bg);
   color: var(--light-txt);
   padding: var(--content-v) var(--content-h);
@@ -9,6 +9,8 @@
   flex-direction: column;
   justify-content: space-between;
   overflow-y: scroll;
+  scrollbar-gutter: stable;
+  box-sizing: border-box;
 }
 
 #nav-menu .list-section {
@@ -52,5 +54,10 @@
 @media (max-width: 50rem) {
   #nav-menu .header-items {
     display: block;
+  }
+
+  #nav-menu .header-logo {
+    width: 12rem;
+    max-width: 100%;;
   }
 }
