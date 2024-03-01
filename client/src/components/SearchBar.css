@@ -23,7 +23,7 @@
 #search-bar .search-btn {
   margin: auto 0;
   height: 100%;
-  width: 10%;
+  width: 3rem;
   display: flex;
   justify-content: space-around;
 }

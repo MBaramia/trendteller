@@ -1,7 +1,8 @@
 .company-list-view {
     width: 100%;
     text-align: left;
-    overflow-x: scroll;
+    min-width: fit-content;
+    /* overflow-x: scroll; */
 }
 
 .company-list-view h2 {
