@@ -792,6 +792,7 @@ function StockChart({ company }) {
         return allData;
     }
     const allChartData = produceAllData();
+    console.log(allChartData);
 
     const produceToolTipData = () => {
         let allData = [];
@@ -814,6 +815,7 @@ function StockChart({ company }) {
         return allData;
     }
     const allToolTipData = produceToolTipData();
+    console.log(allToolTipData);
 
     const mainData = {
         open: "145.4100",  
@@ -927,13 +929,21 @@ function StockChart({ company }) {
         <div id='stock-chart'>
             <div className='chart-area'>
                 <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart width={100} height={50} data={chartData} margin={{ top: 5, right: 40, left: 0, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" />
+                    <AreaChart width={100} height={50} data={chartData} margin={{ top: 5, right: 50, left: 10, bottom: 5 }}>
+                        <defs>
+                            <linearGradient id="colour" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor='#10588f' stopOpacity={0.5} />
+                                <stop offset="75%" stopColor='#10588f' stopOpacity={0.1} />
+                            </linearGradient>
+                        </defs>
+
+
+                        <CartesianGrid opacity={0.5}/>
                         <XAxis dataKey="date" />
-                        <YAxis />
+                        <YAxis tickFormatter={(num)=>`£${num.toFixed(2)}`} />
                         <Tooltip content={<CustomTooltip />} />
                         {/* <Legend /> */}
-                        <Area type="monotone" dataKey="close" stroke="#0d1f2d" fill="#4e606e"  activeDot={{ r: 8 }} />
+                        <Area type="monotone" dataKey="close" stroke="#0d1f2d" fill="url(#colour)"  activeDot={{ r: 8 }} />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
