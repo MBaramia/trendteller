@@ -1,5 +1,6 @@
 .news-list-view {
-  overflow-x: scroll;
+  min-width: fit-content
+  /* overflow-x: scroll; */
 }
 
 .news-list-view h2 {
@@ -8,10 +9,9 @@
 
 .news-list-view .list-item {
   width: 100%;
-  /* min-width: 40rem; */
   display: grid;
   min-width: fit-content;
-  grid-template-columns: minmax(6.5rem, 1.2fr) minmax(30rem, 6fr);
+  grid-template-columns: minmax(6.5rem, 1.2fr) minmax(20rem, 6fr);
   overflow: visible;
   margin-bottom: 1.2rem;
   box-shadow: var(--shadow);
@@ -48,8 +48,8 @@
 
 .news-list-view .item-main {
   width: 100%;
-  display: grid;
-  grid-template-columns: 5fr 1fr;
+  display: flex;
+  /* grid-template-columns: 3fr 1fr; */
 }
 
 .news-list-view .item-text {
@@ -58,6 +58,7 @@
   white-space: nowrap;
   overflow: hidden;
   padding: 1.3rem;
+  width: 100%;
 }
 
 .news-list-view .text-top p {
@@ -74,6 +75,16 @@
   margin-top: 0.5rem;
 }
 
+.news-list-view .text-bottom :first-child {
+  margin-right: 0.3rem;
+  text-overflow: ellipsis;
+}
+
+.news-list-view .text-bottom :nth-child(2) {
+  width: 100%;
+  text-align: right;
+}
+
 .news-list-view .item-right {
   white-space: nowrap;
   overflow: hidden;
@@ -81,13 +92,7 @@
   border-top-right-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
   padding: 1.3rem;
-}
-
-.news-list-view .item-right p {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: auto;
+  min-width: 5rem;
 }
 
 .news-list-view .smiley {

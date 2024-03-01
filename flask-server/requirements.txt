@@ -1,6 +1,5 @@
 flask
 flask-login
-flask_sqlalchemy
-werkzeug.security
-sqlalchemy.sql
-sqlalchemy
+Flask-SQLAlchemy
+Werkzeug
+Flask-Mail

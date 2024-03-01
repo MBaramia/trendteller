@@ -43,10 +43,10 @@ def logout():
     logout_user()
     return jsonify({"message": "Logout successful"})
 
-@app.route("/protected")
+@app.route("/checkLoggedIn")
 @login_required
 def protected():
-    return "Logged in"
+    return jsonify({"message": "Is logged in"})
 
 # Members API route - delete
 @app.route("/members")

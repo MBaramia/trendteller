@@ -1,0 +1,104 @@
+#company-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+#company-info .info-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#company-info .left-title {
+    display: flex;
+    gap: 1rem;
+}
+
+#company-info .smiley {
+    height: 3.5rem;
+    width: auto;
+    margin: auto 0;
+}
+
+#company-info .info-right {
+    display: flex;
+    gap: 1rem;
+}
+
+#company-info .info-right >* {
+    display: flex;
+    gap: 0.2rem;
+}
+
+#company-info .info-right >* >* {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+#stock-chart {
+    padding: 1rem;
+    width: 100%;
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+#stock-chart .btn-area {
+    width: 80%;
+    margin: auto;
+    padding: 0rem 3rem;
+    display: flex;
+    /* min-height: fit-content; */
+    justify-content: space-evenly;
+    font-size: 0.9rem;
+}
+
+#stock-chart .btn-area >* >*:hover {
+    opacity: var(--hover-opacity);
+    cursor: pointer;
+}
+
+#stock-chart .btn-area button {
+    background-color: var(--dark-bg);
+    padding: 0.9rem;
+    margin: 0 0.1rem;
+    width: 4rem;
+
+    transition: opacity var(--hover-transition), background-color var(--hover-transition);
+}
+
+#stock-chart .chart-area {
+    height: 25rem;
+    width: 100%;
+    padding: 1rem;
+    /* background-color: var(--dark-bg); */
+}
+
+#stock-chart .chart-area >* {
+    margin: auto;
+}
+
+#stock-chart .custom-tooltip {
+    background-color: rgba(255,255,255,0.7);
+    padding: 0.7rem;
+    color: var(--dark-txt);
+    border-radius: var(--radius);
+    line-height: 1.3;
+}
+
+#stock-chart .tooltip-title {
+    font-weight: var(--roboto-black);
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+}
+
+#stock-chart .tooltip-text {
+    display: flex;
+}
+
+#stock-chart .tooltip-left {
+    margin-right: 0.2rem;
+}

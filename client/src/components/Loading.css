@@ -1,0 +1,30 @@
+.loading {
+  background-color: transparent;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+
+  animation: fadeIn 0.7s ease-out forwards; 
+}
+
+.loading .loading-icon {
+  margin: auto;
+  height: 50%;
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.loading .loading-icon >* {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+
+  animation: spin 2s linear infinite;  
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

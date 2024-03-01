@@ -23,7 +23,7 @@
 #search-bar .search-btn {
   margin: auto 0;
   height: 100%;
-  width: 10%;
+  width: 3rem;
   display: flex;
   justify-content: space-around;
 }
@@ -32,6 +32,7 @@
   opacity: var(--hover-opacity);
   cursor: pointer;
 }
+
 #search-bar .search-btn >* :hover {
   opacity: 1;
 }
@@ -43,4 +44,12 @@
   opacity: 0.5;
 
   transition: opacity var(--hover-transition);
+}
+
+@media (max-width: 50rem) {
+  #search-bar {
+    width: 100%;
+    margin: 0;
+    margin-top: 1rem;
+  }
 }

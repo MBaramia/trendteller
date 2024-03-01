@@ -1,7 +1,8 @@
 .company-list-view {
     width: 100%;
     text-align: left;
-    overflow-x: scroll;
+    min-width: fit-content;
+    /* overflow-x: scroll; */
 }
 
 .company-list-view h2 {
@@ -31,6 +32,8 @@
     color: var(--light-txt);
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
+
+    font-weight: var(--roboto-bold);
 } 
 
 .company-list-view .list-content {
@@ -40,7 +43,6 @@
     overflow-x: visible;
 }
 
-
 .company-list-view .list-row {
     transition: background-color var(--hover-transition);
 }
@@ -49,12 +51,16 @@
     background-color: var(--light-bg);
 }
 
+.company-list-view .list-row, .company-list-view .list-header:first-child {
+    padding-left: 1rem;
+}
+
 .company-list-view .list-header :last-child, .company-list-view .list-section >* >* >*:last-child {
     text-align: center;
 }
 
 .company-list-view p {
-    padding: 1rem;
+    padding: 1rem 0.2rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

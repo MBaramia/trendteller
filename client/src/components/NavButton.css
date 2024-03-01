@@ -1,0 +1,27 @@
+#nav-btn {
+  background-color: var(--dark-bg);
+  height: 5rem;
+  width: var(--navbutton-width);
+  display: flex;
+  justify-content: space-around;
+}
+
+#nav-btn.right >* {
+  transform: rotate(180deg);
+}
+
+#nav-btn >* {
+  width: 100%;
+  margin: auto;
+  color: var(--light-txt);
+
+  transition: opacity var(--hover-transition);
+}
+
+#nav-btn:hover {
+  cursor: pointer;
+}
+
+#nav-btn:hover >* {
+  opacity: var(--hover-opacity);
+}

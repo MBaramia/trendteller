@@ -16,11 +16,15 @@
     ```
     cd flask-server
     ```
-3. Run `source venv/bin/activate`
+3. Run `python3.11 -m venv venv`
+    ```
+    python3.11 -m venv venv
+    ```
+4. Run `source venv/bin/activate`
     ```
     source venv/bin/activate
     ```   
-4. Run `pip install -r ./requirements.txt`
+5. Run `pip install -r ./requirements.txt`
     ```
     pip install -r ./requirements.txt
     ``` 

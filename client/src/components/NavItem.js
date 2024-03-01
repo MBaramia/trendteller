@@ -4,7 +4,7 @@ import React from "react";
 
 function NavItem({ navIcon, url, children }) {
   const { pathname } = useLocation();
-  console.log(pathname);
+  // console.log(pathname);
   const url_match = url === pathname;
   navIcon = React.cloneElement(navIcon, {
     className: "nav-icon",
