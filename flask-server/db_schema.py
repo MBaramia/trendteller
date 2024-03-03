@@ -34,6 +34,7 @@ class CompanyData(db.Model):
     description = db.Column(db.String(10000))
     symbol = db.Column(db.String(4))
     exchange = db.Column(db.Double)
+    currPerception = db.Column(db.Integer) # stores the current perception of the company
     def __init__(self,id,name,description,symbol,exchange): 
         self.id = id 
         self.name = name
@@ -47,12 +48,16 @@ class Articles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dateTime = db.Column(DateTime(timezone=True),default=func.now(), nullable=False)
     link = db.Column(db.String(255))
+    title = db.Column(db.String(100))
+    source = db.Column(db.String(100))
     summary =  db.Column(db.String(500))
     effect = db.Column(db.Integer)
-    def __init__(self,id,dateTime,link,summary, effect): 
+    def __init__(self,id,dateTime,link,title,source,summary, effect): 
         self.id = id 
         self.dateTime = dateTime
         self.link = link
+        self.title = title
+        self.source = source
         self.summary = summary
         self.effect = effect
 
@@ -177,52 +182,6 @@ def getRecommendedCompanies(userID):
         if count == 3:
             return recommended
     return recommended
-
-def getFollowedCompanies(userID):
-    gettingCompaniesQry = text("SELECT companyID FROM FollowedCompanies WHERE userID=:userID")
-    followedCompaniesQry = gettingCompaniesQry.bindparams(userID = userID)
-    resultset = db.session.execute(followedCompaniesQry)
-    values = resultset.fetchall()
-
-def getAllNews():
-    getNews = text("SELECT * FROM ORDER BY datetime DESC LIMIT = 15")
-    getNewsQry = getNews.bindparams()
-    resultset = db.session.execute(getNewsQry)
-    values = resultset.fetchall()
-
-def getAllCompanies():
-    getCompanies = text("SELECT * FROM Companies")
-    getCompaniesQry = getCompanies.bindparams()
-    resultset = db.session.execute(getCompaniesQry)
-    values = resultset.fetchall()
-
-def getNotifications(userID):
-    notifications = text("SELECT * FROM Notifications WHERE userID=:uerID AND viewed=False")
-    notificationsQry = notifications.bindparams(userID=userID)
-    resultset = db.session.execute(notificationsQry)
-    values = resultset.fetchall()
-
-def getCompanyInfo(companyID):
-    getCompanies = text("SELECT * FROM Companies WHERE companyID=:companyID")
-    getCompaniesQry = getCompanies.bindparams(companyID = companyID)
-    resultset = db.session.execute(getCompaniesQry)
-    values = resultset.fetchall()
-
-def getCompanyNews(companyID):
-    getCompaniesNews = text("SELECT * FROM Articles")
-    getCompaniesNewsQry = getCompaniesNews.bindparams()
-    resultset = db.session.execute(getCompaniesNewsQry)
-    values = resultset.fetchall()
-
-def getArticleInfo(articleID, companyID):
-    getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.ArticleID = AffectedCompanies.ArticleID WHERE AffectedCompanies.CompanyID=:companyID")
-    getArticlesQry = getArticles.bindparams(companyID = companyID)
-    resultset = db.session.execute(getArticlesQry)
-    values = resultset.fetchall()
-
-def searchCompanies(query):
-    query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
-    results = query.all()
 
 
 
