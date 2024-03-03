@@ -167,6 +167,7 @@ export function getFollowedCompanies() {
       return response.json();
     })
     .then((data) => {
+      console.log("Followed companies")
       console.log(data);
       return {
         status: status,
@@ -193,6 +194,61 @@ export function getAllNews() {
       return response.json();
     })
     .then((data) => {
+      console.log("All news")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getAllCompanies() {
+  let status = true;
+  return fetch("/getAllCompanies", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("All companies")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getNotifications() {
+  let status = true;
+  return fetch("/getNotifications", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Notifications")
       console.log(data);
       return {
         status: status,

@@ -1,8 +1,19 @@
-import NewsListView from '../components/NewsListView';
+import { useState, useEffect } from "react";
+import NewsListView from "../components/NewsListView";
+import { getNotifications } from "../Auth";
 // import './Notifications.css'
 
 function Notifications() {
+  const [notifications, setNotifications] = useState([])
 
+  useEffect(() => {
+    getNotifications()
+      .then((result) => {
+        setNotifications(result.data.data);
+      });
+  }, []);
+
+  /*
   const notifications = [
     {
       id: 1,
@@ -11,7 +22,7 @@ function Notifications() {
       companyCode: "MSFT",
       source: "BBC",
       date: "20/02/2024",
-      perception: 1
+      perception: 1,
     },
     {
       id: 2,
@@ -20,7 +31,7 @@ function Notifications() {
       companyCode: "TSLA",
       source: "The Guardian",
       date: "18/02/2024",
-      perception: 1
+      perception: 1,
     },
     {
       id: 3,
@@ -29,7 +40,7 @@ function Notifications() {
       companyCode: "ORCL",
       source: "Sky",
       date: "27/01/2024",
-      perception: 0
+      perception: 0,
     },
     {
       id: 4,
@@ -38,7 +49,7 @@ function Notifications() {
       companyCode: "GOOGL",
       source: "BBC",
       date: "18/01/2024",
-      perception: 2
+      perception: 2,
     },
     {
       id: 5,
@@ -47,7 +58,7 @@ function Notifications() {
       companyCode: "AMZN",
       source: "The Independent",
       date: "10/01/2024",
-      perception: 0
+      perception: 0,
     },
     {
       id: 6,
@@ -56,7 +67,7 @@ function Notifications() {
       companyCode: "AAPL",
       source: "CNBC",
       date: "25/02/2024",
-      perception: 1
+      perception: 1,
     },
     {
       id: 7,
@@ -65,7 +76,7 @@ function Notifications() {
       companyCode: "FB",
       source: "TechCrunch",
       date: "22/02/2024",
-      perception: 1
+      perception: 1,
     },
     {
       id: 8,
@@ -74,7 +85,7 @@ function Notifications() {
       companyCode: "NFLX",
       source: "Reuters",
       date: "16/02/2024",
-      perception: 1
+      perception: 1,
     },
     {
       id: 9,
@@ -83,7 +94,7 @@ function Notifications() {
       companyCode: "IBM",
       source: "Financial Times",
       date: "12/02/2024",
-      perception: 2
+      perception: 2,
     },
     {
       id: 10,
@@ -92,17 +103,18 @@ function Notifications() {
       companyCode: "SPCE",
       source: "SpaceX News",
       date: "05/02/2024",
-      perception: 1
-    }
-  ];  
-  
+      perception: 1,
+    },
+  ];
+  */
+
   return (
     <>
-    <div id='notifications-pg'>
+      <div id="notifications-pg">
         <NewsListView title={"Notifications"} data={notifications} />
-    </div>
+      </div>
     </>
   );
 }
-  
+
 export default Notifications;

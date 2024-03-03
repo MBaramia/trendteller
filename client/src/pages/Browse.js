@@ -1,10 +1,20 @@
-import RecommendedCompanyView from '../components/RecommendedCompanyView';
-import CompanyListView from '../components/CompanyListView';
-import { useState } from 'react';
+import RecommendedCompanyView from "../components/RecommendedCompanyView";
+import CompanyListView from "../components/CompanyListView";
+import { useState, useEffect } from "react";
+import { getAllCompanies } from "../Auth";
 // import './Browse.css'
 
 function Browse() {
+  const [allCompanies, setAllCompanies] = useState([])
 
+  useEffect(() => {
+    getAllCompanies()
+      .then((result) => {
+        setAllCompanies(result.data.data);
+      });
+  }, []);
+
+  /*
   const allCompanies = [
     {
       id: 15,
@@ -187,6 +197,7 @@ function Browse() {
       following: true,
     },
   ];
+  */
 
   const recommendedCompanies = [
     {
@@ -215,7 +226,7 @@ function Browse() {
       change: "-15.2%",
       perception: 1,
       following: true,
-    }
+    },
   ];
 
   const produceInitialAllFollowing = () => {
@@ -224,7 +235,7 @@ function Browse() {
       idToFollowing[company.id] = company.following;
     }
     return idToFollowing;
-  }
+  };
 
   let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
 
@@ -234,16 +245,26 @@ function Browse() {
     setIdToFollowing(newIdToFollowing);
     // console.log(idToFollowing);
     // make server request
-  }
-  
+  };
+
   return (
     <>
-    <div id='browse-pg'>
-      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing} />
-      <CompanyListView title={"All Companies"} data={allCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing} />
-    </div>
+      <div id="browse-pg">
+        <RecommendedCompanyView
+          title={"Recommended For You"}
+          data={recommendedCompanies}
+          idToFollowing={idToFollowing}
+          toggleFollowing={toggleFollowing}
+        />
+        <CompanyListView
+          title={"All Companies"}
+          data={allCompanies}
+          idToFollowing={idToFollowing}
+          toggleFollowing={toggleFollowing}
+        />
+      </div>
     </>
   );
 }
-  
+
 export default Browse;

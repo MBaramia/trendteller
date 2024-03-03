@@ -99,9 +99,18 @@ def queryAllCompanies(userID):
         following = False
         if len(followingValues) != 0:
             following = True
-        item = {"id":company[0], "name":company[1], "code":company[3], "price":str(company[4]), "change":"change", "perception":"perception", "following":following} # need stock data and perception data for change and perception
-        jsonObject = json.dumps(item, indent = 2)
-        allCompanies.append(jsonObject)
+        item = {"id":company[0], "name":company[1], "code":company[3], "price":str(company[4]), "change":"+1.0", "perception":1, "following":following} # need stock data and perception data for change and perception
+        allCompanies.append(item)
+    #Testing - delete below
+    allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
+    allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":2, "following":True})
+    allCompanies.append({"id":7, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
+    allCompanies.append({"id":8, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":0, "following":True})
+    allCompanies.append({"id":9, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":0, "following":True})
+    allCompanies.append({"id":10, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":2, "following":True})
+    allCompanies.append({"id":11, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":1, "following":True})
+    allCompanies.append({"id":12, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":2, "following":True})
+    #Testing - delete above
     finalResult = {"data":allCompanies}
     return finalResult
 
@@ -128,9 +137,21 @@ def queryNotifications(userID):
         companyDataValue = companyDataResult.fetchall()
 
 
-        item = {"id":notification[0],"code":companyDataValue[0][1],"id":companyDataValue[0][0],"title":getTitleQryValues[0][0],"source":getTitleQryValues[0][1],"date":getTitleQryValues[0][2], "effect":getTitleQryValues[0][3]}
-        jsonObject = json.dumps(item, indent = 2)
-        notifications.append(jsonObject)
+        item = {"id":notification[0],"companyCode":companyDataValue[0][1],"companyID":companyDataValue[0][0],"title":getTitleQryValues[0][0],"source":getTitleQryValues[0][1],"date":getTitleQryValues[0][2], "perception":getTitleQryValues[0][3]}
+        notifications.append(item)
+    #Testing - delete below
+    notifications.append({"id":0,"companyCode":"MSFT","companyID":5,"title":"Microsoft unveils new Windows 12 operating system","source":"BBC","date":"20/02/2024", "perception":1})
+    notifications.append({"id":1,"companyCode":"AAPL","companyID":3,"title":"Apple announces new iPhone 13 with advanced features","source":"TechCrunch","date":"09/15/2021", "perception":1})
+    notifications.append({"id":2,"companyCode":"AMZN","companyID":4,"title":"Amazon launches new delivery drone technology","source":"CNN","date":"09/14/2021", "perception":2})
+    notifications.append({"id":3,"companyCode":"MSFT","companyID":5,"title":"Microsoft acquires leading AI startup","source":"The Verge","date":"09/13/2021", "perception":2})
+    notifications.append({"id":4,"companyCode":"FB","companyID":6,"title":"Facebook introduces new privacy features","source":"Reuters","date":"09/12/2021", "perception":1})
+    notifications.append({"id":5,"companyCode":"NFLX","companyID":7,"title":"Netflix announces partnership with top Hollywood studio","source":"Variety","date":"09/11/2021", "perception":0})
+    notifications.append({"id":6,"companyCode":"INTC","companyID":11,"title":"Intel unveils breakthrough processor technology","source":"PCMag","date":"09/10/2021", "perception":0})
+    notifications.append({"id":7,"companyCode":"PYPL","companyID":2,"title":"PayPal introduces new payment platform","source":"Forbes","date":"09/09/2021", "perception":1})
+    notifications.append({"id":8,"companyCode":"NVDA","companyID":12,"title":"Nvidia launches new graphics card series","source":"Tom's Hardware","date":"09/08/2021", "perception":2})
+    notifications.append({"id":9,"companyCode":"IBM","companyID":13,"title":"IBM announces breakthrough in quantum computing","source":"ZDNet","date":"09/07/2021", "perception":1})
+    notifications.append({"id":10,"companyCode":"TWTR","companyID":14,"title":"Twitter introduces new feature to combat misinformation","source":"The Guardian","date":"09/06/2021", "perception":2})
+    #Testing - delete above
     finalResult = {"data":notifications}
     return finalResult     
 
@@ -283,6 +304,18 @@ def getFollowedCompanies():
 @login_required
 def getAllNews():
     query = queryAllNews()
+    return jsonify(query)
+
+@app.route('/getAllCompanies', methods=['POST'])
+@login_required
+def getAllCompanies():
+    query = queryAllCompanies(current_user.id)
+    return jsonify(query)
+
+@app.route('/getNotifications', methods=['POST'])
+@login_required
+def getNotifications():
+    query = queryNotifications(current_user.id)
     return jsonify(query)
 
 if __name__ == "__main__":
