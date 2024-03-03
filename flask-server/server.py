@@ -16,7 +16,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-def getFollowedCompanies(userID):
+def queryFollowedCompanies(userID):
     gettingCompaniesQry = text("SELECT * FROM FollowedCompanies JOIN CompanyData WHERE userID=:userID")
     followedCompaniesQry = gettingCompaniesQry.bindparams(userID = userID)
     resultset = db.session.execute(followedCompaniesQry)
@@ -31,13 +31,26 @@ def getFollowedCompanies(userID):
         if len(followingValues) != 0:
             following = True
         item = {"id":company[0], "name":company[3], "code":company[5], "price":company[6], "perception":"", "following":following}
-        jsonObject = json.dumps(item, indent=2)
         allCompanies.append(item)
+    #Testing - delete below
+    allCompanies.append({"id":0, "name":"Tesla", "code":"TSLA", "price":147.9400, "change": "-14.9%", "perception":-1, "following":True})
+    allCompanies.append({"id":1, "name":"Google", "code":"GOOGL", "price":132.6500, "change": "+9.3%", "perception":1, "following":True})
+    allCompanies.append({"id":2, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":0, "following":True})
+    allCompanies.append({"id":3, "name":"Apple", "code":"AAPL", "price":148.3600, "change": "+1.5%", "perception":0, "following":True})
+    allCompanies.append({"id":4, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":1, "following":True})
+    allCompanies.append({"id":5, "name":"Microsoft", "code":"MSFT", "price":305.2200, "change": "-0.5%", "perception":-1, "following":True})
+    allCompanies.append({"id":6, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":1, "following":True})
+    allCompanies.append({"id":7, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":-1, "following":True})
+    allCompanies.append({"id":11, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":-1, "following":True})
+    allCompanies.append({"id":12, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":1, "following":True})
+    allCompanies.append({"id":13, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":0, "following":True})
+    allCompanies.append({"id":14, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":1, "following":True})
+    #Testing - delete above
     result = {"data":allCompanies}
-    return json.dumps(result, indent = 2)
+    return result
 
 
-def getAllNews():
+def queryAllNews():
     getNews = text("SELECT * FROM ORDER BY datetime DESC LIMIT = 15")
     getNewsQry = getNews.bindparams()
     resultset = db.session.execute(getNewsQry)
@@ -60,10 +73,10 @@ def getAllNews():
         jsonObject = json.dumps(item)
         resultList.append(jsonObject)
     finalResult = {"data":resultList}
-    return json.dumps(finalResult)
+    return finalResult
         
 
-def getAllCompanies(userID):
+def queryAllCompanies(userID):
     getCompanies = text("SELECT * FROM CompanyData")
     getCompaniesQry = getCompanies.bindparams()
     resultset = db.session.execute(getCompaniesQry)
@@ -81,12 +94,11 @@ def getAllCompanies(userID):
         jsonObject = json.dumps(item, indent = 2)
         allCompanies.append(jsonObject)
     finalResult = {"data":allCompanies}
-    finalJson = json.dumps(finalResult)
-    return finalJson
+    return finalResult
 
 
 
-def getNotifications(userID):
+def queryNotifications(userID):
     notifications = text("SELECT * FROM Notifications WHERE userID=:userID AND viewed=False")
     notificationsQry = notifications.bindparams(userID=userID)
     resultset = db.session.execute(notificationsQry)
@@ -111,9 +123,9 @@ def getNotifications(userID):
         jsonObject = json.dumps(item, indent = 2)
         notifications.append(jsonObject)
     finalResult = {"data":notifications}
-    return json.dumps(finalResult)        
+    return finalResult     
 
-def getCompanyInfo(companyID, userID):
+def queryCompanyInfo(companyID, userID):
     getCompanies = text("SELECT * FROM CompanyData WHERE companyID=:companyID")
     getCompaniesQry = getCompanies.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesQry)
@@ -127,9 +139,9 @@ def getCompanyInfo(companyID, userID):
         if len(followingValues) != 0:
             following = True
         item = {"id":company[0], "code":company[3], "name":company[1], "overview":company[2], "perception":company[5],"following":following}
-        return json.dumps(item, indent = 2)
+        return item
 
-def getCompanyNews(companyID):
+def queryCompanyNews(companyID):
     getCompaniesNews = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.articleID = AffectedCompanies.articleID JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.companyID WHERE companyID=:companyID")
     getCompaniesNewsQry = getCompaniesNews.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesNewsQry)
@@ -140,10 +152,10 @@ def getCompanyNews(companyID):
         jsonObject = json.dumps(item, indent=2)
         allArticles.append(jsonObject)
     finalResult = {"data":allArticles}
-    return json.dumps(finalResult, indent = 2)
+    return finalResult
 
 
-def getArticleInfo(articleID, companyID):
+def queryArticleInfo(articleID, companyID):
     getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.articleID = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID")
     getArticlesQry = getArticles.bindparams(companyID = companyID)
     resultset = db.session.execute(getArticlesQry)
@@ -155,8 +167,7 @@ def getArticleInfo(articleID, companyID):
     companyValues = companyResults.fetchall()
     for article in values:
         item = {"title":article[3],"source":article[4],"companyID":str(companyID),"companyName":companyValues[1], "companyCode":companyValues[3], "date":article[1], "summary":article[6], "perception":article[7], "analysis":article[11], "link":article[2]}
-        jsonObject = json.dumps(item, indent = 2)
-    return jsonObject
+    return item
 
 def searchCompanies(query, userID):
     query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
@@ -165,7 +176,7 @@ def searchCompanies(query, userID):
     for company in results:
         companies.append(getCompanyInfo(company[0], userID))
     result = {"data":companies}
-    return json.dumps(result, indent = 2)
+    return result
 
 
 
@@ -253,11 +264,11 @@ def getUserData():
 def checkLoggedIn():
     return jsonify({"message": "Is logged in"})
 
-# Members API route - delete
-@app.route("/members")
-def members():
-    getAllCompanies(1)
-    return {"members": ["member1", "member2", "member3"]}
+@app.route('/getFollowedCompanies', methods=['POST'])
+@login_required
+def getFollowedCompanies():
+    query = queryFollowedCompanies(current_user.id)
+    return jsonify(query)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -123,9 +123,35 @@ export function processUpdate(username, password) {
     });
 }
 
-export function getUserData(username, password) {
+export function getUserData() {
   let status = true;
   return fetch("/getUserData", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getFollowedCompanies() {
+  let status = true;
+  return fetch("/getFollowedCompanies", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

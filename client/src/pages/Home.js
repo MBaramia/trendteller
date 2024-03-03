@@ -1,11 +1,21 @@
-import { useState } from 'react';
-import CompanyListView from '../components/CompanyListView';
-import NewsListView from '../components/NewsListView';
-import RecommendedCompanyView from '../components/RecommendedCompanyView';
+import { useState, useEffect } from "react";
+import CompanyListView from "../components/CompanyListView";
+import NewsListView from "../components/NewsListView";
+import RecommendedCompanyView from "../components/RecommendedCompanyView";
+import { getFollowedCompanies } from "../Auth";
 // import './Home.css'
 
 function Home() {
+  const [followedCompanies, setFollowedCompanies] = useState([])
 
+  useEffect(() => {
+    getFollowedCompanies().then((result) => {
+      setFollowedCompanies(result.data.data);
+      setIdToFollowing(produceInitialAllFollowing())
+    });
+  }, []);
+
+  /*
   const followedCompanies = [
     {
       id: 15,
@@ -189,6 +199,8 @@ function Home() {
     },
   ];
 
+  */
+
   const recommendedCompanies = [
     {
       id: 5,
@@ -216,7 +228,7 @@ function Home() {
       change: "+5.6%",
       perception: 0,
       following: false,
-    }
+    },
   ];
 
   const news = [
@@ -227,7 +239,7 @@ function Home() {
       companyCode: "MSFT",
       source: "BBC",
       date: "20/02/2024",
-      perception: 1
+      perception: 1,
     },
     {
       id: 2,
@@ -236,7 +248,7 @@ function Home() {
       companyCode: "TSLA",
       source: "The Guardian",
       date: "18/02/2024",
-      perception: 1
+      perception: 1,
     },
     {
       id: 3,
@@ -245,7 +257,7 @@ function Home() {
       companyCode: "ORCL",
       source: "Sky",
       date: "27/01/2024",
-      perception: 0
+      perception: 0,
     },
     {
       id: 4,
@@ -254,7 +266,7 @@ function Home() {
       companyCode: "GOOGL",
       source: "BBC",
       date: "18/01/2024",
-      perception: 2
+      perception: 2,
     },
     {
       id: 5,
@@ -263,8 +275,8 @@ function Home() {
       companyCode: "AMZN",
       source: "The Independent",
       date: "10/01/2024",
-      perception: 0
-    }
+      perception: 0,
+    },
   ];
 
   const produceInitialAllFollowing = () => {
@@ -276,7 +288,7 @@ function Home() {
       idToFollowing[company.id] = company.following;
     }
     return idToFollowing;
-  }
+  };
 
   let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
 
@@ -286,17 +298,27 @@ function Home() {
     setIdToFollowing(newIdToFollowing);
     // console.log(idToFollowing);
     // make server request
-  }
+  };
 
   return (
     <>
-    <div id='home-pg'>
-      <CompanyListView title={"Followed Companies"} data={followedCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing}/>
-      <RecommendedCompanyView title={"Recommended For You"} data={recommendedCompanies} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing}/>
-      <NewsListView title={"News"} data={news} />
-    </div>
+      <div id="home-pg">
+        <CompanyListView
+          title={"Followed Companies"}
+          data={followedCompanies}
+          idToFollowing={idToFollowing}
+          toggleFollowing={toggleFollowing}
+        />
+        <RecommendedCompanyView
+          title={"Recommended For You"}
+          data={recommendedCompanies}
+          idToFollowing={idToFollowing}
+          toggleFollowing={toggleFollowing}
+        />
+        <NewsListView title={"News"} data={news} />
+      </div>
     </>
   );
 }
-  
+
 export default Home;
