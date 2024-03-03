@@ -174,3 +174,29 @@ export function getFollowedCompanies() {
       };
     });
 }
+
+export function getAllNews() {
+  let status = true;
+  return fetch("/getAllNews", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

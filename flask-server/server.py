@@ -33,25 +33,25 @@ def queryFollowedCompanies(userID):
         item = {"id":company[0], "name":company[3], "code":company[5], "price":company[6], "perception":"", "following":following}
         allCompanies.append(item)
     #Testing - delete below
-    allCompanies.append({"id":0, "name":"Tesla", "code":"TSLA", "price":147.9400, "change": "-14.9%", "perception":-1, "following":True})
-    allCompanies.append({"id":1, "name":"Google", "code":"GOOGL", "price":132.6500, "change": "+9.3%", "perception":1, "following":True})
-    allCompanies.append({"id":2, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":0, "following":True})
-    allCompanies.append({"id":3, "name":"Apple", "code":"AAPL", "price":148.3600, "change": "+1.5%", "perception":0, "following":True})
-    allCompanies.append({"id":4, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":1, "following":True})
-    allCompanies.append({"id":5, "name":"Microsoft", "code":"MSFT", "price":305.2200, "change": "-0.5%", "perception":-1, "following":True})
-    allCompanies.append({"id":6, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":1, "following":True})
-    allCompanies.append({"id":7, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":-1, "following":True})
-    allCompanies.append({"id":11, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":-1, "following":True})
-    allCompanies.append({"id":12, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":1, "following":True})
-    allCompanies.append({"id":13, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":0, "following":True})
-    allCompanies.append({"id":14, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":1, "following":True})
+    allCompanies.append({"id":0, "name":"Tesla", "code":"TSLA", "price":147.9400, "change": "-14.9%", "perception":0, "following":True})
+    allCompanies.append({"id":1, "name":"Google", "code":"GOOGL", "price":132.6500, "change": "+9.3%", "perception":2, "following":True})
+    allCompanies.append({"id":2, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
+    allCompanies.append({"id":3, "name":"Apple", "code":"AAPL", "price":148.3600, "change": "+1.5%", "perception":1, "following":True})
+    allCompanies.append({"id":4, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":2, "following":True})
+    allCompanies.append({"id":5, "name":"Microsoft", "code":"MSFT", "price":305.2200, "change": "-0.5%", "perception":0, "following":True})
+    allCompanies.append({"id":6, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
+    allCompanies.append({"id":7, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":0, "following":True})
+    allCompanies.append({"id":11, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":0, "following":True})
+    allCompanies.append({"id":12, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":2, "following":True})
+    allCompanies.append({"id":13, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":1, "following":True})
+    allCompanies.append({"id":14, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":2, "following":True})
     #Testing - delete above
     result = {"data":allCompanies}
     return result
 
 
 def queryAllNews():
-    getNews = text("SELECT * FROM ORDER BY datetime DESC LIMIT = 15")
+    getNews = text("SELECT * FROM Articles ORDER BY datetime DESC LIMIT 15")
     getNewsQry = getNews.bindparams()
     resultset = db.session.execute(getNewsQry)
     values = resultset.fetchall()
@@ -70,8 +70,17 @@ def queryAllNews():
         codeValue = codeResult.fetchall()
 
         item = {"id":article[0], "title":article[3], "companyID":affectedValue[0][0], "companyCode":codeValue[0][0], "source":"", "date":article[1], "perception":article[5]}
-        jsonObject = json.dumps(item)
-        resultList.append(jsonObject)
+        resultList.append(item)
+
+    #Testing - delete below
+    resultList.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
+    resultList.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":3, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
+    resultList.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":4, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
+    resultList.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":5, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
+    resultList.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":6, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
+    resultList.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":7, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
+    resultList.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":11, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
+    #Testing - delete above
     finalResult = {"data":resultList}
     return finalResult
         
@@ -268,6 +277,12 @@ def checkLoggedIn():
 @login_required
 def getFollowedCompanies():
     query = queryFollowedCompanies(current_user.id)
+    return jsonify(query)
+
+@app.route('/getAllNews', methods=['POST'])
+@login_required
+def getAllNews():
+    query = queryAllNews()
     return jsonify(query)
 
 if __name__ == "__main__":

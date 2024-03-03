@@ -2,17 +2,23 @@ import { useState, useEffect } from "react";
 import CompanyListView from "../components/CompanyListView";
 import NewsListView from "../components/NewsListView";
 import RecommendedCompanyView from "../components/RecommendedCompanyView";
-import { getFollowedCompanies } from "../Auth";
+import { getFollowedCompanies, getAllNews } from "../Auth";
 // import './Home.css'
 
 function Home() {
-  const [followedCompanies, setFollowedCompanies] = useState([])
+  const [followedCompanies, setFollowedCompanies] = useState([]);
+  const [news, setNews] = useState([]);
 
   useEffect(() => {
-    getFollowedCompanies().then((result) => {
-      setFollowedCompanies(result.data.data);
-      setIdToFollowing(produceInitialAllFollowing())
-    });
+    getFollowedCompanies()
+      .then((result) => {
+        setFollowedCompanies(result.data.data);
+        setIdToFollowing(produceInitialAllFollowing());
+        return getAllNews();
+      })
+      .then((result) => {
+        setNews(result.data.data);
+      });
   }, []);
 
   /*
@@ -231,6 +237,7 @@ function Home() {
     },
   ];
 
+  /*
   const news = [
     {
       id: 1,
@@ -278,6 +285,7 @@ function Home() {
       perception: 0,
     },
   ];
+  */
 
   const produceInitialAllFollowing = () => {
     let idToFollowing = {};
