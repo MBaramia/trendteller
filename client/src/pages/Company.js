@@ -18,7 +18,9 @@ function Company() {
   useEffect(() => {
     getCompanyInfo(companyID)
       .then((result) => {
-        setCompany(result.data);
+        if (result.data) {
+          setCompany(result.data);
+        }
         return getCompanyNews(companyID);
       }).then((result) => {
         setNews(result.data.data)
