@@ -2,10 +2,18 @@ import "./Bell.css";
 import { ReactComponent as RingingBell } from "../images/bell_icon_header.svg";
 import { ReactComponent as StillBell } from "../images/bell_icon_white.svg";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getNotifications } from "../Auth";
 
 function Bell() {
-  let [num, ] = useState(0);
+  let [num, setNum] = useState(0);
+
+  useEffect(() => {
+    getNotifications()
+      .then((result) => {
+        setNum(result.data.data.length);
+      });
+  }, []);
 
   return (
     <div id="bell-container">
