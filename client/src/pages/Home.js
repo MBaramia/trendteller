@@ -9,12 +9,15 @@ function Home() {
   const [followedCompanies, setFollowedCompanies] = useState([]);
   const [news, setNews] = useState([]);
   const [recommendedCompanies, setRecommendedCompanies] = useState([])
+  const [idToFollowing, setIdToFollowing] = useState({});
 
   useEffect(() => {
+    let companies = []
     getFollowedCompanies()
       .then((result) => {
         setFollowedCompanies(result.data.data);
-        setIdToFollowing(produceInitialAllFollowing());
+        companies = companies.concat(result.data.data)
+        console.log("Companies: " + companies.length)
         return getAllNews();
       })
       .then((result) => {
@@ -22,8 +25,27 @@ function Home() {
         return getRecommendedCompanies();
       }).then((result) => {
         setRecommendedCompanies(result.data.data);
+        companies = companies.concat(result.data.data)
+        console.log("Companies: " + companies.length)
+        setIdToFollowing(produceInitialAllFollowing(companies))
       });
   }, []);
+
+  const produceInitialAllFollowing = (companies) => {
+    let idToFollowing = {};
+    for (const company of companies) {
+      idToFollowing[company.id] = company.following;
+    }
+    return idToFollowing;
+  };
+
+  const toggleFollowing = (id) => {
+    let newIdToFollowing = { ...idToFollowing };
+    newIdToFollowing[id] = !idToFollowing[id];
+    setIdToFollowing(newIdToFollowing);
+    // console.log(idToFollowing);
+    // make server request
+  };
 
   /*
   const followedCompanies = [
@@ -291,27 +313,6 @@ function Home() {
     },
   ];
   */
-
-  const produceInitialAllFollowing = () => {
-    let idToFollowing = {};
-    for (const company of followedCompanies) {
-      idToFollowing[company.id] = company.following;
-    }
-    for (const company of recommendedCompanies) {
-      idToFollowing[company.id] = company.following;
-    }
-    return idToFollowing;
-  };
-
-  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
-
-  const toggleFollowing = (id) => {
-    let newIdToFollowing = { ...idToFollowing };
-    newIdToFollowing[id] = !idToFollowing[id];
-    setIdToFollowing(newIdToFollowing);
-    // console.log(idToFollowing);
-    // make server request
-  };
 
   return (
     <>

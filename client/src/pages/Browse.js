@@ -7,16 +7,34 @@ import { getAllCompanies, getRecommendedCompanies } from "../Auth";
 function Browse() {
   const [allCompanies, setAllCompanies] = useState([])
   const [recommendedCompanies, setRecommendedCompanies] = useState([])
+  const [idToFollowing, setIdToFollowing] = useState({});
 
   useEffect(() => {
     getAllCompanies()
       .then((result) => {
         setAllCompanies(result.data.data);
+        setIdToFollowing(produceInitialAllFollowing(result.data.data))
         return getRecommendedCompanies();
       }).then((result) => {
         setRecommendedCompanies(result.data.data)
       });
   }, []);
+
+  const produceInitialAllFollowing = (companies) => {
+    let idToFollowing = {};
+    for (const company of companies) {
+      idToFollowing[company.id] = company.following;
+    }
+    return idToFollowing;
+  };
+
+  const toggleFollowing = (id) => {
+    let newIdToFollowing = { ...idToFollowing };
+    newIdToFollowing[id] = !idToFollowing[id];
+    setIdToFollowing(newIdToFollowing);
+    // console.log(idToFollowing);
+    // make server request
+  };
 
   /*
   const allCompanies = [
@@ -233,24 +251,6 @@ function Browse() {
     },
   ];
   */
-
-  const produceInitialAllFollowing = () => {
-    let idToFollowing = {};
-    for (const company of allCompanies) {
-      idToFollowing[company.id] = company.following;
-    }
-    return idToFollowing;
-  };
-
-  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
-
-  const toggleFollowing = (id) => {
-    let newIdToFollowing = { ...idToFollowing };
-    newIdToFollowing[id] = !idToFollowing[id];
-    setIdToFollowing(newIdToFollowing);
-    // console.log(idToFollowing);
-    // make server request
-  };
 
   return (
     <>
