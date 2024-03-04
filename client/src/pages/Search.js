@@ -1,12 +1,22 @@
-import { useParams } from 'react-router-dom';
-import CompanyListView from '../components/CompanyListView';
-import { useState } from 'react';
+import { useParams } from "react-router-dom";
+import CompanyListView from "../components/CompanyListView";
+import { useState, useEffect } from "react";
+import { searchCompanies } from "../Auth";
 // import './Search.css'
 
 function Search() {
-
   let { query } = useParams();
-  
+
+  const [searchResults, setSearchResults] = useState([])
+
+  useEffect(() => {
+    searchCompanies(query)
+      .then((result) => {
+        setSearchResults(result.data.data);
+      });
+  }, []);
+
+  /*
   const searchResults = [
     {
       id: 15,
@@ -189,6 +199,7 @@ function Search() {
       following: true,
     },
   ];
+  */
 
   const produceInitialAllFollowing = () => {
     let idToFollowing = {};
@@ -196,7 +207,7 @@ function Search() {
       idToFollowing[company.id] = company.following;
     }
     return idToFollowing;
-  }
+  };
 
   let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
 
@@ -206,15 +217,20 @@ function Search() {
     setIdToFollowing(newIdToFollowing);
     // console.log(idToFollowing);
     // make server request
-  }
+  };
 
   return (
     <>
-    <div id='search-pg'>
-      <CompanyListView title={'Search results for "' + query + '"'} data={searchResults} idToFollowing={idToFollowing} toggleFollowing={toggleFollowing} />
-    </div>
+      <div id="search-pg">
+        <CompanyListView
+          title={'Search results for "' + query + '"'}
+          data={searchResults}
+          idToFollowing={idToFollowing}
+          toggleFollowing={toggleFollowing}
+        />
+      </div>
     </>
   );
 }
-  
+
 export default Search;

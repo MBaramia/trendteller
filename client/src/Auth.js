@@ -347,3 +347,33 @@ export function getArticleInfo(articleID, companyID) {
       };
     });
 }
+
+export function searchCompanies(query) {
+  let status = true;
+  return fetch("/searchCompanies", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: query,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Search Companies")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

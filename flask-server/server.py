@@ -211,12 +211,12 @@ def queryArticleInfo(articleID, companyID):
     return item
     #Testing - delete above
 
-def searchCompanies(query, userID):
+def querySearchCompanies(query, userID):
     query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
     results = query.all()
     companies = []
     for company in results:
-        companies.append(getCompanyInfo(company[0], userID))
+        companies.append(queryCompanyInfo(company.id, userID))
     result = {"data":companies}
     return result
 
@@ -356,6 +356,15 @@ def getArticleInfo():
     companyID = data.get("companyID")
 
     query = queryArticleInfo(articleID, companyID)
+    return jsonify(query)
+
+@app.route('/searchCompanies', methods=['POST'])
+@login_required
+def searchCompanies():
+    data = request.get_json()
+    query= data.get("query")
+
+    query = querySearchCompanies(query, current_user.id)
     return jsonify(query)
 
 if __name__ == "__main__":
