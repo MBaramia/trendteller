@@ -763,6 +763,10 @@ const fetched = {
 
 function StockChart({ company }) {
 
+    // please fetch mainData and changes as they are
+    // for allToolTip data please add a boolean field isPrediction to each data point
+    // also pls give me an array of dates from most to least recent
+
     const [timeScale, setTimeScale] = useState(0);
 
     const timeScaleToInfo = [
@@ -781,11 +785,21 @@ function StockChart({ company }) {
         let allData = [];
         for (let i=0; i<4; i++) {
             const keys = Object.keys(fetched[i]);
+            console.log(keys);
             let dataArray = [];
 
             for (const key of keys) {
                 dataArray.push({date: key, close: parseFloat(fetched[i][key]["4. close"])});
             }
+            for (let i=0;i<5;i++) {
+                dataArray[i] = {date: dataArray[i].date, prediction: dataArray[i].close};
+            }
+            const index = 4;
+            dataArray[index] = {
+                date: dataArray[index].date, 
+                close: dataArray[index].prediction, 
+                prediction: dataArray[index].prediction
+            };
             allData.push(dataArray);
         }
 
@@ -843,7 +857,7 @@ function StockChart({ company }) {
 
     const getChartData = () => {
         const data = allChartData[timeScaleToInfo[timeScale].type];
-        return data.slice(0, Math.min(data.length, timeScaleToInfo[timeScale].count)).reverse();
+        return data.slice(0, Math.min(data.length, timeScaleToInfo[timeScale].count)+5).reverse();
     }
     const chartData = getChartData();
 
@@ -931,9 +945,13 @@ function StockChart({ company }) {
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart width={100} height={50} data={chartData} margin={{ top: 5, right: 50, left: 10, bottom: 5 }}>
                         <defs>
-                            <linearGradient id="colour" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="close-colour" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="0%" stopColor='#10588f' stopOpacity={0.5} />
                                 <stop offset="75%" stopColor='#10588f' stopOpacity={0.1} />
+                            </linearGradient>
+                            <linearGradient id="pred-colour" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor='#40494f' stopOpacity={0.5} />
+                                <stop offset="75%" stopColor='#40494f' stopOpacity={0.1} />
                             </linearGradient>
                         </defs>
 
@@ -943,7 +961,8 @@ function StockChart({ company }) {
                         <YAxis tickFormatter={(num)=>`£${num.toFixed(2)}`} />
                         <Tooltip content={<CustomTooltip />} />
                         {/* <Legend /> */}
-                        <Area type="monotone" dataKey="close" stroke="#0d1f2d" fill="url(#colour)"  activeDot={{ r: 8 }} />
+                        <Area type="monotone" dataKey="close" stroke="#0d1f2d" fill="url(#close-colour)"  activeDot={{ r: 8 }} />
+                        <Area type="monotone" dataKey="prediction" strokeDasharray="5 5" stroke="#000000" fill="url(#pred-colour)"  activeDot={{ r: 8 }} />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>

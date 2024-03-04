@@ -1,8 +1,7 @@
 #company-info {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
-  }
+}
   
 #company-info .info-left {
     display: flex;
