@@ -1,6 +1,6 @@
 import "./Login.css";
 import { processLogin, processRegister } from "../Auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Signup({ logInUser }) {
   let [username, setUsername] = useState("");
@@ -13,6 +13,34 @@ function Signup({ logInUser }) {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+  };
+
+  const isUsernameValid = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(username)) {
+      setErrors(["Username must be an email"]);
+      return false;
+    } 
+    return true;
+  };
+
+  const isPasswordValid = () => {
+    if (password.length < 5) {
+      setErrors(["Password must be longer than 5 characters"]);
+      return false;
+    } else if (password.length > 20) {
+      setErrors(["Password must be shorter than 20 characters"]);
+      return false;
+    }
+    return true;
+  };
+
+  const validateInput = async () => {
+    console.log(errors); 
+    if (isUsernameValid() && isPasswordValid()) {
+        // console.log("submit");
+        submitChanges();
+    }
   };
 
   const submitChanges = async () => {
@@ -28,12 +56,9 @@ function Signup({ logInUser }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      submitChanges();
+      validateInput();
     }
   };
-
-  // const errors = ["Error Message 1", "Error Message 2"];
-  // const error = "";
 
   return (
     <>
@@ -62,7 +87,7 @@ function Signup({ logInUser }) {
             placeholder="Password"
           />
           <div className="btn-container">
-            <button onClick={submitChanges}>Sign Up</button>
+            <button onClick={validateInput}>Sign Up</button>
           </div>
           <p>
             Already have an account? <a href="/singup">Log In</a>

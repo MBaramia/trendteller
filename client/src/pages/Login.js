@@ -16,7 +16,6 @@ function Login({ logInUser }) {
   };
 
   const submitChanges = async () => {
-    console.log(`${username} | ${password}`);
     const logIn = await processLogin(username, password);
     if (logIn.status) {
       logInUser();
@@ -31,9 +30,6 @@ function Login({ logInUser }) {
       submitChanges();
     }
   };
-
-  // const errors = ["Error Message 1", "Error Message 2"];
-  // const error = "";
 
   return (
     <>

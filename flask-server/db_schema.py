@@ -196,15 +196,16 @@ def dbinit():
         CompanyData(4, 'J Sainsbury plc', 'J Sainsbury plc Description', 'SBRY', 252.70, 0)
     ]
 
+    # rules for users: username must be an email, password must be between 5 and 20 chars
     userList = [
-        UserData("user1","test"),
-        UserData("user2","test"),
-        UserData("user3","test"),
-        UserData("user4","test"),
-        UserData("user5","test"),
-        UserData("user6","test"),
-        UserData("user7","test"),
-        UserData("uesr8","test")
+        UserData("user1@email.com","testpass"),
+        UserData("user2@email.com","testpass"),
+        UserData("user3@email.com","testpass"),
+        UserData("user4@email.com","testpass"),
+        UserData("user5@email.com","testpass"),
+        UserData("user6@email.com","testpass"),
+        UserData("user7@email.com","testpass"),
+        UserData("uesr8@email.com","testpass")
     ]
     db.session.add_all(userList)
     for i in range(0,len(companyList)):

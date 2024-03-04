@@ -6,6 +6,18 @@
   margin-bottom: 2rem;
 }
 
+#profile-pg .errors, #profile-pg .update {
+  margin-bottom: 1.5rem;
+}
+
+#profile-pg .errors {
+  color: var(--negative);
+}
+
+#profile-pg .update {
+  color: var(--positive);
+}
+
 #profile-pg input, #profile-pg span {
   display: block;
   margin: auto;
