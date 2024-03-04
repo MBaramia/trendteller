@@ -765,7 +765,7 @@ function StockChart({ company }) {
 
     // please fetch mainData and changes as they are
     // for allToolTip data please add a boolean field isPrediction to each data point
-    // also pls give me an array of dates from most to least recent
+    // also pls give me a matrix dates such that dates[i][j] gives me the jth most recent date of the ith stock data type (intraday, daily, etc.)
 
     const [timeScale, setTimeScale] = useState(0);
 
