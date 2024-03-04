@@ -33,20 +33,20 @@ if resetdb:
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-def getFollowedCompanies(userID):
+def queryFollowedCompanies(userID):
     gettingCompaniesQry = text("SELECT companyID FROM FollowedCompanies WHERE userID=:userID")
     followedCompaniesQry = gettingCompaniesQry.bindparams(userID = userID)
     resultset = db.session.execute(followedCompaniesQry)
     values = resultset.fetchall()
     print(values)
 
-def getAllNews():
+def queryAllNews():
     getNews = text("SELECT * FROM ORDER BY datetime DESC LIMIT = 15")
     getNewsQry = getNews.bindparams()
     resultset = db.session.execute(getNewsQry)
     values = resultset.fetchall()
 
-def getAllCompanies():
+def queryAllCompanies():
     getCompanies = text("SELECT * FROM Companies")
     getCompaniesQry = getCompanies.bindparams()
     resultset = db.session.execute(getCompaniesQry)
@@ -54,7 +54,7 @@ def getAllCompanies():
     print(values)
 
 
-def getNotifications(userID):
+def queryNotifications(userID):
     notifications = text("SELECT * FROM Notifications WHERE userID=:uerID AND viewed=False")
     notificationsQry = notifications.bindparams(userID=userID)
     resultset = db.session.execute(notificationsQry)
@@ -66,19 +66,19 @@ def getCompanyInfo(companyID):
     resultset = db.session.execute(getCompaniesQry)
     values = resultset.fetchall()
 
-def getCompanyNews(companyID):
+def queryCompanyNews(companyID):
     getCompaniesNews = text("SELECT * FROM Articles")
     getCompaniesNewsQry = getCompaniesNews.bindparams()
     resultset = db.session.execute(getCompaniesNewsQry)
     values = resultset.fetchall()
 
-def getArticleInfo(articleID, companyID):
+def queryArticleInfo(articleID, companyID):
     getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.ArticleID = AffectedCompanies.ArticleID WHERE AffectedCompanies.CompanyID=:companyID")
     getArticlesQry = getArticles.bindparams(companyID = companyID)
     resultset = db.session.execute(getArticlesQry)
     values = resultset.fetchall()
 
-def searchCompanies(query):
+def querySearchCompanies(query):
     query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
     results = query.all()
 
