@@ -256,3 +256,94 @@ export function getNotifications() {
       };
     });
 }
+
+export function getCompanyInfo(companyID) {
+  let status = true;
+  return fetch("/getCompanyInfo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Company Info")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getCompanyNews(companyID) {
+  let status = true;
+  return fetch("/getCompanyNews", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Company News")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getArticleInfo(articleID, companyID) {
+  let status = true;
+  return fetch("/getArticleInfo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      articleID: articleID,
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Article Info")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

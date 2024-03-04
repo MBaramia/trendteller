@@ -156,7 +156,7 @@ def queryNotifications(userID):
     return finalResult     
 
 def queryCompanyInfo(companyID, userID):
-    getCompanies = text("SELECT * FROM CompanyData WHERE companyID=:companyID")
+    getCompanies = text("SELECT * FROM CompanyData WHERE id=:companyID")
     getCompaniesQry = getCompanies.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesQry)
     values = resultset.fetchall()
@@ -172,21 +172,29 @@ def queryCompanyInfo(companyID, userID):
         return item
 
 def queryCompanyNews(companyID):
-    getCompaniesNews = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.articleID = AffectedCompanies.articleID JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.companyID WHERE companyID=:companyID")
+    getCompaniesNews = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id WHERE CompanyData.id=:companyID")
     getCompaniesNewsQry = getCompaniesNews.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesNewsQry)
     values = resultset.fetchall()
     allArticles = []
     for article in values:
         item = {"id":article[0], "title":article[3], "companyID":companyID, "companyCode":article[16], "source":article[4], "date":article[1], "perception":article[6]}
-        jsonObject = json.dumps(item, indent=2)
-        allArticles.append(jsonObject)
+        allArticles.append(item)
+    #Testing - delete below
+    allArticles.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
+    allArticles.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":3, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
+    allArticles.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":4, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
+    allArticles.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":5, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
+    allArticles.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":6, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
+    allArticles.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":7, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
+    allArticles.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":11, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
+    #Testing - delete above
     finalResult = {"data":allArticles}
     return finalResult
 
 
 def queryArticleInfo(articleID, companyID):
-    getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.articleID = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID")
+    getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID")
     getArticlesQry = getArticles.bindparams(companyID = companyID)
     resultset = db.session.execute(getArticlesQry)
     values = resultset.fetchall()
@@ -197,7 +205,11 @@ def queryArticleInfo(articleID, companyID):
     companyValues = companyResults.fetchall()
     for article in values:
         item = {"title":article[3],"source":article[4],"companyID":str(companyID),"companyName":companyValues[1], "companyCode":companyValues[3], "date":article[1], "summary":article[6], "perception":article[7], "analysis":article[11], "link":article[2]}
+        return item
+    #Testing - delete below
+    item = {"title":"Elon Musk eats humble pie over unpaid bakery bill","source":"BBC","companyID":0,"companyName":"Tesla", "companyCode":"TSLA", "date":"28/02/2024", "summary":"Elon Musk has covered the cost of 4,000 mini pies for Giving Pies bakery in San Jose after Tesla canceled a last-minute order, leaving the small business $2,000 short. Musk responded to the bakery's social media complaint, stating he would resolve the issue. Tesla placed a new order for 3,600 pies, but the overwhelmed bakery, flooded with business from well-wishers, had to decline. The owner expressed gratitude, and even the mayor of San Jose acknowledged the community's support and thanked Musk for covering the cost.", "perception":2, "analysis":"This article may elicit a mixed response regarding public opinion of Tesla. Elon Musk's prompt intervention and willingness to cover the cost of the canceled bakery order could be viewed positively, showcasing a sense of responsibility and commitment to customer satisfaction. However, the initial cancellation might raise concerns about Tesla's reliability and communication with suppliers. The overwhelming support the bakery received after Musk's involvement may shed light on the power dynamics between large corporations and small businesses, potentially sparking discussions about fair business practices. Ultimately, while the incident highlights the scrutiny faced by prominent companies like Tesla, Musk's swift resolution is likely to leave a more positive impression on public perception.", "link":"https://www.bbc.co.uk/news/technology-68404698"}
     return item
+    #Testing - delete above
 
 def searchCompanies(query, userID):
     query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
@@ -316,6 +328,34 @@ def getAllCompanies():
 @login_required
 def getNotifications():
     query = queryNotifications(current_user.id)
+    return jsonify(query)
+
+@app.route('/getCompanyInfo', methods=['POST'])
+@login_required
+def getCompanyInfo():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryCompanyInfo(companyID, current_user.id)
+    return jsonify(query)
+
+@app.route('/getCompanyNews', methods=['POST'])
+@login_required
+def getCompanyNews():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryCompanyNews(companyID)
+    return jsonify(query)
+
+@app.route('/getArticleInfo', methods=['POST'])
+@login_required
+def getArticleInfo():
+    data = request.get_json()
+    articleID = data.get("articleID")
+    companyID = data.get("companyID")
+
+    query = queryArticleInfo(articleID, companyID)
     return jsonify(query)
 
 if __name__ == "__main__":

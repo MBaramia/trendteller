@@ -35,12 +35,13 @@ class CompanyData(db.Model):
     symbol = db.Column(db.String(4))
     exchange = db.Column(db.Double)
     currPerception = db.Column(db.Integer) # stores the current perception of the company
-    def __init__(self,id,name,description,symbol,exchange): 
+    def __init__(self,id,name,description,symbol,exchange, currPerception): 
         self.id = id 
         self.name = name
         self.description = description
         self.symbol = symbol
         self.exchange = exchange
+        self.currPerception = currPerception
 
 # this table stores all of the data relating to an article
 class Articles(db.Model):
@@ -188,11 +189,11 @@ def getRecommendedCompanies(userID):
 # put some data into the tables
 def dbinit():
     companyList = [
-        CompanyData(0,'Tesla','Tesla Description', 'TSLA', 193.43),
-        CompanyData(1,'Alphabet Inc Class C','Alphabet Inc Class C description','GOOG',145.38),
-        CompanyData(2,'Microsoft Corp','Microsoft Corp Description', 'MSFT',410.48),
-        CompanyData(3,'Apple Inc','Apple Inc Description', 'AAPL',182.52),
-        CompanyData(4, 'J Sainsbury plc', 'J Sainsbury plc Description', 'SBRY', 252.70)
+        CompanyData(0,'Tesla','Tesla Description', 'TSLA', 193.43, 0),
+        CompanyData(1,'Alphabet Inc Class C','Alphabet Inc Class C description','GOOG',145.38, 1),
+        CompanyData(2,'Microsoft Corp','Microsoft Corp Description', 'MSFT',410.48, 2),
+        CompanyData(3,'Apple Inc','Apple Inc Description', 'AAPL',182.52, 1),
+        CompanyData(4, 'J Sainsbury plc', 'J Sainsbury plc Description', 'SBRY', 252.70, 0)
     ]
 
     userList = [
