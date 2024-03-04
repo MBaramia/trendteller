@@ -60,7 +60,7 @@ def queryNotifications(userID):
     resultset = db.session.execute(notificationsQry)
     values = resultset.fetchall()
 
-def getCompanyInfo(companyID):
+def queryCompanyInfo(companyID):
     getCompanies = text("SELECT * FROM Companies WHERE companyID=:companyID")
     getCompaniesQry = getCompanies.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesQry)
