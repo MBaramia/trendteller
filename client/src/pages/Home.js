@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import CompanyListView from "../components/CompanyListView";
 import NewsListView from "../components/NewsListView";
 import RecommendedCompanyView from "../components/RecommendedCompanyView";
-import { getFollowedCompanies, getAllNews } from "../Auth";
+import { getFollowedCompanies, getAllNews, getRecommendedCompanies } from "../Auth";
 // import './Home.css'
 
 function Home() {
   const [followedCompanies, setFollowedCompanies] = useState([]);
   const [news, setNews] = useState([]);
+  const [recommendedCompanies, setRecommendedCompanies] = useState([])
 
   useEffect(() => {
     getFollowedCompanies()
@@ -18,6 +19,9 @@ function Home() {
       })
       .then((result) => {
         setNews(result.data.data);
+        return getRecommendedCompanies();
+      }).then((result) => {
+        setRecommendedCompanies(result.data.data);
       });
   }, []);
 
@@ -205,7 +209,7 @@ function Home() {
     },
   ];
 
-  */
+  
 
   const recommendedCompanies = [
     {
@@ -236,6 +240,7 @@ function Home() {
       following: false,
     },
   ];
+  */
 
   /*
   const news = [

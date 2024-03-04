@@ -377,3 +377,30 @@ export function searchCompanies(query) {
       };
     });
 }
+
+export function getRecommendedCompanies() {
+  let status = true;
+  return fetch("/getRecommendedCompanies", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Recommended companies")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

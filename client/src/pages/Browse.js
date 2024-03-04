@@ -1,16 +1,20 @@
 import RecommendedCompanyView from "../components/RecommendedCompanyView";
 import CompanyListView from "../components/CompanyListView";
 import { useState, useEffect } from "react";
-import { getAllCompanies } from "../Auth";
+import { getAllCompanies, getRecommendedCompanies } from "../Auth";
 // import './Browse.css'
 
 function Browse() {
   const [allCompanies, setAllCompanies] = useState([])
+  const [recommendedCompanies, setRecommendedCompanies] = useState([])
 
   useEffect(() => {
     getAllCompanies()
       .then((result) => {
         setAllCompanies(result.data.data);
+        return getRecommendedCompanies();
+      }).then((result) => {
+        setRecommendedCompanies(result.data.data)
       });
   }, []);
 
@@ -197,7 +201,7 @@ function Browse() {
       following: true,
     },
   ];
-  */
+  
 
   const recommendedCompanies = [
     {
@@ -228,6 +232,7 @@ function Browse() {
       following: true,
     },
   ];
+  */
 
   const produceInitialAllFollowing = () => {
     let idToFollowing = {};

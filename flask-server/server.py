@@ -220,6 +220,16 @@ def querySearchCompanies(query, userID):
     result = {"data":companies}
     return result
 
+def queryRecommendedCompanies(userID):
+    #Placeholder - replace with actual logic (should return exactly 3 companies)
+    allCompanies = []
+    allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
+    allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":0, "following":True})
+    allCompanies.append({"id":7, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
+    #Placeholder - replace with actual logic
+    finalResult = {"data":allCompanies}
+    return finalResult
+
 
 
 app = Flask(__name__)
@@ -365,6 +375,12 @@ def searchCompanies():
     query= data.get("query")
 
     query = querySearchCompanies(query, current_user.id)
+    return jsonify(query)
+
+@app.route('/getRecommendedCompanies', methods=['POST'])
+@login_required
+def getRecommendedCompanies():
+    query = queryRecommendedCompanies(current_user.id)
     return jsonify(query)
 
 if __name__ == "__main__":
