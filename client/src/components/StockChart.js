@@ -785,7 +785,7 @@ function StockChart({ company }) {
         let allData = [];
         for (let i=0; i<4; i++) {
             const keys = Object.keys(fetched[i]);
-            console.log(keys);
+            // console.log(keys);
             let dataArray = [];
 
             for (const key of keys) {
@@ -806,7 +806,7 @@ function StockChart({ company }) {
         return allData;
     }
     const allChartData = produceAllData();
-    console.log(allChartData);
+    // console.log(allChartData);
 
     const produceToolTipData = () => {
         let allData = [];
@@ -829,7 +829,7 @@ function StockChart({ company }) {
         return allData;
     }
     const allToolTipData = produceToolTipData();
-    console.log(allToolTipData);
+    // console.log(allToolTipData);
 
     const mainData = {
         open: "145.4100",  

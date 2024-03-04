@@ -4,6 +4,7 @@
   margin: 0 auto;
   width: 100%;
   z-index: 1;
+  height: 3.5rem;
   background-color: transparent;
   border-radius: var(--radius);
 }
@@ -12,12 +13,12 @@
   background-color: var(--dark-bg);
   color: var(--light-txt);
   border-radius: var(--radius);
-  height: 3.5rem;
   font-size: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   box-shadow: var(--shadow);
+  height: 3.5rem;
   /* width: 100%; */
 
   transition: opacity var(--hover-transition);

@@ -1,6 +1,7 @@
 import "./AnalysisTextView.css";
+import Loading from "./Loading";
 
-function AnalysisTextView({ title, perception, text }) {
+function AnalysisTextView({ hasLoaded, title, perception, text }) {
 
   const perceptionToComponent = (p) => {
     if (p === 2) {
@@ -16,12 +17,16 @@ function AnalysisTextView({ title, perception, text }) {
     <>
       <div className="analysis-text-view narrow-content">
         <h2>{title}</h2>
+        {hasLoaded ? <>
         <div className="text-analysis">
           <>{perceptionToComponent(perception)}</>
         </div>
         <div className="text-content">
           <p>{text}</p>
         </div>
+        </>:<>
+          <Loading />
+        </>}
       </div>
     </>
   );

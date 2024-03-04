@@ -1,7 +1,8 @@
 import CompanyListRow from "./CompanyListRow";
 import "./CompanyListView.css";
+import Loading from "./Loading";
 
-function CompanyListView({ title, data, idToFollowing, toggleFollowing }) {
+function CompanyListView({ hasLoaded, title, data, idToFollowing, toggleFollowing }) {
 
   return (
     <>
@@ -16,9 +17,18 @@ function CompanyListView({ title, data, idToFollowing, toggleFollowing }) {
             <p>Following</p>
           </div>
           <div className="list-content">
-            {data.map((company) => (
-              <CompanyListRow key={company.id} company={company} following={idToFollowing[company.id]} toggleFollowing={toggleFollowing} />
-            ))}
+            {hasLoaded ? <>
+              {data.map((company) => (
+                <CompanyListRow
+                  key={company.id} 
+                  company={company} 
+                  following={idToFollowing[company.id]} 
+                  toggleFollowing={toggleFollowing}
+                />
+              ))}
+            </>:<>
+            <Loading />
+            </>}
           </div>  
         </div>
       </div>

@@ -12,6 +12,8 @@ function Company() {
   let { companyID } = useParams();
   console.log(companyID);
 
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const [company, setCompany] = useState({})
   const [news, setNews] = useState([])
 
@@ -23,7 +25,8 @@ function Company() {
         }
         return getCompanyNews(companyID);
       }).then((result) => {
-        setNews(result.data.data)
+        setNews(result.data.data);
+        setHasLoaded(true);
       });
   }, []);
 
@@ -113,20 +116,22 @@ function Company() {
             <StockChart company={company} />
           </div>
 
-          <SummaryTextView title={"Overview"} text={company.overview} />
+          <SummaryTextView hasLoaded={hasLoaded} title={"Overview"} text={company.overview} />
 
           <AnalysisTextView
+            hasLoaded={hasLoaded}
             title={"Analysis"}
             perception={company.perception}
             text={company.analysis}
           />
 
-          <NewsListView title={"Recent News"} data={news} />
+          <NewsListView hasLoaded={hasLoaded} title={"Recent News"} data={news} />
         </div>
 
         <div id="fade-overlay" />
 
         <FloatingButton
+          hasLoaded={hasLoaded}
           on={"Unfollow"}
           off={"Follow"}
           isOn={isFollowing}

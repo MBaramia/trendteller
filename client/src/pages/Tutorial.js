@@ -12,7 +12,7 @@ function Tutorial() {
           <h2>Video</h2>
 
       </div>
-      <SummaryTextView title={"Transcript"} text={transcript} />
+      <SummaryTextView hasLoaded={true} title={"Transcript"} text={transcript} />
     </div>
     </>
   );

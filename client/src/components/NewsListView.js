@@ -1,7 +1,8 @@
 import "./NewsListView.css";
 import NewsListItem from "./NewsListItem";
+import Loading from "./Loading";
 
-function NewsListView({ title, data }) {
+function NewsListView({ hasLoaded, title, data }) {
   // view will also take news data as a parameter
 
   return (
@@ -9,9 +10,14 @@ function NewsListView({ title, data }) {
       <div className="news-list-view narrow-content">
         <h2>{title}</h2>
         <div className="list-section">
-          {data.map((item) => (
-            <NewsListItem key={item.id} article={item} />
-          ))}
+          {hasLoaded ? <>
+            {data.map((item) => (
+                <NewsListItem key={item.id} article={item} />
+            ))}
+          </>:<>
+              <Loading />
+          </>}
+          
         </div>
       </div>
     </>

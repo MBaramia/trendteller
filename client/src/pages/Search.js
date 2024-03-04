@@ -5,6 +5,8 @@ import { searchCompanies } from "../Auth";
 // import './Search.css'
 
 function Search() {
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   let { query } = useParams();
 
   const [searchResults, setSearchResults] = useState([])
@@ -13,6 +15,7 @@ function Search() {
     searchCompanies(query)
       .then((result) => {
         setSearchResults(result.data.data);
+        setHasLoaded(true);
       });
   }, []);
 
@@ -223,6 +226,7 @@ function Search() {
     <>
       <div id="search-pg">
         <CompanyListView
+          hasLoaded={hasLoaded}
           title={'Search results for "' + query + '"'}
           data={searchResults}
           idToFollowing={idToFollowing}

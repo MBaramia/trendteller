@@ -5,6 +5,8 @@ import { getAllCompanies, getRecommendedCompanies } from "../Auth";
 // import './Browse.css'
 
 function Browse() {
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const [allCompanies, setAllCompanies] = useState([])
   const [recommendedCompanies, setRecommendedCompanies] = useState([])
   const [idToFollowing, setIdToFollowing] = useState({});
@@ -13,10 +15,11 @@ function Browse() {
     getAllCompanies()
       .then((result) => {
         setAllCompanies(result.data.data);
-        setIdToFollowing(produceInitialAllFollowing(result.data.data))
+        setIdToFollowing(produceInitialAllFollowing(result.data.data));
         return getRecommendedCompanies();
       }).then((result) => {
-        setRecommendedCompanies(result.data.data)
+        setRecommendedCompanies(result.data.data);
+        setHasLoaded(true);
       });
   }, []);
 
@@ -256,12 +259,14 @@ function Browse() {
     <>
       <div id="browse-pg">
         <RecommendedCompanyView
+          hasLoaded={hasLoaded}
           title={"Recommended For You"}
           data={recommendedCompanies}
           idToFollowing={idToFollowing}
           toggleFollowing={toggleFollowing}
         />
         <CompanyListView
+          hasLoaded={hasLoaded}
           title={"All Companies"}
           data={allCompanies}
           idToFollowing={idToFollowing}

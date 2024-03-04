@@ -1,14 +1,20 @@
+import Loading from "./Loading";
 import "./SummaryTextView.css";
 
-function SummaryTextView({ title, text }) {
+function SummaryTextView({ hasLoaded, title, text }) {
 
   return (
     <>
       <div className="summary-text-view narrow-content">
         <h2>{title}</h2>
-        <div className="text-content">
-          <p>{text}</p>
-        </div>
+        {hasLoaded ? <>
+          <div className="text-content">
+            <p>{text}</p>
+          </div>
+        </>: <>
+          <Loading />
+        </>
+        }
       </div>
     </>
   );

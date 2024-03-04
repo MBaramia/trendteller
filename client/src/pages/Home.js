@@ -6,6 +6,8 @@ import { getFollowedCompanies, getAllNews, getRecommendedCompanies } from "../Au
 // import './Home.css'
 
 function Home() {
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const [followedCompanies, setFollowedCompanies] = useState([]);
   const [news, setNews] = useState([]);
   const [recommendedCompanies, setRecommendedCompanies] = useState([])
@@ -28,6 +30,7 @@ function Home() {
         companies = companies.concat(result.data.data)
         console.log("Companies: " + companies.length)
         setIdToFollowing(produceInitialAllFollowing(companies))
+        setHasLoaded(true);
       });
   }, []);
 
@@ -318,18 +321,20 @@ function Home() {
     <>
       <div id="home-pg">
         <CompanyListView
+          hasLoaded={hasLoaded}
           title={"Followed Companies"}
           data={followedCompanies}
           idToFollowing={idToFollowing}
           toggleFollowing={toggleFollowing}
         />
         <RecommendedCompanyView
+          hasLoaded={hasLoaded}
           title={"Recommended For You"}
           data={recommendedCompanies}
           idToFollowing={idToFollowing}
           toggleFollowing={toggleFollowing}
         />
-        <NewsListView title={"News"} data={news} />
+        <NewsListView hasLoaded={hasLoaded} title={"News"} data={news} />
       </div>
     </>
   );

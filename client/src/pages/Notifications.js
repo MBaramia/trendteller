@@ -4,12 +4,14 @@ import { getNotifications } from "../Auth";
 // import './Notifications.css'
 
 function Notifications() {
-  const [notifications, setNotifications] = useState([])
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     getNotifications()
       .then((result) => {
         setNotifications(result.data.data);
+        setHasLoaded(true);
       });
   }, []);
 
@@ -111,7 +113,7 @@ function Notifications() {
   return (
     <>
       <div id="notifications-pg">
-        <NewsListView title={"Notifications"} data={notifications} />
+        <NewsListView hasLoaded={hasLoaded} title={"Notifications"} data={notifications} />
       </div>
     </>
   );

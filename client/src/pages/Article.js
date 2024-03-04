@@ -5,8 +5,11 @@ import SummaryTextView from '../components/SummaryTextView';
 import './Article.css'
 import { useState, useEffect } from 'react';
 import { getArticleInfo } from '../Auth';
+import Loading from '../components/Loading';
 
 function Article() {
+
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   let { articleID, companyID } = useParams();
   console.log(`${articleID} | ${companyID}`);
@@ -17,6 +20,7 @@ function Article() {
     getArticleInfo(articleID, companyID)
       .then((result) => {
         setArticle(result.data);
+        setHasLoaded(true);
       });
   }, []);
 
@@ -47,21 +51,26 @@ function Article() {
     <div id='article-pg'>
       <div id="pg-content">
         <div className='article-info narrow-content'>
-            <h1>{article.title}</h1>
-            <p>Source: {article.source}</p>
-            <p>Company: <a href={`/company/${article.companyID}`} >{article.companyName} ({article.companyCode})</a></p>
-            <p>Published: {article.date}</p>
+        {hasLoaded ? <>
+          <h1>{article.title}</h1>
+          <p>Source: {article.source}</p>
+          <p>Company: <a href={`/company/${article.companyID}`} >{article.companyName} ({article.companyCode})</a></p>
+          <p>Published: {article.date}</p>
+        </>:<>
+          <Loading />
+        </>}
         </div>
 
-        <SummaryTextView title={"Summary"} text={article.summary} />
+        <SummaryTextView title={"Summary"} hasLoaded={hasLoaded} text={article.summary} />
 
-        <AnalysisTextView title={"Analysis"} perception={article.perception} text={article.analysis} />
+        <AnalysisTextView title={"Analysis"} hasLoaded={hasLoaded} perception={article.perception} text={article.analysis} />
       </div>
 
       <div id="fade-overlay" />
 
       {/* change action to visit website link */}
-      <FloatingButton on={"Read full article"} off={""} isOn={true} action={goToArticleLink} />
+      
+      <FloatingButton hasLoaded={hasLoaded} on={"Read full article"} off={""} isOn={true} action={goToArticleLink} />
     </div>
     </>
   );

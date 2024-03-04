@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import "./Profile.css";
 import { processUpdate, getUserData } from "../Auth";
+import Loading from "../components/Loading";
 
 function Profile() {
+
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
@@ -10,6 +13,7 @@ function Profile() {
   useEffect(() => {
     getUserData().then((result) => {
       setEmail(result.data.username);
+      setHasLoaded(true);
     });
   });
 
@@ -42,23 +46,27 @@ function Profile() {
       <div id="profile-pg">
         <div className="form-area narrow-content">
           <h2>Profile</h2>
-          <input
-            type="text"
-            id="email"
-            placeholder="New Email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <input
-            type="password"
-            id="password"
-            placeholder="New Password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          <span className="btn-container">
-            <button onClick={submitChanges}>Submit</button>
-          </span>
+          {hasLoaded ?<>
+            <input
+              type="text"
+              id="email"
+              placeholder="New Email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <input
+              type="password"
+              id="password"
+              placeholder="New Password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            <span className="btn-container">
+              <button onClick={submitChanges}>Submit</button>
+            </span>
+          </>:<>
+            <Loading />
+          </>}
         </div>
       </div>
     </>
