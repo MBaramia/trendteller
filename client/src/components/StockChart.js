@@ -4,6 +4,8 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { ReactComponent as SmileyGood } from "../images/smiley_good_green.svg";
 import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_grey.svg";
 import { ReactComponent as SmileyBad } from "../images/smiley_bad_red.svg";
+
+//0: intradaily, 1: daily, 2: weekly, 3: monthly
 const fetched = {
     0: {
         "2024-02-27 19:55:00": {
@@ -831,6 +833,7 @@ function StockChart({ company }) {
     const allToolTipData = produceToolTipData();
     // console.log(allToolTipData);
 
+    //Data that is displayed on the top right
     const mainData = {
         open: "145.4100",  
         high: "148.1000", 
@@ -839,6 +842,7 @@ function StockChart({ company }) {
         volume: "15198607"
     }
 
+    //Changes (displayed top right) in order 1D, 1W, 1M, 3M, 6M, 1Y, 2Y, MAX
     const changes = [
         "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)",
         "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)"
