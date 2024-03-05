@@ -312,7 +312,7 @@ def processUpdate():
     user = UserData.query.filter(UserData.id == current_user.id).first()
     user.updateDetails(username, password)
     db.session.commit()
-    return jsonify({"message": "Update successful"})
+    return jsonify({"message": "Update successful", "success":True})
 
 @app.route('/getUserData', methods=['POST'])
 @login_required
