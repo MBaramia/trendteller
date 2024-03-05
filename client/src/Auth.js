@@ -404,3 +404,153 @@ export function getRecommendedCompanies() {
       };
     });
 }
+
+export function getStockData(companyID) {
+  let status = true;
+  return fetch("/getStockData", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Stock Data")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getPredictedStockData(companyID) {
+  let status = true;
+  return fetch("/getPredictedStockData", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Predicted Stock Data")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getMainStockData(companyID) {
+  let status = true;
+  return fetch("/getMainStockData", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Main Stock Data")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getStockChanges(companyID) {
+  let status = true;
+  return fetch("/getStockChanges", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Stock Changes")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getStockDates(companyID) {
+  let status = true;
+  return fetch("/getStockDates", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Stock Dates")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

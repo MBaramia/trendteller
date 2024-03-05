@@ -15,6 +15,8 @@ from flask import Flask, render_template,request,session,redirect,flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from fake_data import fakeData, fakePredicton, dates
+
 
 def queryFollowedCompanies(userID):
     gettingCompaniesQry = text("SELECT * FROM FollowedCompanies JOIN CompanyData WHERE userID=:userID")
@@ -247,6 +249,38 @@ def switchFollowing(userID, companyID):
     db.session.execute(insertFollowingQry)
     db.session.commit()
 
+def queryStockData(companyID):
+    return fakeData
+
+def queryPredictedStockData(companyID):
+    return fakePredicton
+
+def queryMainStockData(companyID):
+    #Placeholder - replace with actual logic
+    data = {
+        "open": "145.4100",  
+        "high": "148.1000", 
+        "low": "145.2100", 
+        "price": "147.9400", 
+        "volume": "15198607"
+    }
+    #Placeholder - replace with actual logic
+    return data
+
+def queryStockChanges(companyID):
+    #Placeholder - replace with actual logic
+    data = {
+        "data": [
+            "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)",
+            "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)"
+        ]
+    }
+    #Placeholder - replace with actual logic
+    return data
+
+def queryStockDates(companyID):
+    return dates
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
@@ -389,13 +423,58 @@ def searchCompanies():
     data = request.get_json()
     query= data.get("query")
 
-    query = querySearchCompanies(query, current_user.id)
-    return jsonify(query)
+    result = querySearchCompanies(query, current_user.id)
+    return jsonify(result)
 
 @app.route('/getRecommendedCompanies', methods=['POST'])
 @login_required
 def getRecommendedCompanies():
     query = queryRecommendedCompanies(current_user.id)
+    return jsonify(query)
+
+@app.route('/getStockData', methods=['POST'])
+@login_required
+def getStockData():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryStockData(companyID)
+    return jsonify(query)
+
+@app.route('/getPredictedStockData', methods=['POST'])
+@login_required
+def getPredictedStockData():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryPredictedStockData(companyID)
+    return jsonify(query)
+
+@app.route('/getMainStockData', methods=['POST'])
+@login_required
+def getMainStockData():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryMainStockData(companyID)
+    return jsonify(query)
+
+@app.route('/getStockChanges', methods=['POST'])
+@login_required
+def getStockChanges():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryStockChanges(companyID)
+    return jsonify(query)
+
+@app.route('/getStockDates', methods=['POST'])
+@login_required
+def getStockDates():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryStockDates(companyID)
     return jsonify(query)
 
 if __name__ == "__main__":
