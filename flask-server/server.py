@@ -230,7 +230,17 @@ def queryRecommendedCompanies(userID):
     finalResult = {"data":allCompanies}
     return finalResult
 
-
+def switchFollowing(userID, companyID):
+    getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+    getFollowingQry = getFollowing.bindparams(userID = userID, companyID = companyID)
+    followingResult = db.session.execute(getFollowingQry)
+    followingValues = followingResult.fetchall()
+    if len(followingValues) != 0:
+        # Entry exists, delete it
+        deleteFollowing = text("DELETE FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+        deleteFollowingQry = deleteFollowing.bindparams(userID=userID, companyID=companyID)
+        db.session.execute(deleteFollowingQry)
+        db.session.commit()
 
 app = Flask(__name__)
 
