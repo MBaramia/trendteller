@@ -241,6 +241,11 @@ def switchFollowing(userID, companyID):
         deleteFollowingQry = deleteFollowing.bindparams(userID=userID, companyID=companyID)
         db.session.execute(deleteFollowingQry)
         db.session.commit()
+        return
+    insertFollowing = text("INSERT INTO FollowedCompanies (userID, companyID) VALUES (:userID, :companyID)")
+    insertFollowingQry = insertFollowing.bindparams(userID=userID, companyID=companyID)
+    db.session.execute(insertFollowingQry)
+    db.session.commit()
 
 app = Flask(__name__)
 
