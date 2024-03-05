@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from sqlalchemy import event 
 import json
 from sqlalchemy import text
+import datetime
 # create the database interface
 db = SQLAlchemy()
 
@@ -53,8 +54,7 @@ class Articles(db.Model):
     source = db.Column(db.String(100))
     summary =  db.Column(db.String(500))
     effect = db.Column(db.Integer)
-    def __init__(self,id,dateTime,link,title,source,summary, effect): 
-        self.id = id 
+    def __init__(self,dateTime,link,title,source,summary, effect): 
         self.dateTime = dateTime
         self.link = link
         self.title = title
@@ -207,8 +207,18 @@ def dbinit():
         UserData("user7@email.com","testpass"),
         UserData("uesr8@email.com","testpass")
     ]
+
+    articleList = [Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 1", "BBC", "Summary1", 1), 
+                   Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 2", "BBC", "Summary2", -1), 
+                   Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 3", "BBC", "Summary3", 0)]
+    affectedList = [AffectedCompanies(1, 1, -1, "Analysis1", "Justification1"), 
+                AffectedCompanies(2, 2, 1, "Analysis2", "Justification2"), 
+                AffectedCompanies(3, 3, 0, "Analysis3", "Justification3")]
+
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
         db.session.add(companyList[i])
-    #db.session.add_all(companyList)
+    db.session.add_all(articleList)
+    db.session.add_all(affectedList)
+
     db.session.commit()
