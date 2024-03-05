@@ -784,4 +784,4 @@ fakePredicton = {
 dates = [[], [], [], []]
 
 for outer_key, inner_dict in fakeData.items():
-    dates[outer_key] = sorted(inner_dict.keys(), key=lambda date: datetime.strptime(date.split(' ')[0], "%Y-%m-%d"), reverse=True)
+    dates[outer_key] = sorted(inner_dict.keys(), key=lambda date: datetime.strptime(date, "%Y-%m-%d %H:%M:%S") if ' ' in date else datetime.strptime(date, "%Y-%m-%d"), reverse=True)
