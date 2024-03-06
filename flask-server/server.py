@@ -17,6 +17,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
+from stock_price_prediction import fetch_stock_prediction
 
 # websocket
 from flask_socketio import SocketIO, emit
@@ -162,6 +163,10 @@ def queryNotifications(userID):
     notifications.append({"id":10,"companyCode":"TWTR","companyID":14,"title":"Twitter introduces new feature to combat misinformation","source":"The Guardian","date":"09/06/2021", "perception":2})
     #Testing - delete above
     finalResult = {"data":notifications}
+    notificationUpdate = text("UPDATE Notifications SET viewed = :viewed WHERE userID = :userID")
+    notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
+    db.session.execute(notificationQry)
+    db.session.commit()
     return finalResult     
 
 def queryCompanyInfo(companyID, userID):
@@ -291,6 +296,15 @@ def queryStockChanges(companyID):
 
 def queryStockDates(companyID):
     return dates
+
+def queryRecentAnalysis(companyID):
+    getAnalysis = text("SELECT analysis FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID ORDER BY Articles.dateTime DESC LIMIT 1")
+    getAnalysisQry = getAnalysis.bindparams(companyID = companyID)
+    results = db.session.execute(getAnalysisQry)
+    values = results.fetchall()
+    if len(values) != 0:
+        return values[0][0]
+    return "No analysis"
 
 def queryPredictedStockDates(companyID):
     return predictedDates
@@ -513,6 +527,15 @@ def getPredictedStockDates():
     companyID = data.get("companyID")
 
     query = queryPredictedStockDates(companyID)
+    return jsonify(query)
+
+@app.route('/getCompanyAnalysis', methods=['POST'])
+@login_required
+def getCompanyAnalysis():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryRecentAnalysis(companyID)
     return jsonify(query)
 
 if __name__ == "__main__":

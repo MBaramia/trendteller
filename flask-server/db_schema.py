@@ -218,7 +218,6 @@ def dbinit():
         CompanyData(1,'Alphabet Inc Class C','Alphabet Inc Class C description','GOOG',145.38, 1),
         CompanyData(2,'Microsoft Corp','Microsoft Corp Description', 'MSFT',410.48, 2),
         CompanyData(3,'Apple Inc','Apple Inc Description', 'AAPL',182.52, 1),
-        CompanyData(4, 'J Sainsbury plc', 'J Sainsbury plc Description', 'SBRY', 252.70, 0)
     ]
 
     # rules for users: username must be an email, password must be between 5 and 20 chars
