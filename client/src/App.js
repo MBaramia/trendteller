@@ -23,21 +23,6 @@ import { processLogin, checkLoggedIn } from "./Auth";
 import Loading from "./components/Loading";
 import NavButton from "./components/NavButton";
 
-function getScrollbarWidth() {
-  const scrollDiv = document.createElement('div');
-  scrollDiv.style.width = '100px';
-  scrollDiv.style.height = '100px';
-  scrollDiv.style.overflow = 'scroll';
-  scrollDiv.style.position = 'absolute';
-  scrollDiv.style.top = '-9999px'; // Hide the div off-screen
-  document.body.appendChild(scrollDiv);
-
-  const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-  document.body.removeChild(scrollDiv);
-
-  return scrollbarWidth;
-}
-
 function App() {
   const [navHidden, setNavHidden] = useState(true);
   // const [data, setData] = useState([{}]);
