@@ -17,6 +17,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
+from stock_price_prediction import fetch_stock_prediction
 
 # websocket
 from flask_socketio import SocketIO, emit
