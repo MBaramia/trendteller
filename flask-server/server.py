@@ -9,7 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import text
 import random
 import json
-
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
 # create the Flask app
 from flask import Flask, render_template,request,session,redirect,flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -24,7 +25,18 @@ from flask_socketio import SocketIO, emit
 
 # cors
 from flask_cors import CORS
+scheduler = BackgroundScheduler()
+scheduler.start()
 
+def fetch_stock_predictions_job():
+    company_ids = [0, 1, 2]  
+    for company_id in company_ids:
+        fetch_stock_prediction(company_id)
+
+# Schedule the job to run every hour
+scheduler.add_job(func=fetch_stock_predictions_job, trigger='interval', hours=1, id='stock_prediction_job')
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
 
 def queryFollowedCompanies(userID):
     gettingCompaniesQry = text("SELECT * FROM FollowedCompanies JOIN CompanyData WHERE userID=:userID")
