@@ -225,9 +225,9 @@ def querySearchCompanies(query, userID):
 def queryRecommendedCompanies(userID):
     #Placeholder - replace with actual logic (should return exactly 3 companies)
     allCompanies = []
-    allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
-    allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":0, "following":True})
-    allCompanies.append({"id":7, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
+    allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":False})
+    allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":0, "following":False})
+    allCompanies.append({"id":7, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":False})
     #Placeholder - replace with actual logic
     finalResult = {"data":allCompanies}
     return finalResult
