@@ -554,6 +554,35 @@ export function getStockDates(companyID) {
       };
     });
 }
+export function getPredictedStockDates(companyID) {
+  let status = true;
+  return fetch("/getPredictedStockDates", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Predicted Stock Dates")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
 
 export function processToggleFollowing(companyID) {
   let status = true;

@@ -16,7 +16,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # fake stock data
-from fake_data import fakeData, fakePredicton, dates, combinedData
+from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
 
 # websocket
 from flask_socketio import SocketIO, emit
@@ -292,6 +292,9 @@ def queryStockChanges(companyID):
 def queryStockDates(companyID):
     return dates
 
+def queryPredictedStockDates(companyID):
+    return predictedDates
+
 app = Flask(__name__)
 
 # add cors policy
@@ -501,6 +504,15 @@ def toggleFollowing():
     companyID = data.get("companyID")
 
     query = switchFollowing(current_user.id, companyID)
+    return jsonify(query)
+
+@app.route('/getPredictedStockDates', methods=['POST'])
+@login_required
+def getPredictedStockDates():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryPredictedStockDates(companyID)
     return jsonify(query)
 
 if __name__ == "__main__":
