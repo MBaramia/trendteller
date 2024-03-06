@@ -6,7 +6,7 @@ import "./Company.css";
 import { useParams } from "react-router-dom";
 import NewsListView from "../components/NewsListView";
 import StockChart from "../components/StockChart";
-import { getCompanyInfo, getCompanyNews } from "../Auth";
+import { getCompanyInfo, getCompanyNews, getCompanyAnalysis } from "../Auth";
 
 function Company() {
   let { companyID } = useParams();
@@ -16,6 +16,7 @@ function Company() {
 
   const [company, setCompany] = useState({})
   const [news, setNews] = useState([])
+  const [companyAnalysis, setCompanyAnalysis] = useState("")
 
   useEffect(() => {
     getCompanyInfo(companyID)
@@ -26,6 +27,9 @@ function Company() {
         return getCompanyNews(companyID);
       }).then((result) => {
         setNews(result.data.data);
+        return getCompanyAnalysis();
+      }).then((result) => {
+        setCompanyAnalysis(result.data);
         setHasLoaded(true);
       });
   }, []);
@@ -122,7 +126,7 @@ function Company() {
             hasLoaded={hasLoaded}
             title={"Analysis"}
             perception={company.perception}
-            text={company.analysis}
+            text={companyAnalysis}
           />
 
           <NewsListView hasLoaded={hasLoaded} title={"Recent News"} data={news} />

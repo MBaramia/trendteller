@@ -554,6 +554,7 @@ export function getStockDates(companyID) {
       };
     });
 }
+
 export function getPredictedStockDates(companyID) {
   let status = true;
   return fetch("/getPredictedStockDates", {
@@ -606,6 +607,36 @@ export function processToggleFollowing(companyID) {
     })
     .then((data) => {
       console.log("Follow toggled")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
+export function getCompanyAnalysis(companyID) {
+  let status = true;
+  return fetch("/getCompanyAnalysis", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Company Analysis")
       console.log(data);
       return {
         status: status,

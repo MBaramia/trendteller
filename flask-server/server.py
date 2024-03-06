@@ -296,12 +296,15 @@ def queryStockChanges(companyID):
 def queryStockDates(companyID):
     return dates
 
-def getRecentAnalysis(companyID):
-    getAnalysis = text("SELECT analysis FROM Articles JOIN AffectedCompanies ON Articles.articleID = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID ORDER BY Articles.dateTime DESC LIMIT 1")
+def queryRecentAnalysis(companyID):
+    getAnalysis = text("SELECT analysis FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID ORDER BY Articles.dateTime DESC LIMIT 1")
     getAnalysisQry = getAnalysis.bindparams(companyID = companyID)
     results = db.session.execute(getAnalysisQry)
     values = results.fetchall()
-    return values[0][0]
+    if len(values) != 0:
+        return values[0][0]
+    return "No analysis"
+
 def queryPredictedStockDates(companyID):
     return predictedDates
 
@@ -523,6 +526,15 @@ def getPredictedStockDates():
     companyID = data.get("companyID")
 
     query = queryPredictedStockDates(companyID)
+    return jsonify(query)
+
+@app.route('/getCompanyAnalysis', methods=['POST'])
+@login_required
+def getCompanyAnalysis():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryRecentAnalysis(companyID)
     return jsonify(query)
 
 if __name__ == "__main__":
