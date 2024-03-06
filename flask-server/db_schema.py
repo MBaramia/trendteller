@@ -110,7 +110,24 @@ class CompanyWeights(db.Model):
         self.relationOne = relationOne
         self.relationTwo = relationTwo
         self.mutualFollowers = mutualFollowers
-
+# this table stores prediction data
+class Prediction(db.Model):
+    __tablename__ = 'Prediction'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    companyID = db.Column(db.Integer, db.ForeignKey('CompanyData.id'), nullable=False)
+    date_predicted = db.Column(DateTime(timezone=True), default=func.now(), nullable=False)
+    close = db.Column(db.Float)
+    volume = db.Column(db.Float)
+    open = db.Column(db.Float)
+    high = db.Column(db.Float)
+    low = db.Column(db.Float)
+    def __init__(self, companyID, close, volume, open, high, low):
+        self.companyID = companyID
+        self.close = close
+        self.volume = volume
+        self.open = open
+        self.high = high
+        self.low = low
 
 @event.listens_for(FollowedCompanies, 'before_insert')
 def before_followed_companies_insert(mapper, connection, target):
