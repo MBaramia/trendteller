@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import CompanyListView from "../components/CompanyListView";
 import { useState, useEffect } from "react";
 import { searchCompanies, processToggleFollowing } from "../Auth";
+import io from "socket.io-client";
 // import './Search.css'
 
 function Search() {
@@ -13,13 +14,28 @@ function Search() {
   const [idToFollowing, setIdToFollowing] = useState({});
 
   useEffect(() => {
-    searchCompanies(query)
-      .then((result) => {
-        setSearchResults(result.data.data);
-        setIdToFollowing(produceInitialAllFollowing(result.data.data))
-        setHasLoaded(true);
-      });
+    fetchPageData();
+    return setUpSocketListener();
   }, []);
+
+  const fetchPageData = () => {
+    searchCompanies(query)
+    .then((result) => {
+      setSearchResults(result.data.data);
+      setIdToFollowing(produceInitialAllFollowing(result.data.data))
+      setHasLoaded(true);
+    });
+  }
+
+  const setUpSocketListener = () => {
+    const socket = io("http://127.0.0.1:5000");
+    socket.on("database_updated", (data) => {
+      console.log(data);
+      fetchPageData();
+    });
+
+    return () => socket.disconnect();
+  }
 
   const produceInitialAllFollowing = (companies) => {
     let idToFollowing = {};
