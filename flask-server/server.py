@@ -42,6 +42,8 @@ scheduler.add_job(func=lambda: fetch_and_store_predictions('monthly'), trigger='
 # Ensure the scheduler is shut down properly on exit
 atexit.register(lambda: scheduler.shutdown())
 
+# integrated
+# need stock data and perception data for change and perception
 def queryFollowedCompanies(userID):
     gettingCompaniesQry = text("""
         SELECT CompanyData.id, name, symbol 
@@ -65,7 +67,17 @@ def queryFollowedCompanies(userID):
         # if len(followingValues) != 0:
         #     following = True
         # print(company)
-        item = {"id":company[0], "name":company[1], "code":company[2], "price":random.randint(50, 200), "perception":random.randint(50, 200), "following":True}
+
+        # waiting for real data to produce price
+        item = {
+            "id":company[0], 
+            "name":company[1], 
+            "code":company[2], 
+            "price":random.randint(50, 200), 
+            "change": "-14.9%",
+            "perception":random.randint(0, 2), 
+            "following":True
+        }
         allCompanies.append(item)
 
     #Testing - delete below
@@ -85,7 +97,7 @@ def queryFollowedCompanies(userID):
     result = {"data":allCompanies}
     return result
 
-
+# waiting on dummy data for news articles/analysis etc.
 def queryAllNews():
     getNews = text("SELECT * FROM Articles ORDER BY datetime DESC LIMIT 15")
     getNewsQry = getNews.bindparams()
@@ -121,38 +133,50 @@ def queryAllNews():
     finalResult = {"data":resultList}
     return finalResult
         
-
+# integrated
+# need stock data and perception data for change and perception
 def queryAllCompanies(userID):
-    getCompanies = text("SELECT * FROM CompanyData")
+    getCompanies = text("SELECT id, name, symbol FROM CompanyData")
     getCompaniesQry = getCompanies.bindparams()
     resultset = db.session.execute(getCompaniesQry)
     values = resultset.fetchall()
     allCompanies = []
-    # for company in values:
-    #     getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-    #     getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-    #     followingResult = db.session.execute(getFollowingQry)
-    #     followingValues = followingResult.fetchall()
-    #     following = False
-    #     if len(followingValues) != 0:
-    #         following = True
-    #     item = {"id":company[0], "name":company[1], "code":company[3], "price":str(company[4]), "change":"+1.0", "perception":1, "following":following} # need stock data and perception data for change and perception
-    #     allCompanies.append(item)
+
+    for company in values:
+        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
+        followingResult = db.session.execute(getFollowingQry)
+        followingValues = followingResult.fetchall()
+
+        following = False
+        if len(followingValues) != 0:
+            following = True
+        
+        # waiting for real data to produce price, change
+        item = {
+            "id":company[0], 
+            "name":company[1], 
+            "code":company[2], 
+            "price":random.randint(50, 200), 
+            "change": "-14.9%",
+            "perception":random.randint(0, 2), 
+            "following":following
+        }
+        allCompanies.append(item)
 
     #Testing - delete below
-    allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
-    allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":2, "following":True})
-    allCompanies.append({"id":7, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
-    allCompanies.append({"id":8, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":0, "following":True})
-    allCompanies.append({"id":9, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":0, "following":True})
-    allCompanies.append({"id":10, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":2, "following":True})
-    allCompanies.append({"id":11, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":1, "following":True})
-    allCompanies.append({"id":12, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":2, "following":True})
+    # allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
+    # allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":2, "following":True})
+    # allCompanies.append({"id":7, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
+    # allCompanies.append({"id":8, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":0, "following":True})
+    # allCompanies.append({"id":9, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":0, "following":True})
+    # allCompanies.append({"id":10, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":2, "following":True})
+    # allCompanies.append({"id":11, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":1, "following":True})
+    # allCompanies.append({"id":12, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":2, "following":True})
     #Testing - delete above
 
     finalResult = {"data":allCompanies}
     return finalResult
-
 
 
 def queryNotifications(userID):
