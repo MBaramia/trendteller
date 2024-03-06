@@ -43,34 +43,44 @@ scheduler.add_job(func=lambda: fetch_and_store_predictions('monthly'), trigger='
 atexit.register(lambda: scheduler.shutdown())
 
 def queryFollowedCompanies(userID):
-    gettingCompaniesQry = text("SELECT * FROM FollowedCompanies JOIN CompanyData WHERE userID=:userID")
+    gettingCompaniesQry = text("""
+        SELECT CompanyData.id, name, symbol 
+        FROM FollowedCompanies 
+        JOIN CompanyData ON FollowedCompanies.companyID = CompanyData.id
+        WHERE FollowedCompanies.userID = :userID
+    """)
     followedCompaniesQry = gettingCompaniesQry.bindparams(userID = userID)
     resultset = db.session.execute(followedCompaniesQry)
     values = resultset.fetchall()
     allCompanies = []
+    # print(userID)
+    # print(values)
+
     for company in values:
-        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-        followingResult = db.session.execute(getFollowingQry)
-        followingValues = followingResult.fetchall()
-        following = False
-        if len(followingValues) != 0:
-            following = True
-        item = {"id":company[0], "name":company[3], "code":company[5], "price":company[6], "perception":"", "following":following}
+        # getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+        # getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
+        # followingResult = db.session.execute(getFollowingQry)
+        # followingValues = followingResult.fetchall()
+        # following = False
+        # if len(followingValues) != 0:
+        #     following = True
+        # print(company)
+        item = {"id":company[0], "name":company[1], "code":company[2], "price":random.randint(50, 200), "perception":random.randint(50, 200), "following":True}
         allCompanies.append(item)
+
     #Testing - delete below
-    allCompanies.append({"id":0, "name":"Tesla", "code":"TSLA", "price":147.9400, "change": "-14.9%", "perception":0, "following":True})
-    allCompanies.append({"id":1, "name":"Google", "code":"GOOGL", "price":132.6500, "change": "+9.3%", "perception":2, "following":True})
-    allCompanies.append({"id":2, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
-    allCompanies.append({"id":3, "name":"Apple", "code":"AAPL", "price":148.3600, "change": "+1.5%", "perception":1, "following":True})
-    allCompanies.append({"id":4, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":2, "following":True})
-    allCompanies.append({"id":5, "name":"Microsoft", "code":"MSFT", "price":305.2200, "change": "-0.5%", "perception":0, "following":True})
-    allCompanies.append({"id":6, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
-    allCompanies.append({"id":7, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":0, "following":True})
-    allCompanies.append({"id":11, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":0, "following":True})
-    allCompanies.append({"id":12, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":2, "following":True})
-    allCompanies.append({"id":13, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":1, "following":True})
-    allCompanies.append({"id":14, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":2, "following":True})
+    # allCompanies.append({"id":0, "name":"Tesla", "code":"TSLA", "price":147.9400, "change": "-14.9%", "perception":0, "following":True})
+    # allCompanies.append({"id":1, "name":"Google", "code":"GOOGL", "price":132.6500, "change": "+9.3%", "perception":2, "following":True})
+    # allCompanies.append({"id":2, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
+    # allCompanies.append({"id":3, "name":"Apple", "code":"AAPL", "price":148.3600, "change": "+1.5%", "perception":1, "following":True})
+    # allCompanies.append({"id":4, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":2, "following":True})
+    # allCompanies.append({"id":5, "name":"Microsoft", "code":"MSFT", "price":305.2200, "change": "-0.5%", "perception":0, "following":True})
+    # allCompanies.append({"id":6, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":True})
+    # allCompanies.append({"id":7, "name":"Netflix", "code":"NFLX", "price":574.1300, "change": "-1.2%", "perception":0, "following":True})
+    # allCompanies.append({"id":11, "name":"Intel", "code":"INTC", "price":54.1800, "change": "-0.9%", "perception":0, "following":True})
+    # allCompanies.append({"id":12, "name":"Nvidia", "code":"NVDA", "price":220.0500, "change": "+3.7%", "perception":2, "following":True})
+    # allCompanies.append({"id":13, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":1, "following":True})
+    # allCompanies.append({"id":14, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":2, "following":True})
     #Testing - delete above
     result = {"data":allCompanies}
     return result
@@ -82,21 +92,21 @@ def queryAllNews():
     resultset = db.session.execute(getNewsQry)
     values = resultset.fetchall()
     resultList = []
-    for article in values:
-        # this query gets the affected companies by an article
-        getAffected = text("SELECT * FROM AffectedCompanies WHERE articleID=:articleID")
-        getAffectedQry = getAffected.bindparams(articleID = article[0])
-        affectedResult = db.session.execute(getAffectedQry)
-        affectedValue = affectedResult.fetchall()
+    # for article in values:
+    #     # this query gets the affected companies by an article
+    #     getAffected = text("SELECT * FROM AffectedCompanies WHERE articleID=:articleID")
+    #     getAffectedQry = getAffected.bindparams(articleID = article[0])
+    #     affectedResult = db.session.execute(getAffectedQry)
+    #     affectedValue = affectedResult.fetchall()
 
-        #getting the company code based on the affected company ID
-        getCode = text("SELECT symbol FROM CompanyData WHERE id=:companyID")
-        getCodeQry = getCode.bindparams(companyID = affectedValue[0][0])
-        codeResult = db.session.execute(getCodeQry)
-        codeValue = codeResult.fetchall()
+    #     #getting the company code based on the affected company ID
+    #     getCode = text("SELECT symbol FROM CompanyData WHERE id=:companyID")
+    #     getCodeQry = getCode.bindparams(companyID = affectedValue[0][0])
+    #     codeResult = db.session.execute(getCodeQry)
+    #     codeValue = codeResult.fetchall()
 
-        item = {"id":article[0], "title":article[3], "companyID":affectedValue[0][0], "companyCode":codeValue[0][0], "source":"", "date":article[1], "perception":article[5]}
-        resultList.append(item)
+    #     item = {"id":article[0], "title":article[3], "companyID":affectedValue[0][0], "companyCode":codeValue[0][0], "source":"", "date":article[1], "perception":article[5]}
+    #     resultList.append(item)
 
     #Testing - delete below
     resultList.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
@@ -107,6 +117,7 @@ def queryAllNews():
     resultList.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":7, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
     resultList.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":11, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
     #Testing - delete above
+
     finalResult = {"data":resultList}
     return finalResult
         
@@ -117,16 +128,17 @@ def queryAllCompanies(userID):
     resultset = db.session.execute(getCompaniesQry)
     values = resultset.fetchall()
     allCompanies = []
-    for company in values:
-        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-        followingResult = db.session.execute(getFollowingQry)
-        followingValues = followingResult.fetchall()
-        following = False
-        if len(followingValues) != 0:
-            following = True
-        item = {"id":company[0], "name":company[1], "code":company[3], "price":str(company[4]), "change":"+1.0", "perception":1, "following":following} # need stock data and perception data for change and perception
-        allCompanies.append(item)
+    # for company in values:
+    #     getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+    #     getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
+    #     followingResult = db.session.execute(getFollowingQry)
+    #     followingValues = followingResult.fetchall()
+    #     following = False
+    #     if len(followingValues) != 0:
+    #         following = True
+    #     item = {"id":company[0], "name":company[1], "code":company[3], "price":str(company[4]), "change":"+1.0", "perception":1, "following":following} # need stock data and perception data for change and perception
+    #     allCompanies.append(item)
+
     #Testing - delete below
     allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":True})
     allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":2, "following":True})
@@ -137,6 +149,7 @@ def queryAllCompanies(userID):
     allCompanies.append({"id":11, "name":"IBM", "code":"IBM", "price":139.2800, "change": "-0.3%", "perception":1, "following":True})
     allCompanies.append({"id":12, "name":"Twitter", "code":"TWTR", "price":69.4200, "change": "+1.8%", "perception":2, "following":True})
     #Testing - delete above
+
     finalResult = {"data":allCompanies}
     return finalResult
 
@@ -148,23 +161,24 @@ def queryNotifications(userID):
     resultset = db.session.execute(notificationsQry)
     values = resultset.fetchall()
     notifications = []
-    for notification in values:
-        #gets title of article
-        getTitle = text("SELECT title, source, date, effect FROM Articles WHERE articleID=:articleID")
-        getTitleQry = getTitle.bindparams(articleID = notification[1])
-        getTitleResult = db.session.execute(getTitleQry)
-        getTitleQryValues = getTitleResult.fetchall()
+    # for notification in values:
+    #     #gets title of article
+    #     getTitle = text("SELECT title, source, date, effect FROM Articles WHERE articleID=:articleID")
+    #     getTitleQry = getTitle.bindparams(articleID = notification[1])
+    #     getTitleResult = db.session.execute(getTitleQry)
+    #     getTitleQryValues = getTitleResult.fetchall()
 
 
-        #get companyID and code
-        getCompanyData = text("SELECT CompanyData.id, CompanyData.symbol FROM AffectedCompanies JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id WHERE articleID=:articleID")
-        companyDataQry = getCompanyData.bindparams(articleID = notification[1])
-        companyDataResult = db.session.execute(companyDataQry)
-        companyDataValue = companyDataResult.fetchall()
+    #     #get companyID and code
+    #     getCompanyData = text("SELECT CompanyData.id, CompanyData.symbol FROM AffectedCompanies JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id WHERE articleID=:articleID")
+    #     companyDataQry = getCompanyData.bindparams(articleID = notification[1])
+    #     companyDataResult = db.session.execute(companyDataQry)
+    #     companyDataValue = companyDataResult.fetchall()
 
 
-        item = {"id":notification[0],"companyCode":companyDataValue[0][1],"companyID":companyDataValue[0][0],"title":getTitleQryValues[0][0],"source":getTitleQryValues[0][1],"date":getTitleQryValues[0][2], "perception":getTitleQryValues[0][3]}
-        notifications.append(item)
+    #     item = {"id":notification[0],"companyCode":companyDataValue[0][1],"companyID":companyDataValue[0][0],"title":getTitleQryValues[0][0],"source":getTitleQryValues[0][1],"date":getTitleQryValues[0][2], "perception":getTitleQryValues[0][3]}
+    #     notifications.append(item)
+
     #Testing - delete below
     notifications.append({"id":0,"companyCode":"MSFT","companyID":5,"title":"Microsoft unveils new Windows 12 operating system","source":"BBC","date":"20/02/2024", "perception":1})
     notifications.append({"id":1,"companyCode":"AAPL","companyID":3,"title":"Apple announces new iPhone 13 with advanced features","source":"TechCrunch","date":"09/15/2021", "perception":1})
@@ -177,7 +191,8 @@ def queryNotifications(userID):
     notifications.append({"id":8,"companyCode":"NVDA","companyID":12,"title":"Nvidia launches new graphics card series","source":"Tom's Hardware","date":"09/08/2021", "perception":2})
     notifications.append({"id":9,"companyCode":"IBM","companyID":13,"title":"IBM announces breakthrough in quantum computing","source":"ZDNet","date":"09/07/2021", "perception":1})
     notifications.append({"id":10,"companyCode":"TWTR","companyID":14,"title":"Twitter introduces new feature to combat misinformation","source":"The Guardian","date":"09/06/2021", "perception":2})
-    #Testing - delete above
+    # Testing - delete above
+
     finalResult = {"data":notifications}
     notificationUpdate = text("UPDATE Notifications SET viewed = :viewed WHERE userID = :userID")
     notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
@@ -190,6 +205,7 @@ def queryCompanyInfo(companyID, userID):
     getCompaniesQry = getCompanies.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesQry)
     values = resultset.fetchall()
+
     for company in values:
         getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
         getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
@@ -198,7 +214,7 @@ def queryCompanyInfo(companyID, userID):
         following = False
         if len(followingValues) != 0:
             following = True
-        item = {"id":company[0], "code":company[3], "name":company[1], "overview":company[2], "perception":company[5],"following":following}
+        item = {"id":company[0], "name":company[1], "code":company[2], "overview":company[3], "perception":random.randint(0, 2),"following":following}
         return item
 
 def queryCompanyNews(companyID):
@@ -210,6 +226,7 @@ def queryCompanyNews(companyID):
     for article in values:
         item = {"id":article[0], "title":article[3], "companyID":companyID, "companyCode":article[16], "source":article[4], "date":article[1], "perception":article[6]}
         allArticles.append(item)
+
     #Testing - delete below
     print(len(allArticles))
     allArticles.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
@@ -220,6 +237,7 @@ def queryCompanyNews(companyID):
     allArticles.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":7, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
     allArticles.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":11, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
     #Testing - delete above
+
     finalResult = {"data":allArticles}
     return finalResult
 
@@ -254,9 +272,9 @@ def querySearchCompanies(query, userID):
 def queryRecommendedCompanies(userID):
     #Placeholder - replace with actual logic (should return exactly 3 companies)
     allCompanies = []
-    allCompanies.append({"id":5, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":False})
-    allCompanies.append({"id":6, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":0, "following":False})
-    allCompanies.append({"id":7, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":False})
+    allCompanies.append({"id":20, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":False})
+    allCompanies.append({"id":21, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":0, "following":False})
+    allCompanies.append({"id":22, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":False})
     #Placeholder - replace with actual logic
     finalResult = {"data":allCompanies}
     return finalResult

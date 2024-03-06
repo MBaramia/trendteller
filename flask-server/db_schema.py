@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy import event 
 import json
-from sqlalchemy import text
+from sqlalchemy import text, UniqueConstraint
 import datetime
 # create the database interface
 db = SQLAlchemy()
@@ -32,15 +32,16 @@ class CompanyData(db.Model):
     __tablename__='CompanyData'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
-    description = db.Column(db.String(10000))
     symbol = db.Column(db.String(4))
+    description = db.Column(db.String(10000))
+    
     # exchange = db.Column(db.Double)
     # currPerception = db.Column(db.Integer) # stores the current perception of the company
-    def __init__(self,id,name,description,symbol): 
+    def __init__(self,id,name,symbol,description): 
         self.id = id 
         self.name = name
-        self.description = description
         self.symbol = symbol
+        self.description = description
         # self.exchange = exchange
         # self.currPerception = currPerception
 
@@ -65,11 +66,15 @@ class Articles(db.Model):
 # this is a table of companies that a user tracks
 class FollowedCompanies(db.Model):
     __tablename__ = 'FollowedCompanies'
+    id = db.Column(db.Integer, primary_key=True)
+    companyID = Column(Integer, db.ForeignKey('CompanyData.id'))
+    userID = Column(Integer, db.ForeignKey('UserData.id'))
 
-    companyID = Column(Integer, db.ForeignKey('CompanyData.id'), primary_key=True)
-    userID = Column(Integer, db.ForeignKey('UserData.id'), primary_key=True)
+    __table_args__ = (
+        UniqueConstraint('companyID', 'userID'),  # Ensure uniqueness of pair (companyID, userID)
+    )
 
-    def __init__(self,companyID,userID):
+    def __init__(self, companyID, userID):
         self.companyID = companyID
         self.userID = userID
 
@@ -303,40 +308,45 @@ def dbinit():
         UserData("user5@email.com","testpass"),
         UserData("user6@email.com","testpass"),
         UserData("user7@email.com","testpass"),
-        UserData("uesr8@email.com","testpass")
+        UserData("user8@email.com","testpass")
     ]
 
+    # 10 companies with IDs 0-9
+    # 8 users with IDs 1-8
     followedCompanies = [
-        FollowedCompanies(0, 0),  # User 0 follows Apple Inc.
-        FollowedCompanies(0, 1),  # User 0 follows Amazon.com Inc.
-        FollowedCompanies(0, 2),  # User 0 follows Alphabet Inc.
-        FollowedCompanies(0, 3),  # User 0 follows Microsoft Corporation
-        FollowedCompanies(0, 4),  # User 0 follows Tesla, Inc.
-        FollowedCompanies(0, 5),  # User 0 follows JPMorgan Chase & Co.
-        FollowedCompanies(6, 6),  # User 6 follows Walmart Inc.
-        FollowedCompanies(7, 7),  # User 7 follows The Coca-Cola Company
-        FollowedCompanies(8, 8),  # User 8 follows Pfizer Inc.
-        FollowedCompanies(9, 9),  # User 9 follows Netflix, Inc.
-        FollowedCompanies(0, 5),  # User 0 follows JPMorgan Chase & Co.
-        FollowedCompanies(1, 7),  # User 1 follows The Coca-Cola Company
-        FollowedCompanies(2, 3),  # User 2 follows Microsoft Corporation
-        FollowedCompanies(3, 8),  # User 3 follows Pfizer Inc.
-        FollowedCompanies(4, 2),  # User 4 follows Alphabet Inc.
-        FollowedCompanies(5, 0),  # User 5 follows Apple Inc.
-        FollowedCompanies(6, 4),  # User 6 follows Tesla, Inc.
-        FollowedCompanies(7, 9),  # User 7 follows Netflix, Inc.
-        FollowedCompanies(8, 1),  # User 8 follows Amazon.com Inc.
-        FollowedCompanies(9, 6),  # User 9 follows Walmart Inc.
+        FollowedCompanies(0, 1),  # Apple Inc. is followed by User 1
+        FollowedCompanies(1, 1),  # Amazon.com Inc. is followed by User 1
+        FollowedCompanies(2, 1),  # Alphabet Inc. is followed by User 1
+        FollowedCompanies(3, 1),  # Microsoft Corporation is followed by User 1
+        FollowedCompanies(4, 1),  # Tesla, Inc. is followed by User 1
+        FollowedCompanies(5, 1),  # JPMorgan Chase & Co. is followed by User 1
+        FollowedCompanies(6, 7),  # Walmart Inc. is followed by User 7
+        FollowedCompanies(7, 8),  # The Coca-Cola Company is followed by User 8
+        FollowedCompanies(8, 2),  # Pfizer Inc. is followed by User 2
+        FollowedCompanies(9, 2),  # Netflix, Inc. is followed by User 2
+        FollowedCompanies(5, 2),  # JPMorgan Chase & Co. is followed by User 2
+        FollowedCompanies(7, 2),  # The Coca-Cola Company is followed by User 2
+        FollowedCompanies(3, 3),  # Microsoft Corporation is followed by User 3
+        FollowedCompanies(8, 4),  # Pfizer Inc. is followed by User 4
+        FollowedCompanies(2, 5),  # Alphabet Inc. is followed by User 5
+        FollowedCompanies(0, 6),  # Apple Inc. is followed by User 6
+        FollowedCompanies(4, 6),  # Tesla, Inc. is followed by User 6
+        FollowedCompanies(9, 7),  # Netflix, Inc. is followed by User 7
+        FollowedCompanies(1, 8),  # Amazon.com Inc. is followed by User 8
+        FollowedCompanies(6, 9),  # Walmart Inc. is followed by User 9
     ]
 
-    articleList = [Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 1", "BBC", "Summary1", 1), 
-                   Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 2", "BBC", "Summary2", -1), 
-                   Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 3", "BBC", "Summary3", 0)
+
+    articleList = [
+        Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 1", "BBC", "Summary1", 1), 
+        Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 2", "BBC", "Summary2", -1), 
+        Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 3", "BBC", "Summary3", 0)
     ]
     
-    affectedList = [AffectedCompanies(1, 1, -1, "Analysis1", "Justification1"), 
-                AffectedCompanies(2, 2, 1, "Analysis2", "Justification2"), 
-                AffectedCompanies(3, 3, 0, "Analysis3", "Justification3")
+    affectedList = [
+        AffectedCompanies(1, 1, -1, "Analysis1", "Justification1"), 
+        AffectedCompanies(2, 2, 1, "Analysis2", "Justification2"), 
+        AffectedCompanies(3, 3, 0, "Analysis3", "Justification3")
     ]
 
     db.session.add_all(userList)
@@ -344,5 +354,6 @@ def dbinit():
         db.session.add(companyList[i])
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
+    db.session.add_all(followedCompanies)
 
     db.session.commit()
