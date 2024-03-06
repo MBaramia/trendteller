@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import CompanyListView from "../components/CompanyListView";
 import { useState, useEffect } from "react";
-import { searchCompanies } from "../Auth";
+import { searchCompanies, processToggleFollowing } from "../Auth";
 // import './Search.css'
 
 function Search() {
@@ -10,14 +10,24 @@ function Search() {
   let { query } = useParams();
 
   const [searchResults, setSearchResults] = useState([])
+  const [idToFollowing, setIdToFollowing] = useState({});
 
   useEffect(() => {
     searchCompanies(query)
       .then((result) => {
         setSearchResults(result.data.data);
+        setIdToFollowing(produceInitialAllFollowing(result.data.data))
         setHasLoaded(true);
       });
   }, []);
+
+  const produceInitialAllFollowing = (companies) => {
+    let idToFollowing = {};
+    for (const company of companies) {
+      idToFollowing[company.id] = company.following;
+    }
+    return idToFollowing;
+  };
 
   /*
   const searchResults = [
@@ -204,20 +214,13 @@ function Search() {
   ];
   */
 
-  const produceInitialAllFollowing = () => {
-    let idToFollowing = {};
-    for (const company of searchResults) {
-      idToFollowing[company.id] = company.following;
-    }
-    return idToFollowing;
-  };
-
-  let [idToFollowing, setIdToFollowing] = useState(produceInitialAllFollowing);
-
   const toggleFollowing = (id) => {
     let newIdToFollowing = { ...idToFollowing };
     newIdToFollowing[id] = !idToFollowing[id];
-    setIdToFollowing(newIdToFollowing);
+    processToggleFollowing(id).then(() => {
+      setIdToFollowing(newIdToFollowing);
+    });
+    //setIdToFollowing(newIdToFollowing);
     // console.log(idToFollowing);
     // make server request
   };

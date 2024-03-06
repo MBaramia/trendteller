@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 # Load your dataset
-data = pd.read_csv(r"C:\Users\Mohammed Baramia\OneDrive - University of Warwick\CS261\data.csv")
+data = pd.read_csv(r"path_to_csv_file")
 
 # Preprocess the data
 data['Date'] = pd.to_datetime(data['Date'])
@@ -64,3 +64,4 @@ for i in range(7):
 predicted_prices = scaler.inverse_transform(predicted)
 
 print(predicted_prices)
+# returns Predicted Close Price, Volume, Open Price, High Price, Low Price.

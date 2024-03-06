@@ -1,13 +1,6 @@
-import './StockChart.css';
-import { useState, useEffect } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { ReactComponent as SmileyGood } from "../images/smiley_good_green.svg";
-import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_grey.svg";
-import { ReactComponent as SmileyBad } from "../images/smiley_bad_red.svg";
-import { getStockData, getPredictedStockData, getMainStockData, getStockChanges, getStockDates } from '../Auth';
+from datetime import datetime
 
-//0: intradaily, 1: daily, 2: weekly, 3: monthly
-const fetched = {
+fetched = {
     0: {
         "2024-02-27 19:55:00": {
             "1. open": "185.0800",
@@ -762,254 +755,33 @@ const fetched = {
             "5. volume": "96447210"
         }
     }
-};
-
-function StockChart({ company }) {
-
-    // please fetch mainData and changes as they are
-    // for allToolTip data please add a boolean field isPrediction to each data point
-    // also pls give me a matrix dates such that dates[i][j] gives me the jth most recent date of the ith stock data type (intraday, daily, etc.)
-
-    const [timeScale, setTimeScale] = useState(0);
-    const [stockData, setStockData] = useState({})
-    const [predictedStockData, setPredictedStockData] = useState({})
-    const [mainData, setMainData] = useState({})
-    const [changes, setChanges] = useState([])
-    const [dates, setDates] = useState([])
-
-    useEffect(() => {
-        getStockData(company.id)
-          .then((result) => {
-            setStockData(result.data);
-            return getPredictedStockData(company.id);
-          }).then((result) => {
-            setPredictedStockData(result.data);
-            return getMainStockData(company.id);
-          }).then((result) => {
-            setMainData(result.data);
-            return getStockChanges(company.id);
-          }).then((result) => {
-            setChanges(result.data.data);
-            return getStockDates(company.id);
-          }).then((result) => {
-            setDates(result.data);
-          });
-      }, []);
-
-    const timeScaleToInfo = [
-        {name: "1D", count: 100, type: 0},         //1D (intraday)
-        {name: "1W", count: 7, type: 1},           //1W (daily)
-        {name: "1M", count: 30, type: 1},          //1M (daily)
-        {name: "3M", count: 30, type: 1},          //3M (daily)
-        {name: "6M", count: 30, type: 1},          //6M (daily)
-        {name: "1Y", count: 52, type: 2},          //1Y (weekly)
-        {name: "2Y", count: 104, type: 2},         //2Y (weekly)
-        {name: "MAX", count: Infinity, type: 3}    //MAX (monthly)
-    ];
-
-    // use companyID to fetch data
-    const produceAllData = () => {
-        let allData = [];
-        for (let i=0; i<4; i++) {
-            const keys = Object.keys(fetched[i]);
-            // console.log(keys);
-            let dataArray = [];
-
-            for (const key of keys) {
-                dataArray.push({date: key, close: parseFloat(fetched[i][key]["4. close"])});
-            }
-            for (let i=0;i<5;i++) {
-                dataArray[i] = {date: dataArray[i].date, prediction: dataArray[i].close};
-            }
-            const index = 4;
-            dataArray[index] = {
-                date: dataArray[index].date, 
-                close: dataArray[index].prediction, 
-                prediction: dataArray[index].prediction
-            };
-            allData.push(dataArray);
-        }
-
-        return allData;
-    }
-    const allChartData = produceAllData();
-    // console.log(allChartData);
-
-    const produceToolTipData = () => {
-        let allData = [];
-        for (let i=0; i<4; i++) {
-            const keys = Object.keys(fetched[i]);
-            let dateToInfo = {};
-
-            for (const key of keys) {
-                dateToInfo[key] = {
-                    open: (fetched[i][key]["1. open"]),
-                    high: (fetched[i][key]["2. high"]),
-                    low: (fetched[i][key]["3. low"]),
-                    close: (fetched[i][key]["4. close"]),
-                    volume: (fetched[i][key]["5. volume"])
-                }
-            }
-            allData.push(dateToInfo);
-        }
-
-        return allData;
-    }
-    const allToolTipData = produceToolTipData();
-    // console.log(allToolTipData);
-
-    //Data that is displayed on the top right
-    // const mainData = {
-    //     open: "145.4100",  
-    //     high: "148.1000", 
-    //     low: "145.2100", 
-    //     price: "147.9400", 
-    //     volume: "15198607"
-    // }
-
-    //Changes (displayed top right) in order 1D, 1W, 1M, 3M, 6M, 1Y, 2Y, MAX
-    // const changes = [
-    //     "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)",
-    //     "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)"
-    // ];
-
-    // fetched data now stored in allData
-
-    // const chartData = [
-    //     { date: '2023-01-01', price: 100 },
-    //     { date: '2023-01-02', price: 105 },
-    //     { date: '2023-01-03', price: 110 },
-    //     { date: '2023-01-04', price: 108 },
-    //     { date: '2023-01-05', price: 112 },
-    //     { date: '2023-01-06', price: 115 },
-    // ];
-
-    const getChartData = () => {
-        const data = allChartData[timeScaleToInfo[timeScale].type];
-        return data.slice(0, Math.min(data.length, timeScaleToInfo[timeScale].count)+5).reverse();
-    }
-    const chartData = getChartData();
-
-    function CustomTooltip({ payload, label, active }) {
-        if (active) {
-            const data = allToolTipData[timeScaleToInfo[timeScale].type][label];
-            return (
-                <div className="custom-tooltip">
-                    <p className='tooltip-title'>{label}</p>
-                    <div className="tooltip-text">
-                        <div className='tooltip-left'>
-                            <p>{`Open:`}</p>
-                            <p>{`High:`}</p>
-                            <p>{`Low:`}</p>
-                            <p>{`Close:`}</p>
-                            <p>{`Volume:`}</p>
-                        </div>
-                        <div className='tooltip-right'>
-                            <p>{`£${data.open}`}</p>
-                            <p>{`£${data.high}`}</p>
-                            <p>{`£${data.low}`}</p>
-                            <p>{`£${data.close}`}</p>
-                            <p>{`${data.volume}`}</p>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-      
-        return null;
-    }
-
-    const perceptionToSmiley = (p) => {
-        if (p === 2) {
-          return <SmileyGood className="smiley" />;
-        } else if (p === 1) {
-          return <SmileyNeutral className="smiley" />;
-        } else {
-          return <SmileyBad className="smiley" />;
-        }
-    }
-
-    return (
-        <>
-        <div id='company-info'>
-            <div className='info-left'>
-                <div className='left-title'>
-                    <h1>{company.code}</h1>
-                    {perceptionToSmiley(company.perception)}
-                </div>
-              <h3>{company.name}</h3>
-            </div>
-            <div className='info-right'>
-                <div>
-                    <div className='left-side'>
-                        <p>Open:</p>
-                        <p>High:</p>
-                        <p>Low:</p>
-                        
-                    </div>
-                    <div className='right-side'>
-                        <p>£{mainData.open}</p>
-                        <p>£{mainData.high}</p>
-                        <p>£{mainData.low}</p>
-                       
-                    </div>
-                </div>
-                <div>
-                    <div className='left-side'>
-                        <p>Price:</p>
-                        <p>Change:</p>
-                        <p>Volume:</p>
-                    </div>
-                    <div className='right-side'>
-                        <p>£{mainData.price}</p>
-                        <p>{changes[timeScale]}</p>
-                        <p>{mainData.volume}</p>
-                    </div>
-                </div>
-              
-            </div>
-        </div>
-        <div id='stock-chart'>
-            <div className='chart-area'>
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart width={100} height={50} data={chartData} margin={{ top: 5, right: 50, left: 10, bottom: 5 }}>
-                        <defs>
-                            <linearGradient id="close-colour" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor='#10588f' stopOpacity={0.5} />
-                                <stop offset="75%" stopColor='#10588f' stopOpacity={0.1} />
-                            </linearGradient>
-                            <linearGradient id="pred-colour" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor='#40494f' stopOpacity={0.5} />
-                                <stop offset="75%" stopColor='#40494f' stopOpacity={0.1} />
-                            </linearGradient>
-                        </defs>
-
-
-                        <CartesianGrid opacity={0.5}/>
-                        <XAxis dataKey="date" />
-                        <YAxis tickFormatter={(num)=>`£${num.toFixed(2)}`} />
-                        <Tooltip content={<CustomTooltip />} />
-                        {/* <Legend /> */}
-                        <Area type="monotone" dataKey="close" stroke="#0d1f2d" fill="url(#close-colour)"  activeDot={{ r: 8 }} />
-                        <Area type="monotone" dataKey="prediction" strokeDasharray="5 5" stroke="#000000" fill="url(#pred-colour)"  activeDot={{ r: 8 }} />
-                    </AreaChart>
-                </ResponsiveContainer>
-            </div>
-            <div className='btn-area'>
-                {timeScaleToInfo.map((info, index) => (
-                    <div key={index} className='btn-container'>
-                        <button
-                            style={timeScale === index ? {backgroundColor: "var(--neutral)"} : {}}
-                            key={index}
-                            onClick={()=>{setTimeScale(index)}}>
-                                {info.name}
-                        </button>
-                    </div>
-                ))}
-            </div>
-        </div>
-        </>
-    );
 }
 
-export default StockChart;
+# Remove the "1. ", "2. ", etc. from the keys and add "isPrediction" field
+fakeData = {
+    outer_key: {
+        date: {
+            **{key.split('. ')[1]: value for key, value in data.items()},
+            "isPrediction": False
+        } 
+        for date, data in inner_dict.items()
+    } 
+    for outer_key, inner_dict in fetched.items()
+}
+
+fakePredicton = {
+    outer_key: {
+        date: {
+            **{key.split('. ')[1]: value for key, value in data.items()},
+            "isPrediction": True
+        } 
+        for date, data in inner_dict.items()
+    } 
+    for outer_key, inner_dict in fetched.items()
+}
+
+
+dates = [[], [], [], []]
+
+for outer_key, inner_dict in fakeData.items():
+    dates[outer_key] = sorted(inner_dict.keys(), key=lambda date: datetime.strptime(date, "%Y-%m-%d %H:%M:%S") if ' ' in date else datetime.strptime(date, "%Y-%m-%d"), reverse=True)

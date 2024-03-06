@@ -1,7 +1,7 @@
 import RecommendedCompanyView from "../components/RecommendedCompanyView";
 import CompanyListView from "../components/CompanyListView";
 import { useState, useEffect } from "react";
-import { getAllCompanies, getRecommendedCompanies } from "../Auth";
+import { getAllCompanies, getRecommendedCompanies, processToggleFollowing } from "../Auth";
 // import './Browse.css'
 
 function Browse() {
@@ -34,7 +34,10 @@ function Browse() {
   const toggleFollowing = (id) => {
     let newIdToFollowing = { ...idToFollowing };
     newIdToFollowing[id] = !idToFollowing[id];
-    setIdToFollowing(newIdToFollowing);
+    processToggleFollowing(id).then(() => {
+      setIdToFollowing(newIdToFollowing);
+    });
+    //setIdToFollowing(newIdToFollowing);
     // console.log(idToFollowing);
     // make server request
   };
