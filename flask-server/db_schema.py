@@ -185,6 +185,31 @@ def getRecommendedCompanies(userID):
     return recommended
 
 
+    # gets all companies that the user follows
+    recommended = []
+    qrytext = text("SELECT companyID FROM FollowedCompanies WHERE userID=:userID;")
+    qry = qrytext.bindparams(userID = userID)
+    resultset = db.session.execute(qry)
+    values = resultset.fetchall()
+
+    qrytwo = text("SELECT relationOne, relationTwo FROM CompanyWeights ORDER BY mutualFollowers DESC")
+    resultsetTwo = db.session.execute(qrytwo)
+    valuesTwo = resultsetTwo.fetchall()
+
+    count = 0
+    for i in range (0,len(valuesTwo)):
+        testing = valuesTwo[i]
+        if (testing[0] in values and testing[1] not in values):
+            count += 1
+            recommended.append(testing[0])
+        elif (testing[0] not in values and testing[1] in values):
+            count += 1
+            recommended.append(testing[1])
+        if count == 3:
+            return recommended
+    return recommended
+
+
 
 # put some data into the tables
 def dbinit():

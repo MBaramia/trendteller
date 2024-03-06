@@ -66,7 +66,7 @@ def queryAllNews():
         affectedValue = affectedResult.fetchall()
 
         #getting the company code based on the affected company ID
-        getCode = text("SELECT symbol FROM CompanyData WHERE companyID=:companyID")
+        getCode = text("SELECT symbol FROM CompanyData WHERE id=:companyID")
         getCodeQry = getCode.bindparams(companyID = affectedValue[0][0])
         codeResult = db.session.execute(getCodeQry)
         codeValue = codeResult.fetchall()
@@ -183,6 +183,7 @@ def queryCompanyNews(companyID):
         item = {"id":article[0], "title":article[3], "companyID":companyID, "companyCode":article[16], "source":article[4], "date":article[1], "perception":article[6]}
         allArticles.append(item)
     #Testing - delete below
+    print(len(allArticles))
     allArticles.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
     allArticles.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":3, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
     allArticles.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":4, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
