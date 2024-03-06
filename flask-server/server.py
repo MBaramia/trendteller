@@ -28,14 +28,18 @@ from flask_cors import CORS
 scheduler = BackgroundScheduler()
 scheduler.start()
 
-def fetch_stock_predictions_job():
-    company_ids = [0, 1, 2]  
+def fetch_and_store_predictions(timeframe):
+    company_ids = [0, 1, 2]  # Example company IDs
     for company_id in company_ids:
-        fetch_stock_prediction(company_id)
+        fetch_stock_prediction(company_id, timeframe)
 
-# Schedule the job to run every hour
-scheduler.add_job(func=fetch_stock_predictions_job, trigger='interval', hours=1, id='stock_prediction_job')
-# Shut down the scheduler when exiting the app
+# Schedule jobs for different timeframes
+scheduler.add_job(func=lambda: fetch_and_store_predictions('intraday'), trigger='interval', hours=1, id='intraday_prediction_job')
+scheduler.add_job(func=lambda: fetch_and_store_predictions('daily'), trigger='interval', hours=24, id='daily_prediction_job')
+scheduler.add_job(func=lambda: fetch_and_store_predictions('weekly'), trigger='interval', days=7, id='weekly_prediction_job')
+scheduler.add_job(func=lambda: fetch_and_store_predictions('monthly'), trigger='interval', weeks=4, id='monthly_prediction_job')
+
+# Ensure the scheduler is shut down properly on exit
 atexit.register(lambda: scheduler.shutdown())
 
 def queryFollowedCompanies(userID):
@@ -549,6 +553,27 @@ def getCompanyAnalysis():
 
     query = queryRecentAnalysis(companyID)
     return jsonify(query)
+    
+@app.route('/getPredictions/<int:company_id>', methods=['GET'])
+def get_predictions(company_id):
+    # Query the database for predictions related to the company_id
+    predictions = Prediction.query.filter_by(companyID=company_id).order_by(Prediction.date_predicted.desc()).limit(7).all()
+
+    # Format the predictions into a JSON-serializable list
+    predictions_list = []
+    for prediction in predictions:
+        prediction_data = {
+            'date_predicted': prediction.date_predicted.strftime("%Y-%m-%d %H:%M:%S"),
+            'open': prediction.open,
+            'high': prediction.high,
+            'low': prediction.low,
+            'close': prediction.close,
+            'volume': prediction.volume
+        }
+        predictions_list.append(prediction_data)
+
+    # Return the data as a JSON response
+    return jsonify(predictions_list)
 
 if __name__ == "__main__":
     app.run(debug=True)
