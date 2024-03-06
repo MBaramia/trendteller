@@ -180,6 +180,10 @@ main {
   transition: 0.3s ease-out;
 }
 
+.bottom-space {
+  height: var(--content-v);
+}
+
 @media (max-width: 60rem) {
   .nav-section {
     display: flex;

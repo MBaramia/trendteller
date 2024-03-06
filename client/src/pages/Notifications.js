@@ -114,6 +114,7 @@ function Notifications() {
     <>
       <div id="notifications-pg">
         <NewsListView hasLoaded={hasLoaded} title={"Notifications"} data={notifications} />
+        <div className="bottom-space"/>
       </div>
     </>
   );
