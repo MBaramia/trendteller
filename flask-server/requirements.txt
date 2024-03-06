@@ -5,3 +5,8 @@ Werkzeug
 Flask-Mail
 flask-socketio
 flask-cors
+requests
+pandas
+scikit-learn
+keras
+tensorflow
