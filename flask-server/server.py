@@ -155,6 +155,10 @@ def queryNotifications(userID):
     notifications.append({"id":10,"companyCode":"TWTR","companyID":14,"title":"Twitter introduces new feature to combat misinformation","source":"The Guardian","date":"09/06/2021", "perception":2})
     #Testing - delete above
     finalResult = {"data":notifications}
+    notificationUpdate = text("UPDATE Notifications SET viewed = :viewed WHERE userID = :userID")
+    notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
+    db.session.execute(notificationQry)
+    db.session.commit()
     return finalResult     
 
 def queryCompanyInfo(companyID, userID):
