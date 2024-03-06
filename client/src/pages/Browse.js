@@ -2,6 +2,7 @@ import RecommendedCompanyView from "../components/RecommendedCompanyView";
 import CompanyListView from "../components/CompanyListView";
 import { useState, useEffect } from "react";
 import { getAllCompanies, getRecommendedCompanies, processToggleFollowing } from "../Auth";
+import io from "socket.io-client";
 // import './Browse.css'
 
 function Browse() {
@@ -12,6 +13,11 @@ function Browse() {
   const [idToFollowing, setIdToFollowing] = useState({});
 
   useEffect(() => {
+    fetchPageData();
+    return setUpSocketListener();
+  }, []);
+
+  const fetchPageData = () => {
     getAllCompanies()
       .then((result) => {
         setAllCompanies(result.data.data);
@@ -21,7 +27,17 @@ function Browse() {
         setRecommendedCompanies(result.data.data);
         setHasLoaded(true);
       });
-  }, []);
+  }
+
+  const setUpSocketListener = () => {
+    const socket = io("http://127.0.0.1:5000");
+    socket.on("database_updated", (data) => {
+      console.log(data);
+      fetchPageData();
+    });
+
+    return () => socket.disconnect();
+  }
 
   const produceInitialAllFollowing = (companies) => {
     let idToFollowing = {};

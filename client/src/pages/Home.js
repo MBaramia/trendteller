@@ -3,6 +3,7 @@ import CompanyListView from "../components/CompanyListView";
 import NewsListView from "../components/NewsListView";
 import RecommendedCompanyView from "../components/RecommendedCompanyView";
 import { getFollowedCompanies, getAllNews, getRecommendedCompanies, processToggleFollowing } from "../Auth";
+import io from "socket.io-client";
 // import './Home.css'
 
 function Home() {
@@ -14,6 +15,11 @@ function Home() {
   const [idToFollowing, setIdToFollowing] = useState({});
 
   useEffect(() => {
+    fetchPageData();
+    return setUpSocketListener();
+  }, []);
+
+  const fetchPageData = () => {
     let companies = []
     getFollowedCompanies()
       .then((result) => {
@@ -32,7 +38,17 @@ function Home() {
         setIdToFollowing(produceInitialAllFollowing(companies))
         setHasLoaded(true);
       });
-  }, []);
+  }
+
+  const setUpSocketListener = () => {
+    const socket = io("http://127.0.0.1:5000");
+    socket.on("database_updated", (data) => {
+      console.log(data);
+      fetchPageData();
+    });
+
+    return () => socket.disconnect();
+  }
 
   const produceInitialAllFollowing = (companies) => {
     let idToFollowing = {};

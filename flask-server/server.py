@@ -15,7 +15,14 @@ from flask import Flask, render_template,request,session,redirect,flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from fake_data import fakeData, fakePredicton, dates
+# fake stock data
+from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
+
+# websocket
+from flask_socketio import SocketIO, emit
+
+# cors
+from flask_cors import CORS
 
 
 def queryFollowedCompanies(userID):
@@ -248,15 +255,17 @@ def switchFollowing(userID, companyID):
         deleteFollowingQry = deleteFollowing.bindparams(userID=userID, companyID=companyID)
         db.session.execute(deleteFollowingQry)
         db.session.commit()
+        socketio.emit("database_updated", {"data": "Company unfollowed"})
         return "Company unfollowed"
     insertFollowing = text("INSERT INTO FollowedCompanies (userID, companyID) VALUES (:userID, :companyID)")
     insertFollowingQry = insertFollowing.bindparams(userID=userID, companyID=companyID)
     db.session.execute(insertFollowingQry)
     db.session.commit()
+    socketio.emit("database_updated", {"data": "Company followed"})
     return "Company followed"
 
 def queryStockData(companyID):
-    return fakeData
+    return combinedData
 
 def queryPredictedStockData(companyID):
     return fakePredicton
@@ -293,8 +302,16 @@ def getRecentAnalysis(companyID):
     results = db.session.execute(getAnalysisQry)
     values = results.fetchall()
     return values[0][0]
+def queryPredictedStockDates(companyID):
+    return predictedDates
 
 app = Flask(__name__)
+
+# add cors policy
+CORS(app)
+
+# create websocket
+socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -497,6 +514,15 @@ def toggleFollowing():
     companyID = data.get("companyID")
 
     query = switchFollowing(current_user.id, companyID)
+    return jsonify(query)
+
+@app.route('/getPredictedStockDates', methods=['POST'])
+@login_required
+def getPredictedStockDates():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = queryPredictedStockDates(companyID)
     return jsonify(query)
 
 if __name__ == "__main__":

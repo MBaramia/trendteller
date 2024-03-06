@@ -3,3 +3,5 @@ flask-login
 Flask-SQLAlchemy
 Werkzeug
 Flask-Mail
+flask-socketio
+flask-cors

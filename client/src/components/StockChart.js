@@ -4,7 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { ReactComponent as SmileyGood } from "../images/smiley_good_green.svg";
 import { ReactComponent as SmileyNeutral} from "../images/smiley_neutral_grey.svg";
 import { ReactComponent as SmileyBad } from "../images/smiley_bad_red.svg";
-import { getStockData, getPredictedStockData, getMainStockData, getStockChanges, getStockDates } from '../Auth';
+import { getStockData, getPredictedStockData, getMainStockData, getStockChanges, getStockDates, getPredictedStockDates } from '../Auth';
 
 //0: intradaily, 1: daily, 2: weekly, 3: monthly
 const fetched = {
@@ -776,6 +776,7 @@ function StockChart({ company }) {
     const [mainData, setMainData] = useState({})
     const [changes, setChanges] = useState([])
     const [dates, setDates] = useState([])
+    const [predictedDates, setPredictedDates] = useState([])
 
     useEffect(() => {
         getStockData(company.id)
@@ -793,6 +794,9 @@ function StockChart({ company }) {
             return getStockDates(company.id);
           }).then((result) => {
             setDates(result.data);
+            return getPredictedStockDates(company.id);
+          }).then((result) => {
+            setPredictedDates(result.data)
           });
       }, []);
 
