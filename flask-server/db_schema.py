@@ -34,15 +34,15 @@ class CompanyData(db.Model):
     name = db.Column(db.String(100), unique=True)
     description = db.Column(db.String(10000))
     symbol = db.Column(db.String(4))
-    exchange = db.Column(db.Double)
-    currPerception = db.Column(db.Integer) # stores the current perception of the company
-    def __init__(self,id,name,description,symbol,exchange, currPerception): 
+    # exchange = db.Column(db.Double)
+    # currPerception = db.Column(db.Integer) # stores the current perception of the company
+    def __init__(self,id,name,description,symbol): 
         self.id = id 
         self.name = name
         self.description = description
         self.symbol = symbol
-        self.exchange = exchange
-        self.currPerception = currPerception
+        # self.exchange = exchange
+        # self.currPerception = currPerception
 
 # this table stores all of the data relating to an article
 class Articles(db.Model):
@@ -231,10 +231,67 @@ def getRecommendedCompanies(userID):
 # put some data into the tables
 def dbinit():
     companyList = [
-        CompanyData(0,'Tesla','Tesla Description', 'TSLA', 193.43, 0),
-        CompanyData(1,'Alphabet Inc Class C','Alphabet Inc Class C description','GOOG',145.38, 1),
-        CompanyData(2,'Microsoft Corp','Microsoft Corp Description', 'MSFT',410.48, 2),
-        CompanyData(3,'Apple Inc','Apple Inc Description', 'AAPL',182.52, 1),
+        CompanyData(0, 'Apple Inc.', 'AAPL', \
+            '''Apple Inc. is an American multinational technology company that designs, 
+            develops, and sells consumer electronics, computer software, and online 
+            services. It is widely known for its iPhone smartphones, Mac computers, 
+            iPad tablets, and Apple Watch smartwatches.'''
+        ),
+        CompanyData(1, 'Amazon.com Inc.', 'AMZN', \
+            '''Amazon.com Inc. is an American multinational technology company that 
+            focuses on e-commerce, cloud computing, digital streaming, and artificial 
+            intelligence. It is the largest online marketplace and has expanded into 
+            various industries, including logistics, healthcare, and entertainment.'''
+        ),
+        CompanyData(2, 'Alphabet Inc.', 'GOOGL', \
+            '''Alphabet Inc. is an American multinational conglomerate that was created 
+            through a corporate restructuring of Google in 2015. It is primarily 
+            involved in technology and internet-related businesses, including online 
+            advertising, search engines, cloud computing, and hardware.'''
+        ),
+        CompanyData(3, 'Microsoft Corporation', 'MSFT', \
+            '''Microsoft Corporation is an American multinational technology company 
+            that develops, manufactures, licenses, supports, and sells computer 
+            software, consumer electronics, personal computers, and related services. 
+            It is known for its Windows operating system and Office productivity suite.'''
+        ),
+        CompanyData(4, 'Tesla, Inc.', 'TSLA', \
+            '''Tesla, Inc. is an American electric vehicle and clean energy company that 
+            designs, manufactures, and sells electric cars, battery energy storage 
+            systems, and solar panels. It is led by CEO Elon Musk and is known for 
+            its innovative approach to transportation and energy.'''
+        ),
+        CompanyData(5, 'JPMorgan Chase & Co.', 'JPM', \
+            '''JPMorgan Chase & Co. is an American multinational investment bank and 
+            financial services company. It is the largest bank in the United States 
+            by assets and is involved in investment banking, commercial banking, 
+            asset management, and other financial services.'''
+        ),
+        CompanyData(6, 'Walmart Inc.', 'WMT', \
+            '''Walmart Inc. is an American multinational retail corporation that operates 
+            a chain of hypermarkets, discount department stores, and grocery stores. 
+            It is the world's largest company by revenue and is known for its low 
+            prices and wide range of products.'''
+        ),
+        CompanyData(7, 'The Coca-Cola Company', 'KO', \
+            '''The Coca-Cola Company is an American multinational beverage corporation 
+            that manufactures, markets, and sells nonalcoholic beverages, primarily 
+            carbonated soft drinks and other beverages. It is one of the world's most 
+            valuable brands and is known for its Coca-Cola soda.'''
+        ),
+        CompanyData(8, 'Pfizer Inc.', 'PFE', \
+            '''Pfizer Inc. is an American multinational pharmaceutical corporation that 
+            develops and produces medicines and vaccines for a wide range of medical 
+            conditions. It is one of the largest pharmaceutical companies in the world 
+            and is involved in research and development in various therapeutic areas.'''
+        ),
+        CompanyData(9, 'Netflix, Inc.', 'NFLX', \
+            '''Netflix, Inc. is an American subscription-based streaming service that 
+            offers a wide variety of movies, TV shows, documentaries, and original 
+            content across a range of genres and languages. It is one of the leading 
+            streaming platforms globally and has revolutionized the way people consume 
+            entertainment.'''
+        )
     ]
 
     # rules for users: username must be an email, password must be between 5 and 20 chars
@@ -249,12 +306,38 @@ def dbinit():
         UserData("uesr8@email.com","testpass")
     ]
 
+    followedCompanies = [
+        FollowedCompanies(0, 0),  # User 0 follows Apple Inc.
+        FollowedCompanies(0, 1),  # User 0 follows Amazon.com Inc.
+        FollowedCompanies(0, 2),  # User 0 follows Alphabet Inc.
+        FollowedCompanies(0, 3),  # User 0 follows Microsoft Corporation
+        FollowedCompanies(0, 4),  # User 0 follows Tesla, Inc.
+        FollowedCompanies(0, 5),  # User 0 follows JPMorgan Chase & Co.
+        FollowedCompanies(6, 6),  # User 6 follows Walmart Inc.
+        FollowedCompanies(7, 7),  # User 7 follows The Coca-Cola Company
+        FollowedCompanies(8, 8),  # User 8 follows Pfizer Inc.
+        FollowedCompanies(9, 9),  # User 9 follows Netflix, Inc.
+        FollowedCompanies(0, 5),  # User 0 follows JPMorgan Chase & Co.
+        FollowedCompanies(1, 7),  # User 1 follows The Coca-Cola Company
+        FollowedCompanies(2, 3),  # User 2 follows Microsoft Corporation
+        FollowedCompanies(3, 8),  # User 3 follows Pfizer Inc.
+        FollowedCompanies(4, 2),  # User 4 follows Alphabet Inc.
+        FollowedCompanies(5, 0),  # User 5 follows Apple Inc.
+        FollowedCompanies(6, 4),  # User 6 follows Tesla, Inc.
+        FollowedCompanies(7, 9),  # User 7 follows Netflix, Inc.
+        FollowedCompanies(8, 1),  # User 8 follows Amazon.com Inc.
+        FollowedCompanies(9, 6),  # User 9 follows Walmart Inc.
+    ]
+
     articleList = [Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 1", "BBC", "Summary1", 1), 
                    Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 2", "BBC", "Summary2", -1), 
-                   Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 3", "BBC", "Summary3", 0)]
+                   Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 3", "BBC", "Summary3", 0)
+    ]
+    
     affectedList = [AffectedCompanies(1, 1, -1, "Analysis1", "Justification1"), 
                 AffectedCompanies(2, 2, 1, "Analysis2", "Justification2"), 
-                AffectedCompanies(3, 3, 0, "Analysis3", "Justification3")]
+                AffectedCompanies(3, 3, 0, "Analysis3", "Justification3")
+    ]
 
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
