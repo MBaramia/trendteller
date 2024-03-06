@@ -554,3 +554,33 @@ export function getStockDates(companyID) {
       };
     });
 }
+
+export function processToggleFollowing(companyID) {
+  let status = true;
+  return fetch("/toggleFollowing", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyID: companyID,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Follow toggled")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}

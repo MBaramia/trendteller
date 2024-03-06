@@ -243,11 +243,12 @@ def switchFollowing(userID, companyID):
         deleteFollowingQry = deleteFollowing.bindparams(userID=userID, companyID=companyID)
         db.session.execute(deleteFollowingQry)
         db.session.commit()
-        return
+        return "Company unfollowed"
     insertFollowing = text("INSERT INTO FollowedCompanies (userID, companyID) VALUES (:userID, :companyID)")
     insertFollowingQry = insertFollowing.bindparams(userID=userID, companyID=companyID)
     db.session.execute(insertFollowingQry)
     db.session.commit()
+    return "Company followed"
 
 def queryStockData(companyID):
     return fakeData
@@ -475,6 +476,15 @@ def getStockDates():
     companyID = data.get("companyID")
 
     query = queryStockDates(companyID)
+    return jsonify(query)
+
+@app.route('/toggleFollowing', methods=['POST'])
+@login_required
+def toggleFollowing():
+    data = request.get_json()
+    companyID = data.get("companyID")
+
+    query = switchFollowing(current_user.id, companyID)
     return jsonify(query)
 
 if __name__ == "__main__":

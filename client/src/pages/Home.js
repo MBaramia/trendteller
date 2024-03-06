@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import CompanyListView from "../components/CompanyListView";
 import NewsListView from "../components/NewsListView";
 import RecommendedCompanyView from "../components/RecommendedCompanyView";
-import { getFollowedCompanies, getAllNews, getRecommendedCompanies } from "../Auth";
+import { getFollowedCompanies, getAllNews, getRecommendedCompanies, processToggleFollowing } from "../Auth";
 // import './Home.css'
 
 function Home() {
@@ -45,7 +45,10 @@ function Home() {
   const toggleFollowing = (id) => {
     let newIdToFollowing = { ...idToFollowing };
     newIdToFollowing[id] = !idToFollowing[id];
-    setIdToFollowing(newIdToFollowing);
+    processToggleFollowing(id).then(() => {
+      setIdToFollowing(newIdToFollowing);
+    });
+    //setIdToFollowing(newIdToFollowing);
     // console.log(idToFollowing);
     // make server request
   };
