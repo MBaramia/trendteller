@@ -35,7 +35,7 @@ function CompanyListRow({ company, following, toggleFollowing }) {
     <>
       <div onClick={goToCompanyPage} className="list-row">
         <p>{company.name} ({company.code})</p>
-        <p>£{company.price}</p>
+        <p>${company.price}</p>
         <p>{company.change}</p>
         <>{perceptionToComponent(company.perception)}</>
         <p className="heart">{followingToComponent(following)}</p>

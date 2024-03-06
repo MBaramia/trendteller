@@ -56,7 +56,7 @@ function RecommendedCompanyItem({ company, following, toggleFollowing }) {
           <p>{company.code}</p>
           <p>{company.name}</p>
           <h3>{perceptionToSmiley(company.perception)}</h3>
-          <p>£{company.price}</p>
+          <p>${company.price}</p>
           <p>{company.change}</p>
         </div>
         <div className="item-btn" onClick={toggleFollow}><p>{buttonText(following)}</p></div>
