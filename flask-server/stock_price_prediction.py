@@ -80,7 +80,19 @@ def fetch_stock_prediction(company_id):
 
     # Inverse transform to get the actual predictions
     predicted_prices = scaler.inverse_transform(predicted)
+    
+    for prediction in predicted_prices:
+        new_prediction = Prediction(
+            companyID=company_id,
+            close=prediction[0],
+            volume=prediction[1],
+            open=prediction[2],
+            high=prediction[3],
+            low=prediction[4]
+        )
+        db.session.add(new_prediction)
 
+    db.session.commit()
     return predicted_prices
 
 # Example usage
