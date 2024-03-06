@@ -283,6 +283,13 @@ def queryStockChanges(companyID):
 def queryStockDates(companyID):
     return dates
 
+def getRecentAnalysis(companyID):
+    getAnalysis = text("SELECT analysis FROM Articles JOIN AffectedCompanies ON Articles.articleID = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID ORDER BY Articles.dateTime DESC LIMIT 1")
+    getAnalysisQry = getAnalysis.bindparams(companyID = companyID)
+    results = db.session.execute(getAnalysisQry)
+    values = results.fetchall()
+    return values[0][0]
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
