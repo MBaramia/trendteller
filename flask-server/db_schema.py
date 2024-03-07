@@ -34,7 +34,6 @@ class CompanyData(db.Model):
     name = db.Column(db.String(100), unique=True)
     symbol = db.Column(db.String(4))
     description = db.Column(db.String(10000))
-    
     # exchange = db.Column(db.Double)
     # currPerception = db.Column(db.Integer) # stores the current perception of the company
     def __init__(self,id,name,symbol,description): 
@@ -68,7 +67,6 @@ class FollowedCompanies(db.Model):
     __tablename__ = 'FollowedCompanies'
     companyID = Column(Integer, db.ForeignKey('CompanyData.id'), primary_key=True)
     userID = Column(Integer, db.ForeignKey('UserData.id'), primary_key=True)
-
     def __init__(self, companyID, userID):
         self.companyID = companyID
         self.userID = userID
@@ -120,7 +118,6 @@ class Prediction(db.Model):
     open = db.Column(db.Float)
     high = db.Column(db.Float)
     low = db.Column(db.Float)
-
     def __init__(self, companyID, date_predicted, close, volume, open, high, low):
         self.companyID = companyID
         self.date_predicted = date_predicted
@@ -129,7 +126,26 @@ class Prediction(db.Model):
         self.open = open
         self.high = high
         self.low = low
-
+        
+  class HistoricData(db.Model):
+    __tablename__ = 'HistoricData'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    companyID = db.Column(db.Integer, db.ForeignKey('CompanyData.id'), nullable=False)
+    date = db.Column(DateTime, nullable=False)
+    open = db.Column(db.Float, nullable=False)
+    high = db.Column(db.Float, nullable=False)
+    low = db.Column(db.Float, nullable=False)
+    close = db.Column(db.Float, nullable=False)
+    volume = db.Column(db.BigInteger, nullable=False)
+    def __init__(self, companyID, date, open, high, low, close, volume):
+        self.companyID = companyID
+        self.date = date
+        self.open = open
+        self.high = high
+        self.low = low
+        self.close = close
+        self.volume = volume
+  
 @event.listens_for(FollowedCompanies, 'before_insert')
 def before_followed_companies_insert(mapper, connection, target):
     print(f"Inserting FollowedCompanies: companyID={target.companyID}, userID={target.userID}")
