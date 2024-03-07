@@ -121,7 +121,8 @@ class Prediction(db.Model):
     open = db.Column(db.Float)
     high = db.Column(db.Float)
     low = db.Column(db.Float)
-    def __init__(self, companyID, date_predicted, close, volume, open, high, low):
+    timeframe = db.Column(db.String(50))  
+    def __init__(self, companyID, date_predicted, close, volume, open, high, low, timeframe):
         self.companyID = companyID
         self.date_predicted = date_predicted
         self.close = close
@@ -129,6 +130,8 @@ class Prediction(db.Model):
         self.open = open
         self.high = high
         self.low = low
+        self.timeframe = timeframe
+
         
 class HistoricData(db.Model):
     __tablename__ = 'HistoricData'
@@ -140,7 +143,6 @@ class HistoricData(db.Model):
     low = db.Column(db.Float, nullable=False)
     close = db.Column(db.Float, nullable=False)
     volume = db.Column(db.BigInteger, nullable=False)
-
     def __init__(self, companyID, date, open, high, low, close, volume):
         self.companyID = companyID
         self.date = date
@@ -714,6 +716,22 @@ def dbinit():
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
         db.session.add(companyList[i])
+    timeframes = ['intraday', 'daily', 'weekly', 'monthly']
+    for company in companyList:
+        for timeframe in timeframes:
+            predictions = fetch_stock_prediction(company.id, timeframe)
+            for prediction in predictions:
+                new_prediction = Prediction(
+                    companyID=company.id,
+                    date_predicted=datetime.now(timezone.utc),
+                    open=prediction[0],
+                    high=prediction[1],
+                    low=prediction[2],
+                    close=prediction[3],
+                    volume=prediction[4],
+                    timeframe=timeframe
+                )
+                db.session.add(new_prediction)
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
     db.session.add_all(followedCompanies)
