@@ -381,7 +381,7 @@ def querySearchCompanies(query, userID):
     getInfo = text("""
         SELECT id, name, symbol
         FROM CompanyData
-        WHERE name LIKE CONCAT('%', :query, '%')
+        WHERE name LIKE '%' || :query || '%'
     """)
     getInfoQry = getInfo.bindparams(query=query)
     resultset = db.session.execute(getInfoQry)
