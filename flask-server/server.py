@@ -344,13 +344,46 @@ def queryArticleInfo(articleID, companyID):
 
     return item
 
-# integrated
-def querySearchCompanies(query, userID):
-    query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
-    results = query.all()
+# almost integrated
+# yet to be integrated with perception
+def querySearchCompanies(query, userID):  
+    getInfo = text("""
+        SELECT id, name, symbol
+        FROM CompanyData
+        WHERE name LIKE CONCAT('%', :query, '%')
+    """)
+    getInfoQry = getInfo.bindparams(query=query)
+    resultset = db.session.execute(getInfoQry)
+    values = resultset.fetchall()
     companies = []
-    for company in results:
-        companies.append(queryCompanyInfo(company.id, userID))
+
+    for info in values:
+        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = info[0])
+        followingResult = db.session.execute(getFollowingQry)
+        followingValues = followingResult.fetchall()
+
+        following = False
+        if len(followingValues) != 0:
+            following = True
+
+        item = {
+            "id":info[0], 
+            "name":info[1], 
+            "code":info[2], 
+            "price":random.randint(50, 200), 
+            "change": "-14.9%",
+            "perception":random.randint(0, 2), 
+            "following":following
+        }      
+        companies.append(item)
+
+    # query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
+    # results = query.all()
+    # companies = []
+    # for company in results:
+    #     companies.append(queryCompanyInfo(company.id, userID))
+        
     result = {"data":companies}
     return result
 

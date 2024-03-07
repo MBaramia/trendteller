@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from sqlalchemy import event 
 import json
 from sqlalchemy import text, UniqueConstraint
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 # create the database interface
 db = SQLAlchemy()
 
@@ -79,7 +79,7 @@ class Notifications(db.Model):
     userID = Column(Integer, db.ForeignKey('UserData.id'), primary_key=True)
     articleID = Column(Integer, db.ForeignKey('Articles.id'), primary_key=True)
     viewed = Column(db.Boolean, default=False)
-    
+
     def __init__(self,userID,articleID,viewed):
         self.userID = userID
         self.articleID = articleID
@@ -120,8 +120,10 @@ class Prediction(db.Model):
     open = db.Column(db.Float)
     high = db.Column(db.Float)
     low = db.Column(db.Float)
-    def __init__(self, companyID, close, volume, open, high, low):
+
+    def __init__(self, companyID, date_predicted, close, volume, open, high, low):
         self.companyID = companyID
+        self.date_predicted = date_predicted
         self.close = close
         self.volume = volume
         self.open = open
@@ -293,18 +295,19 @@ def dbinit():
         )
     ]
     
-    predictionsList = [
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=150, high=155, low=149, close=154, volume=100000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=3100, high=3200, low=3050, close=3150, volume=300000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=2700, high=2750, low=2690, close=2720, volume=150000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=290, high=300, low=285, close=295, volume=200000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=600, high=620, low=590, close=610, volume=120000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=130, high=135, low=128, close=132, volume=110000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=140, high=142, low=138, close=141, volume=70000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=50, high=52, low=49, close=51, volume=80000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=40, high=42, low=39, close=41, volume=90000),
-        Prediction(date_predicted=datetime.datetime.utcnow(), open=500, high=510, low=495, close=505, volume=100000)
-    ]
+    # predictionsList = [
+    #     Prediction(date_predicted=datetime.now(timezone.utc)+ timedelta(days=1), open=150, high=155, low=149, close=154, volume=100000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=3100, high=3200, low=3050, close=3150, volume=300000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=2700, high=2750, low=2690, close=2720, volume=150000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=290, high=300, low=285, close=295, volume=200000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=600, high=620, low=590, close=610, volume=120000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=130, high=135, low=128, close=132, volume=110000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=140, high=142, low=138, close=141, volume=70000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=50, high=52, low=49, close=51, volume=80000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=40, high=42, low=39, close=41, volume=90000),
+    #     Prediction(date_predicted=datetime.datetime.utcnow(), open=500, high=510, low=495, close=505, volume=100000)
+    # ]
+
     # rules for users: username must be an email, password must be between 5 and 20 chars
     userList = [
         UserData("user1@email.com","testpass"),
@@ -658,5 +661,5 @@ def dbinit():
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
     db.session.add_all(followedCompanies)
-    db.session.add_all(predictionsList)
+    # db.session.add_all(predictionsList)
     db.session.commit()
