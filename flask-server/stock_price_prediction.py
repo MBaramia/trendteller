@@ -32,10 +32,12 @@ def fetch_stock_prediction(company_id, timeframe):
         }
         function = function_mapping.get(timeframe, 'TIME_SERIES_INTRADAY')
         interval = '60min' if timeframe == 'intraday' else ''
-        url = f"https://www.alphavantage.co/query?function={function}&symbol={symbol}{f'&interval={interval}' if interval else ''}&outputsize=full&apikey=your_api_key"
+        url = f"https://www.alphavantage.co/query?function={function}&symbol={symbol}{f'&interval={interval}' if interval else ''}&outputsize=full&apikey={api_key}"
         response = requests.get(url)
         data = response.json()
-        
+        if not data or len(data.keys()) < 2:
+            print("Error fetching data or data not in expected format:", data)
+            return pd.DataFrame()  
         key = list(data.keys())[1]
         df = pd.DataFrame(data[key]).T
         df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
@@ -43,6 +45,7 @@ def fetch_stock_prediction(company_id, timeframe):
         df.index = pd.to_datetime(df.index)
         df = df.sort_index(ascending=True)
         return df
+
 
     company_symbols = {
     0: 'AAPL',   # Apple
@@ -80,8 +83,6 @@ def fetch_stock_prediction(company_id, timeframe):
     predicted_prices[:, 4] = np.abs(predicted_prices[:, 4])
     predicted_prices[:, :4] = np.abs(predicted_prices[:, :4])
     # Print the predictions
-    for i, prediction in enumerate(predicted_prices, start=1):
-        print(f"Prediction {i}: Open: {prediction[0]}, High: {prediction[1]}, Low: {prediction[2]}, Close: {prediction[3]}, Volume: {prediction[4]}")
     return predicted_prices
 
 # Example usage
