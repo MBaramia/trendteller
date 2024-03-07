@@ -8,6 +8,7 @@ import json
 from sqlalchemy import text, UniqueConstraint
 from datetime import datetime, timezone, timedelta
 from stock_price_prediction import fetch_stock_prediction
+from historic import fetch_historic_data
 import requests
 
 # create the database interface
@@ -696,6 +697,21 @@ def dbinit():
                     timeframe=timeframe
                 )
                 db.session.add(new_prediction)
+    for company in companyList:
+        for timeframe in timeframes:
+            historic_data_df = fetch_historic_data(company.symbol, api_key, timeframe)
+            for index, row in historic_data_df.iterrows():
+                historic_data_entry = HistoricData(
+                    companyID=company.id,
+                    date=index.to_pydatetime(),
+                    open=row['Open'],
+                    high=row['High'],
+                    low=row['Low'],
+                    close=row['Close'],
+                    volume=int(row['Volume']),
+                    timeframe=timeframe
+                )
+                db.session.add(historic_data_entry)
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
     db.session.add_all(followedCompanies)
