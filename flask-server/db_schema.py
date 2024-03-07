@@ -265,7 +265,6 @@ def fetch_historic_data_from_alpha_vantage(symbol, api_key):
 def insert_historic_data():
     api_key = "8WATTBIUUCY9LFYZ"  
     symbols = ['AAPL', 'AMZN', 'GOOGL', 'MSFT', 'TSLA', 'JPM', 'WMT', 'KO', 'PFE', 'NFLX']
-
     for index, symbol in enumerate(symbols):
         historic_data = fetch_historic_data_from_alpha_vantage(symbol, api_key)
         for data in historic_data:
@@ -715,3 +714,4 @@ def dbinit():
     db.session.add_all(followedCompanies)
     # db.session.add_all(predictionsList)
     db.session.commit()
+    insert_historic_data()
