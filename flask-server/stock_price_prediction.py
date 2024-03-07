@@ -45,7 +45,19 @@ def fetch_stock_prediction(company_id, timeframe):
         df = df.sort_index(ascending=True)
         return df
 
-    company_symbols = {0: 'AAPL', 1: 'IBM', 2: 'MSFT'}
+    company_symbols = {
+    0: 'AAPL',   # Apple
+    1: 'AMZN',   # Amazon
+    2: 'GOOGL',  # Alphabet Inc. (Google)
+    3: 'MSFT',   # Microsoft
+    4: 'TSLA',   # Tesla
+    5: 'JPM',    # JPMorgan Chase
+    6: 'WMT',    # Walmart
+    7: 'KO',     # Coca-Cola
+    8: 'PFE',    # Pfizer
+    9: 'NFLX'    # Netflix
+}
+
     symbol = company_symbols.get(company_id)
     api_key = '8WATTBIUUCY9LFYZ'
     stock_data = fetch_stock_data(symbol, api_key, timeframe)
@@ -56,6 +68,7 @@ def fetch_stock_prediction(company_id, timeframe):
     X, _ = create_sequences(scaled_data, sequence_length)
 
     model = build_model((sequence_length, X.shape[2]))
+    # model.load_weights('your_model_weights.h5')  # Load your trained model weights
 
     current_batch = X[-1:].reshape(1, sequence_length, X.shape[2])
     predicted = []
@@ -64,18 +77,18 @@ def fetch_stock_prediction(company_id, timeframe):
         predicted.append(predicted_step)
         predicted_step = np.reshape(predicted_step, (1, 1, predicted_step.shape[0]))
         current_batch = np.append(current_batch[:, 1:, :], predicted_step, axis=1)
-
+    
     predicted_prices = scaler.inverse_transform(predicted)
     predicted_prices[:, 4] = np.abs(predicted_prices[:, 4])
-
+    predicted_prices[:, :4] = np.abs(predicted_prices[:, :4])
     # Print the predictions
     for i, prediction in enumerate(predicted_prices, start=1):
         print(f"Prediction {i}: Open: {prediction[0]}, High: {prediction[1]}, Low: {prediction[2]}, Close: {prediction[3]}, Volume: {prediction[4]}")
-      # Save predictions to the database
+
     for prediction in predicted_prices:
         new_prediction = Prediction(
             companyID=company_id,
-            close=prediction[3], 
+            close=prediction[3],  
             volume=prediction[4],  
             open=prediction[0],   
             high=prediction[1],   
@@ -87,6 +100,6 @@ def fetch_stock_prediction(company_id, timeframe):
     return predicted_prices
 
 # Example usage
-# company_id = 1  # This would be passed as a parameter
+# company_id = 3  # This would be passed as a parameter
 # timeframe = 'daily'  # This would be passed as a parameter
 # predictions = fetch_stock_prediction(company_id, timeframe)
