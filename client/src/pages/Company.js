@@ -28,7 +28,7 @@ function Company() {
         return getCompanyNews(companyID);
       }).then((result) => {
         setNews(result.data.data);
-        return getCompanyAnalysis();
+        return getCompanyAnalysis(companyID);
       }).then((result) => {
         setCompanyAnalysis(result.data);
       });
