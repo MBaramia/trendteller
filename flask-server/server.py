@@ -1,6 +1,6 @@
 #from flask import 
 
-from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, Prediction
+from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, Prediction, HistoricData
 
 # import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
@@ -19,7 +19,6 @@ from datetime import datetime, timezone
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
-from stock_price_prediction import fetch_stock_prediction
 
 # websocket
 from flask_socketio import SocketIO, emit
@@ -43,8 +42,37 @@ scheduler.add_job(func=lambda: fetch_and_store_predictions('monthly'), trigger='
 # Ensure the scheduler is shut down properly on exit
 atexit.register(lambda: scheduler.shutdown())
 
+# helper function to get a company's perception
+def queryCompanyPerception(companyID):
+    getPerception = text("""
+        SELECT effect
+        FROM Articles
+        JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
+        WHERE AffectedCompanies.companyID=:companyID
+        ORDER BY Articles.dateTime DESC LIMIT 1
+    """)
+    getPerceptionQry = getPerception.bindparams(companyID = companyID)
+    results = db.session.execute(getPerceptionQry)
+    values = results.fetchall()
+    
+    if len(values) != 0:
+        return values[0][0]
+    return 1
+
+# helper function to determine whether a user follows a company
+def queryCompanyFollowing(userID, companyID):
+    getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+    getFollowingQry = getFollowing.bindparams(userID = userID, companyID = companyID)
+    followingResult = db.session.execute(getFollowingQry)
+    followingValues = followingResult.fetchall()
+
+    if len(followingValues) != 0:
+        return True
+    else:
+        return False
+
 # integrated
-# need stock data and perception data for change and perception
+# need stock data for price and change
 def queryFollowedCompanies(userID):
     gettingCompaniesQry = text("""
         SELECT CompanyData.id, name, symbol 
@@ -65,7 +93,7 @@ def queryFollowedCompanies(userID):
             "code":company[2], 
             "price":random.randint(50, 200), 
             "change": "-14.9%",
-            "perception":random.randint(0, 2), 
+            "perception":queryCompanyPerception(company[0]), 
             "following":True
         }
         allCompanies.append(item)
@@ -138,7 +166,7 @@ def queryAllNews():
     return finalResult
         
 # integrated
-# need stock data and perception data for change and perception
+# need stock data for price and change
 def queryAllCompanies(userID):
     getCompanies = text("SELECT id, name, symbol FROM CompanyData")
     getCompaniesQry = getCompanies.bindparams()
@@ -147,14 +175,14 @@ def queryAllCompanies(userID):
     allCompanies = []
 
     for company in values:
-        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-        followingResult = db.session.execute(getFollowingQry)
-        followingValues = followingResult.fetchall()
+        # getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+        # getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
+        # followingResult = db.session.execute(getFollowingQry)
+        # followingValues = followingResult.fetchall()
 
-        following = False
-        if len(followingValues) != 0:
-            following = True
+        # following = False
+        # if len(followingValues) != 0:
+        #     following = True
         
         # waiting for real data to produce price, change
         item = {
@@ -163,8 +191,8 @@ def queryAllCompanies(userID):
             "code":company[2], 
             "price":random.randint(50, 200), 
             "change": "-14.9%",
-            "perception":random.randint(0, 2), 
-            "following":following
+            "perception":queryCompanyPerception(company[0]), 
+            "following":queryCompanyFollowing(userID, company[0])
         }
         allCompanies.append(item)
 
@@ -258,29 +286,19 @@ def queryNoOfNotifications(userID):
     return len(values) 
 
 # integrated (need to change)
-# need perception data for perception
 def queryCompanyInfo(companyID, userID):
-    getCompanies = text("SELECT id, name, symbol, description FROM CompanyData WHERE id=:companyID")
+    getCompanies = text("SELECT name, symbol, description FROM CompanyData WHERE id=:companyID")
     getCompaniesQry = getCompanies.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesQry)
     company = resultset.fetchall()[0]
 
-    getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-    getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-    followingResult = db.session.execute(getFollowingQry)
-    followingValues = followingResult.fetchall()
-
-    following = False
-    if len(followingValues) != 0:
-        following = True
-
     item = {
-        "id":company[0],
-        "name":company[1],
-        "code":company[2],
-        "overview":company[3],
-        "perception":random.randint(0, 2),
-        "following":following
+        "id":companyID,
+        "name":company[0],
+        "code":company[1],
+        "overview":company[2],
+        "perception":queryCompanyPerception(companyID),
+        "following":queryCompanyFollowing(userID, companyID)
     }
     return item
 
@@ -292,6 +310,7 @@ def queryCompanyNews(companyID):
         JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
         JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id
         WHERE CompanyData.id=:companyID
+        ORDER BY dateTime DESC
     """)
     getCompaniesNewsQry = getCompaniesNews.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesNewsQry)
@@ -356,8 +375,8 @@ def queryArticleInfo(articleID, companyID):
 
     return item
 
-# almost integrated
-# yet to be integrated with perception
+# integrated
+# need stock data for price and change
 def querySearchCompanies(query, userID):  
     getInfo = text("""
         SELECT id, name, symbol
@@ -385,7 +404,7 @@ def querySearchCompanies(query, userID):
             "code":info[2], 
             "price":random.randint(50, 200), 
             "change": "-14.9%",
-            "perception":random.randint(0, 2), 
+            "perception":queryCompanyPerception(info[0]), 
             "following":following
         }      
         companies.append(item)
@@ -431,7 +450,7 @@ def queryRecommendedCompanies(userID):
             "code":company[2], 
             "price":random.randint(50, 200), 
             "change": "-14.9%",
-            "perception":random.randint(0, 2), 
+            "perception":queryCompanyPerception(company[0]), 
             "following":following
         }
         allCompanies.append(item)
@@ -500,26 +519,26 @@ def queryStockChanges(companyID):
 def queryStockDates(companyID):
     return dates
 
-# waiting on dummy data for news articles/analysis etc.
+# integrated
 def queryRecentAnalysis(companyID):
     getAnalysis = text("""
         SELECT justification
-        FROM Articles
-        JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
-        WHERE AffectedCompanies.companyID=:companyID
+        FROM AffectedCompanies
+        JOIN Articles ON AffectedCompanies.articleID = Articles.id
+        WHERE companyID = :companyID
         ORDER BY Articles.dateTime DESC LIMIT 1
     """)
-    getAnalysisQry = getAnalysis.bindparams(companyID = companyID)
+    getAnalysisQry = getAnalysis.bindparams(companyID=companyID)
     results = db.session.execute(getAnalysisQry)
     values = results.fetchall()
-    # print(values)
+
     if len(values) != 0:
         return values[0][0]
     return "No analysis"
 
 def queryPredictedStockDates(companyID):
     return predictedDates
-
+    
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
 
@@ -542,6 +561,7 @@ if resetdb:
         db.drop_all()
         db.create_all()
         dbinit()
+        insert_historic_data()
 login_manager = LoginManager()
 login_manager.init_app(app)
 
