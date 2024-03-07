@@ -68,7 +68,6 @@ def fetch_stock_prediction(company_id, timeframe):
     X, _ = create_sequences(scaled_data, sequence_length)
 
     model = build_model((sequence_length, X.shape[2]))
-    # model.load_weights('your_model_weights.h5')  # Load your trained model weights
 
     current_batch = X[-1:].reshape(1, sequence_length, X.shape[2])
     predicted = []
