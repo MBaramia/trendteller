@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
-from stock_price_prediction import fetch_stock_prediction
+#from stock_price_prediction import fetch_stock_prediction
 
 # websocket
 from flask_socketio import SocketIO, emit
@@ -422,35 +422,62 @@ def queryRecommendedCompanies(userID):
         SELECT *
         FROM CompanyData
         LIMIT 3;
-    """)   
+    """)
+    qryText = text("""
+                    WITH CompaniesFollowed AS (
+                    SELECT companyID
+                    FROM FollowedCompanies
+                    WHERE userID = :userID
+                    ),
+                    LHS AS (
+                        SELECT relationOne AS r, mutualFollowers
+                        FROM CompanyWeights
+                        WHERE relationTwo IN (SELECT companyID FROM CompaniesFollowed) AND relationOne NOT IN (SELECT companyID FROM CompaniesFollowed)
+                    ),
+                    RHS AS (
+                        SELECT relationTwo AS r, mutualFollowers
+                        FROM CompanyWeights
+                        WHERE relationOne IN (SELECT companyID FROM CompaniesFollowed) AND relationTwo NOT IN (SELECT companyID FROM CompaniesFollowed)
+                    ),
+                    Complete AS (
+                        SELECT r, mutualFollowers
+                        FROM LHS
+                        UNION ALL
+                        SELECT r, mutualFollowers
+                        FROM RHS
+                    )
+                    SELECT DISTINCT r
+                    FROM Complete
+                    ORDER BY mutualFollowers DESC
+                    LIMIT 3""")
+    qry = qryText.bindparams(userID = userID)
+    resultSet = db.session.execute(qry)
+    values = resultSet.fetchall() #] values should be all of the companyIDs for the recommended companies
     # followedCompaniesQry = gettingCompaniesQry.bindparams(userID = userID)
-    resultset = db.session.execute(gettingCompaniesQry)
-    values = resultset.fetchall()
-    allCompanies = []
+    #resultset = db.session.execute(gettingCompaniesQry)
+    #values = resultset.fetchall()
+    #allCompanies = []
     # print(userID)
     # print(values)
-
+    allCompanies = []
+    print("length" + str(len(values)))
     for company in values:
-        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-        followingResult = db.session.execute(getFollowingQry)
-        followingValues = followingResult.fetchall()
-        following = False
-        if len(followingValues) != 0:
-            following = True
-        # print(company)
-
-        # waiting for real data to produce price
+        print(company[0])
+        getCompanyInfo = text("SELECT name, symbol FROM CompanyData WHERE id=:id")
+        getCompanyInfoQry = getCompanyInfo.bindparams(id = company[0])
+        results = db.session.execute(getCompanyInfoQry)
+        companyValues= results.fetchall()
         item = {
-            "id":company[0], 
-            "name":company[1], 
-            "code":company[2], 
+            "id":str(company[0]), 
+            "name":companyValues[0][0], 
+            "code":companyValues[0][1], 
             "price":random.randint(50, 200), 
             "change": "-14.9%",
             "perception":queryCompanyPerception(company[0]), 
-            "following":following
+            "following":False
         }
         allCompanies.append(item)
+        print(json.dumps(item, indent=2))
 
     #Placeholder - replace with actual logic (should return exactly 3 companies)
     # allCompanies = []
