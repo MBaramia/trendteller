@@ -3,8 +3,8 @@ flask-login
 Flask-SQLAlchemy
 Werkzeug
 Flask-Mail
-flask-socketio
-flask-cors
+flask-socketio>=5.0.0
+flask-cors>=3.0.0
 requests
 pandas
 scikit-learn

@@ -7,6 +7,10 @@ from sqlalchemy import event
 import json
 from sqlalchemy import text, UniqueConstraint
 from datetime import datetime, timezone, timedelta
+from stock_price_prediction import fetch_stock_prediction
+from historic import fetch_historic_data
+import requests
+
 # create the database interface
 db = SQLAlchemy()
 
@@ -34,7 +38,6 @@ class CompanyData(db.Model):
     name = db.Column(db.String(100), unique=True)
     symbol = db.Column(db.String(4))
     description = db.Column(db.String(10000))
-    
     # exchange = db.Column(db.Double)
     # currPerception = db.Column(db.Integer) # stores the current perception of the company
     def __init__(self,id,name,symbol,description): 
@@ -68,7 +71,6 @@ class FollowedCompanies(db.Model):
     __tablename__ = 'FollowedCompanies'
     companyID = Column(Integer, db.ForeignKey('CompanyData.id'), primary_key=True)
     userID = Column(Integer, db.ForeignKey('UserData.id'), primary_key=True)
-
     def __init__(self, companyID, userID):
         self.companyID = companyID
         self.userID = userID
@@ -120,8 +122,8 @@ class Prediction(db.Model):
     open = db.Column(db.Float)
     high = db.Column(db.Float)
     low = db.Column(db.Float)
-
-    def __init__(self, companyID, date_predicted, close, volume, open, high, low):
+    timeframe = db.Column(db.String(50))  
+    def __init__(self, companyID, date_predicted, close, volume, open, high, low, timeframe):
         self.companyID = companyID
         self.date_predicted = date_predicted
         self.close = close
@@ -129,7 +131,30 @@ class Prediction(db.Model):
         self.open = open
         self.high = high
         self.low = low
+        self.timeframe = timeframe
 
+class HistoricData(db.Model):
+    __tablename__ = 'HistoricData'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    companyID = db.Column(db.Integer, db.ForeignKey('CompanyData.id'), nullable=False)
+    date = db.Column(DateTime, nullable=False)
+    open = db.Column(db.Float, nullable=False)
+    high = db.Column(db.Float, nullable=False)
+    low = db.Column(db.Float, nullable=False)
+    close = db.Column(db.Float, nullable=False)
+    volume = db.Column(db.BigInteger, nullable=False)
+    timeframe = db.Column(db.String(10), nullable=False)  # Intraday, Daily, Weekly, Monthly
+    def __init__(self, companyID, date, open, high, low, close, volume, timeframe):
+        self.companyID = companyID
+        self.date = date
+        self.open = open
+        self.high = high
+        self.low = low
+        self.close = close
+        self.volume = volume
+        self.timeframe = timeframe
+
+  
 @event.listens_for(FollowedCompanies, 'before_insert')
 def before_followed_companies_insert(mapper, connection, target):
     print(f"Inserting FollowedCompanies: companyID={target.companyID}, userID={target.userID}")
@@ -226,8 +251,6 @@ def getRecommendedCompanies(userID):
         if count == 3:
             return recommended
     return recommended
-
-
 
 # put some data into the tables
 def dbinit():
@@ -658,6 +681,37 @@ def dbinit():
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
         db.session.add(companyList[i])
+    timeframes = ['intraday', 'daily', 'weekly', 'monthly']
+    for company in companyList:
+        for timeframe in timeframes:
+            predictions = fetch_stock_prediction(company.id, timeframe)
+            for prediction in predictions:
+                new_prediction = Prediction(
+                    companyID=company.id,
+                    date_predicted=datetime.now(timezone.utc),
+                    open=prediction[0],
+                    high=prediction[1],
+                    low=prediction[2],
+                    close=prediction[3],
+                    volume=prediction[4],
+                    timeframe=timeframe
+                )
+                db.session.add(new_prediction)
+    for company in companyList:
+        for timeframe in timeframes:
+            historic_data_df = fetch_historic_data(company.symbol, api_key, timeframe)
+            for index, row in historic_data_df.iterrows():
+                historic_data_entry = HistoricData(
+                    companyID=company.id,
+                    date=index.to_pydatetime(),
+                    open=row['Open'],
+                    high=row['High'],
+                    low=row['Low'],
+                    close=row['Close'],
+                    volume=int(row['Volume']),
+                    timeframe=timeframe
+                )
+                db.session.add(historic_data_entry)
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
     db.session.add_all(followedCompanies)

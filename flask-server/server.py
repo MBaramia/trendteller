@@ -1,6 +1,6 @@
 #from flask import 
 
-from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, Prediction
+from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, Prediction, HistoricData
 
 # import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
@@ -19,7 +19,8 @@ from datetime import datetime, timezone
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
-#from stock_price_prediction import fetch_stock_prediction
+from stock_price_prediction import fetch_stock_prediction
+
 
 # websocket
 from flask_socketio import SocketIO, emit
@@ -224,7 +225,7 @@ def queryNotifications(userID):
         articleID = value[0]
 
         getInfo = text("""
-            SELECT articleID, title, source, date, effect, companyID, symbol
+            SELECT articleID, title, source, dateTime, effect, companyID, symbol
             FROM Articles           
             JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
             JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id
@@ -272,6 +273,10 @@ def queryNotifications(userID):
     notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
     db.session.execute(notificationQry)
     db.session.commit()
+
+    if len(values) != 0:
+        socketio.emit("database_updated", {"data": "News viewed"})
+
     return finalResult     
 
 def queryNoOfNotifications(userID):
@@ -378,7 +383,7 @@ def querySearchCompanies(query, userID):
     getInfo = text("""
         SELECT id, name, symbol
         FROM CompanyData
-        WHERE name LIKE CONCAT('%', :query, '%')
+        WHERE name LIKE '%' || :query || '%'
     """)
     getInfoQry = getInfo.bindparams(query=query)
     resultset = db.session.execute(getInfoQry)
@@ -562,18 +567,19 @@ def queryRecentAnalysis(companyID):
 
 def queryPredictedStockDates(companyID):
     return predictedDates
-
+    
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
 
 # add cors policy
-CORS(app)
+CORS(app, resources={r"/*":{"origins":"*"}})
 
 # create websocket
-socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
+
 
 db.init_app(app)
 
@@ -767,7 +773,6 @@ def getStockChanges():
 def getStockDates():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = queryStockDates(companyID)
     return jsonify(query)
 
@@ -776,7 +781,6 @@ def getStockDates():
 def toggleFollowing():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = switchFollowing(current_user.id, companyID)
     return jsonify(query)
 
@@ -785,7 +789,6 @@ def toggleFollowing():
 def getPredictedStockDates():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = queryPredictedStockDates(companyID)
     return jsonify(query)
 
@@ -794,30 +797,8 @@ def getPredictedStockDates():
 def getCompanyAnalysis():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = queryRecentAnalysis(companyID)
     return jsonify(query)
     
-@app.route('/getPredictions/<int:company_id>', methods=['GET'])
-def get_predictions(company_id):
-    # Query the database for predictions related to the company_id
-    predictions = Prediction.query.filter_by(companyID=company_id).order_by(Prediction.date_predicted.desc()).limit(7).all()
-
-    # Format the predictions into a JSON-serializable list
-    predictions_list = []
-    for prediction in predictions:
-        prediction_data = {
-            'date_predicted': prediction.date_predicted.strftime("%Y-%m-%d %H:%M:%S"),
-            'open': prediction.open,
-            'high': prediction.high,
-            'low': prediction.low,
-            'close': prediction.close,
-            'volume': prediction.volume
-        }
-        predictions_list.append(prediction_data)
-
-    # Return the data as a JSON response
-    return jsonify(predictions_list)
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True, port=5001)
