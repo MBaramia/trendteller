@@ -7,6 +7,8 @@ from sqlalchemy import event
 import json
 from sqlalchemy import text, UniqueConstraint
 from datetime import datetime, timezone, timedelta
+from stock_price_prediction import fetch_stock_prediction
+
 # create the database interface
 db = SQLAlchemy()
 
@@ -715,3 +717,4 @@ def dbinit():
     # db.session.add_all(predictionsList)
     db.session.commit()
     insert_historic_data()
+    fetch_stock_prediction()
