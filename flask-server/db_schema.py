@@ -8,6 +8,7 @@ import json
 from sqlalchemy import text, UniqueConstraint
 from datetime import datetime, timezone, timedelta
 from stock_price_prediction import fetch_stock_prediction
+import requests
 
 # create the database interface
 db = SQLAlchemy()
@@ -129,7 +130,7 @@ class Prediction(db.Model):
         self.high = high
         self.low = low
         
-  class HistoricData(db.Model):
+class HistoricData(db.Model):
     __tablename__ = 'HistoricData'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     companyID = db.Column(db.Integer, db.ForeignKey('CompanyData.id'), nullable=False)
@@ -139,6 +140,7 @@ class Prediction(db.Model):
     low = db.Column(db.Float, nullable=False)
     close = db.Column(db.Float, nullable=False)
     volume = db.Column(db.BigInteger, nullable=False)
+
     def __init__(self, companyID, date, open, high, low, close, volume):
         self.companyID = companyID
         self.date = date
@@ -254,7 +256,7 @@ def fetch_historic_data_from_alpha_vantage(symbol, api_key):
         return []
     historical_data = []
     for date_str, daily_data in data[time_series_key].items():
-        date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+        date = datetime.strptime(date_str, '%Y-%m-%d')
         historical_data.append({
             'date': date,
             'open': float(daily_data['1. open']),
@@ -267,6 +269,7 @@ def fetch_historic_data_from_alpha_vantage(symbol, api_key):
 def insert_historic_data():
     api_key = "8WATTBIUUCY9LFYZ"  
     symbols = ['AAPL', 'AMZN', 'GOOGL', 'MSFT', 'TSLA', 'JPM', 'WMT', 'KO', 'PFE', 'NFLX']
+
     for index, symbol in enumerate(symbols):
         historic_data = fetch_historic_data_from_alpha_vantage(symbol, api_key)
         for data in historic_data:
@@ -708,45 +711,11 @@ def dbinit():
             )
         )
 
-    notifications_data = [
-        {
-            "userID": 1,
-            "articleID": 0,
-            "viewed": False
-        },
-        {
-            "userID": 1,
-            "articleID": 1,
-            "viewed": False
-        },
-        {
-            "userID": 1,
-            "articleID": 2,
-            "viewed": False
-        }
-    ]
-
-    notificationsList = []
-
-    for i in range(len(notifications_data)):
-        notification = notifications_data[i]
-
-        notificationsList.append(
-            Notifications(
-                notification["userID"],
-                notification["articleID"],
-                notification["viewed"]
-            )
-        )
-
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
         db.session.add(companyList[i])
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
     db.session.add_all(followedCompanies)
-    db.session.add_all(notificationsList)
     # db.session.add_all(predictionsList)
     db.session.commit()
-    insert_historic_data()
-    fetch_stock_prediction()
