@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import NewsListView from "../components/NewsListView";
 import StockChart from "../components/StockChart";
 import { getCompanyInfo, getCompanyNews, getCompanyAnalysis } from "../Auth";
+import Loading from "../components/Loading";
 
 function Company() {
   let { companyID } = useParams();
@@ -14,9 +15,9 @@ function Company() {
 
   const [hasLoaded, setHasLoaded] = useState(false);
 
-  const [company, setCompany] = useState({})
-  const [news, setNews] = useState([])
-  const [companyAnalysis, setCompanyAnalysis] = useState("")
+  const [company, setCompany] = useState(null);
+  const [news, setNews] = useState(null);
+  const [companyAnalysis, setCompanyAnalysis] = useState(null);
 
   useEffect(() => {
     getCompanyInfo(companyID)
@@ -30,9 +31,15 @@ function Company() {
         return getCompanyAnalysis();
       }).then((result) => {
         setCompanyAnalysis(result.data);
-        setHasLoaded(true);
       });
   }, []);
+
+  useEffect(() => {
+    if (company !== null && news !== null && companyAnalysis !== null) {
+      setHasLoaded(true);
+      console.log(news);
+    }
+  }, [company, news, companyAnalysis]);
 
   /*
   const text =
@@ -117,19 +124,36 @@ function Company() {
       <div id="company-pg">
         <div id="pg-content">
           <div className="top-area">
-            <StockChart company={company} />
+            {hasLoaded ? <>
+              <StockChart company={company} />
+            </>:<>
+              <Loading />
+            </>}
           </div>
+          
+          {hasLoaded ?<>
+            <SummaryTextView hasLoaded={hasLoaded} title={"Overview"} text={company.overview} />
+          </>:<>
+            <Loading />
+          </>}
+          
+          {hasLoaded ?<>
+            <AnalysisTextView
+              hasLoaded={hasLoaded}
+              title={"Analysis"}
+              perception={company.perception}
+              text={companyAnalysis}
+            />
+          </>:<>
+            <Loading />
+          </>}
+          
+          {hasLoaded ?<>
+            <NewsListView hasLoaded={hasLoaded} title={"Recent News"} data={news} />
+          </>:<>
+            <Loading />
+          </>}
 
-          <SummaryTextView hasLoaded={hasLoaded} title={"Overview"} text={company.overview} />
-
-          <AnalysisTextView
-            hasLoaded={hasLoaded}
-            title={"Analysis"}
-            perception={company.perception}
-            text={companyAnalysis}
-          />
-
-          <NewsListView hasLoaded={hasLoaded} title={"Recent News"} data={news} />
         </div>
 
         <div id="fade-overlay" />

@@ -178,7 +178,7 @@ def queryAllCompanies(userID):
     finalResult = {"data":allCompanies}
     return finalResult
 
-
+# waiting on dummy data for news articles/analysis etc.
 def queryNotifications(userID):
     notifications = text("SELECT * FROM Notifications WHERE userID=:userID AND viewed=False")
     notificationsQry = notifications.bindparams(userID=userID)
@@ -224,48 +224,59 @@ def queryNotifications(userID):
     db.session.commit()
     return finalResult     
 
+# integrated
+# need perception data for perception
 def queryCompanyInfo(companyID, userID):
-    getCompanies = text("SELECT * FROM CompanyData WHERE id=:companyID")
+    getCompanies = text("SELECT id, name, symbol, description FROM CompanyData WHERE id=:companyID")
     getCompaniesQry = getCompanies.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesQry)
-    values = resultset.fetchall()
+    company = resultset.fetchall()[0]
 
-    for company in values:
-        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-        followingResult = db.session.execute(getFollowingQry)
-        followingValues = followingResult.fetchall()
-        following = False
-        if len(followingValues) != 0:
-            following = True
-        item = {"id":company[0], "name":company[1], "code":company[2], "overview":company[3], "perception":random.randint(0, 2),"following":following}
-        return item
+    getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+    getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
+    followingResult = db.session.execute(getFollowingQry)
+    followingValues = followingResult.fetchall()
 
+    following = False
+    if len(followingValues) != 0:
+        following = True
+
+    item = {
+        "id":company[0],
+        "name":company[1],
+        "code":company[2],
+        "overview":company[3],
+        "perception":random.randint(0, 2),
+        "following":following
+    }
+    return item
+
+# waiting on dummy data for news articles/analysis etc.
 def queryCompanyNews(companyID):
     getCompaniesNews = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id WHERE CompanyData.id=:companyID")
     getCompaniesNewsQry = getCompaniesNews.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesNewsQry)
     values = resultset.fetchall()
     allArticles = []
-    for article in values:
-        item = {"id":article[0], "title":article[3], "companyID":companyID, "companyCode":article[16], "source":article[4], "date":article[1], "perception":article[6]}
-        allArticles.append(item)
+    # for article in values:
+    #     item = {"id":article[0], "title":article[3], "companyID":companyID, "companyCode":article[16], "source":article[4], "date":article[1], "perception":article[6]}
+    #     allArticles.append(item)
 
     #Testing - delete below
     print(len(allArticles))
-    allArticles.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
-    allArticles.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":3, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
-    allArticles.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":4, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
-    allArticles.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":5, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
-    allArticles.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":6, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
-    allArticles.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":7, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
-    allArticles.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":11, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
+    allArticles.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":companyID, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
+    allArticles.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":companyID, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
+    allArticles.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":companyID, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
+    allArticles.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":companyID, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
+    allArticles.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":companyID, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
+    allArticles.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":companyID, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
+    allArticles.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":companyID, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
     #Testing - delete above
 
     finalResult = {"data":allArticles}
     return finalResult
 
-
+# waiting on dummy data for news articles/analysis etc.
 def queryArticleInfo(articleID, companyID):
     getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID")
     getArticlesQry = getArticles.bindparams(companyID = companyID)
@@ -293,21 +304,59 @@ def querySearchCompanies(query, userID):
     result = {"data":companies}
     return result
 
+# integrated(ish)
+# waiting on recommendation system to be finished
 def queryRecommendedCompanies(userID):
-    #Placeholder - replace with actual logic (should return exactly 3 companies)
+    gettingCompaniesQry = text("""
+        SELECT *
+        FROM CompanyData
+        LIMIT 3;
+    """)   
+    # followedCompaniesQry = gettingCompaniesQry.bindparams(userID = userID)
+    resultset = db.session.execute(gettingCompaniesQry)
+    values = resultset.fetchall()
     allCompanies = []
-    allCompanies.append({"id":20, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":False})
-    allCompanies.append({"id":21, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":0, "following":False})
-    allCompanies.append({"id":22, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":False})
+    # print(userID)
+    # print(values)
+
+    for company in values:
+        getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
+        getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
+        followingResult = db.session.execute(getFollowingQry)
+        followingValues = followingResult.fetchall()
+        following = False
+        if len(followingValues) != 0:
+            following = True
+        # print(company)
+
+        # waiting for real data to produce price
+        item = {
+            "id":company[0], 
+            "name":company[1], 
+            "code":company[2], 
+            "price":random.randint(50, 200), 
+            "change": "-14.9%",
+            "perception":random.randint(0, 2), 
+            "following":following
+        }
+        allCompanies.append(item)
+
+    #Placeholder - replace with actual logic (should return exactly 3 companies)
+    # allCompanies = []
+    # allCompanies.append({"id":20, "name":"PayPal", "code":"PYPL", "price":152.6500, "change": "+2.1%", "perception":1, "following":False})
+    # allCompanies.append({"id":21, "name":"Amazon", "code":"AMZN", "price":3342.8800, "change": "+0.8%", "perception":0, "following":False})
+    # allCompanies.append({"id":22, "name":"Facebook", "code":"FB", "price":369.7900, "change": "+2.3%", "perception":2, "following":False})
     #Placeholder - replace with actual logic
     finalResult = {"data":allCompanies}
     return finalResult
 
+# integrated
 def switchFollowing(userID, companyID):
     getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
     getFollowingQry = getFollowing.bindparams(userID = userID, companyID = companyID)
     followingResult = db.session.execute(getFollowingQry)
     followingValues = followingResult.fetchall()
+
     if len(followingValues) != 0:
         # Entry exists, delete it
         deleteFollowing = text("DELETE FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
@@ -316,12 +365,13 @@ def switchFollowing(userID, companyID):
         db.session.commit()
         socketio.emit("database_updated", {"data": "Company unfollowed"})
         return "Company unfollowed"
-    insertFollowing = text("INSERT INTO FollowedCompanies (userID, companyID) VALUES (:userID, :companyID)")
-    insertFollowingQry = insertFollowing.bindparams(userID=userID, companyID=companyID)
-    db.session.execute(insertFollowingQry)
-    db.session.commit()
-    socketio.emit("database_updated", {"data": "Company followed"})
-    return "Company followed"
+    else:
+        insertFollowing = text("INSERT INTO FollowedCompanies (userID, companyID) VALUES (:userID, :companyID)")
+        insertFollowingQry = insertFollowing.bindparams(userID=userID, companyID=companyID)
+        db.session.execute(insertFollowingQry)
+        db.session.commit()
+        socketio.emit("database_updated", {"data": "Company followed"})
+        return "Company followed"
 
 def queryStockData(companyID):
     return combinedData
@@ -355,6 +405,7 @@ def queryStockChanges(companyID):
 def queryStockDates(companyID):
     return dates
 
+# waiting on dummy data for news articles/analysis etc.
 def queryRecentAnalysis(companyID):
     getAnalysis = text("SELECT analysis FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID ORDER BY Articles.dateTime DESC LIMIT 1")
     getAnalysisQry = getAnalysis.bindparams(companyID = companyID)
