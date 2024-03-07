@@ -4,7 +4,6 @@ from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 import numpy as np
-from db_schema import db, Prediction
 
 def fetch_stock_prediction(company_id, timeframe):
     def build_model(input_shape):
@@ -83,19 +82,6 @@ def fetch_stock_prediction(company_id, timeframe):
     # Print the predictions
     for i, prediction in enumerate(predicted_prices, start=1):
         print(f"Prediction {i}: Open: {prediction[0]}, High: {prediction[1]}, Low: {prediction[2]}, Close: {prediction[3]}, Volume: {prediction[4]}")
-
-    for prediction in predicted_prices:
-        new_prediction = Prediction(
-            companyID=company_id,
-            close=prediction[3],  
-            volume=prediction[4],  
-            open=prediction[0],   
-            high=prediction[1],   
-            low=prediction[2]     
-        )
-        db.session.add(new_prediction)
-
-    db.session.commit()
     return predicted_prices
 
 # Example usage
