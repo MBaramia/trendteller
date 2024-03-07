@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import NewsListView from "../components/NewsListView";
-import { getNotifications } from "../Auth";
+import { getNotifications, setUpSocketListener } from "../Auth";
 
 function Notifications() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    getNotifications()
-      .then((result) => {
-        setNotifications(result.data.data);
-        setHasLoaded(true);
-      });
+    fetchPageData();
+    return setUpSocketListener(fetchPageData);
   }, []);
+
+  const fetchPageData = () => {
+    getNotifications()
+    .then((result) => {
+      setNotifications(result.data.data);
+      setHasLoaded(true);
+    });
+  }
 
   return (
     <>

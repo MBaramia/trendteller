@@ -1,6 +1,6 @@
 #from flask import 
 
-from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies
+from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, Prediction
 
 # import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
@@ -244,6 +244,14 @@ def queryNotifications(userID):
     # db.session.execute(notificationQry)
     # db.session.commit()
     return finalResult     
+
+def queryNoOfNotifications(userID):
+    notifications = text("SELECT articleID FROM Notifications WHERE userID=:userID AND viewed=False")
+    notificationsQry = notifications.bindparams(userID=userID)
+    resultset = db.session.execute(notificationsQry)
+    values = resultset.fetchall()
+    notifications = []
+    return len(values) 
 
 # integrated (need to change)
 # need perception data for perception
@@ -620,6 +628,12 @@ def getAllCompanies():
 @login_required
 def getNotifications():
     query = queryNotifications(current_user.id)
+    return jsonify(query)
+
+@app.route('/getNoOfNotifications', methods=['POST'])
+@login_required
+def getNoOfNotifications():
+    query = queryNoOfNotifications(current_user.id)
     return jsonify(query)
 
 @app.route('/getCompanyInfo', methods=['POST'])

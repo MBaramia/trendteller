@@ -259,6 +259,33 @@ export function getNotifications() {
     });
 }
 
+export function getNoOfNotifications() {
+  let status = true;
+  return fetch("/getNoOfNotifications", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return {
+          status: false,
+          data: {"message": "Error"},
+        };
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("No of Notifications")
+      console.log(data);
+      return {
+        status: status,
+        data: data,
+      };
+    });
+}
+
 export function getCompanyInfo(companyID) {
   let status = true;
   return fetch("/getCompanyInfo", {
