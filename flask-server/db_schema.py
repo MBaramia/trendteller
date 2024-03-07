@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from sqlalchemy import event 
 import json
 from sqlalchemy import text, UniqueConstraint
-import datetime
+from datetime import datetime, timezone
 # create the database interface
 db = SQLAlchemy()
 
@@ -54,25 +54,20 @@ class Articles(db.Model):
     title = db.Column(db.String(100))
     source = db.Column(db.String(100))
     summary =  db.Column(db.String(500))
-    effect = db.Column(db.Integer)
-    def __init__(self,dateTime,link,title,source,summary, effect): 
+
+    def __init__(self,dateTime,link,title,source,summary, id=None): 
+        self.id = id
         self.dateTime = dateTime
         self.link = link
         self.title = title
         self.source = source
         self.summary = summary
-        self.effect = effect
 
 # this is a table of companies that a user tracks
 class FollowedCompanies(db.Model):
     __tablename__ = 'FollowedCompanies'
-    id = db.Column(db.Integer, primary_key=True)
-    companyID = Column(Integer, db.ForeignKey('CompanyData.id'))
-    userID = Column(Integer, db.ForeignKey('UserData.id'))
-
-    __table_args__ = (
-        UniqueConstraint('companyID', 'userID'),  # Ensure uniqueness of pair (companyID, userID)
-    )
+    companyID = Column(Integer, db.ForeignKey('CompanyData.id'), primary_key=True)
+    userID = Column(Integer, db.ForeignKey('UserData.id'), primary_key=True)
 
     def __init__(self, companyID, userID):
         self.companyID = companyID
@@ -84,6 +79,7 @@ class Notifications(db.Model):
     userID = Column(Integer, db.ForeignKey('UserData.id'), primary_key=True)
     articleID = Column(Integer, db.ForeignKey('Articles.id'), primary_key=True)
     viewed = Column(db.Boolean, default=False)
+    
     def __init__(self,userID,articleID,viewed):
         self.userID = userID
         self.articleID = articleID
@@ -95,15 +91,13 @@ class AffectedCompanies(db.Model):
     companyID = Column(Integer, db.ForeignKey('CompanyData.id'), primary_key=True)
     articleID = Column(Integer, db.ForeignKey('Articles.id'), primary_key=True)
     effect = Column(Integer)
-    analysis = Column(db.String(500))
     justification = Column(db.String(100))
-    def __init__(self,companyID,articleID,effect,analysis,justification):
+
+    def __init__(self,companyID,articleID,effect,justification):
         self.companyID = companyID
         self.articleID = articleID
         self.effect = effect
-        self.analysis = analysis
         self.justification = justification
-
 
 # this table takes two companies and stores the number of people that follow both of those companies 
 class CompanyWeights(db.Model): 
@@ -336,18 +330,315 @@ def dbinit():
         FollowedCompanies(6, 9),  # Walmart Inc. is followed by User 9
     ]
 
+    # Expanded list of dummy articles for each company, with three articles each
+    articles_data = [
+        # Articles for Apple
+        {
+            "link": "https://www.bloomberg.com/news/articles/2022-09-07/apple-unveils-iphone-14-lineup",
+            "title": "Apple Unveils iPhone 14 Lineup",
+            "source": "Bloomberg",
+            "summary": "Apple's latest iPhone 14 lineup introduces groundbreaking features and improvements.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 0
+        },
+        {
+            "link": "https://www.cnbc.com/2022/09/07/apple-september-2022-event-live-updates.html",
+            "title": "Apple's September Event Highlights",
+            "source": "CNBC",
+            "summary": "Apple reveals new products and updates at its annual September event.",
+            "analysis": "Neutral",
+            "effect": 1,
+            "companyID": 0
+        },
+        {
+            "link": "https://www.macrumors.com/2022/09/07/apple-fall-2022-event-what-to-expect/",
+            "title": "Expectations from Apple's Fall Event",
+            "source": "MacRumors",
+            "summary": "Speculations on what Apple might unveil at its highly anticipated fall event.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 0
+        },
+        # Articles for Amazon
+        {
+            "link": "https://www.reuters.com/business/retail-consumer/amazon-sets-up-first-ever-physical-store-outside-us-2022-09-05/",
+            "title": "Amazon Opens Its First Physical Store Abroad",
+            "source": "Reuters",
+            "summary": "Amazon expands its retail presence with its first-ever physical store outside the United States.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 1
+        },
+        {
+            "link": "https://www.cnet.com/tech/services-and-software/amazons-new-alexa-features-aim-to-protect-your-home/",
+            "title": "Amazon Enhances Alexa for Home Safety",
+            "source": "CNET",
+            "summary": "New features in Amazon's Alexa are designed to offer users enhanced home security and peace of mind.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 1
+        },
+        {
+            "link": "https://techcrunch.com/2022/09/06/amazon-aws-to-invest-12-billion-in-india-by-2030/",
+            "title": "Amazon's Major Investment in India with AWS",
+            "source": "TechCrunch",
+            "summary": "Amazon announces a significant $12 billion investment in India to expand its AWS services.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 1
+        },
+        # Articles for Alphabet (Google)
+        {
+            "link": "https://www.theverge.com/2022/9/6/23339804/google-search-updates-ai-features-mum-algorithm",
+            "title": "Google Unveils AI-Powered Search Updates",
+            "source": "The Verge",
+            "summary": "Google introduces new AI-powered features in its search engine, promising a revolutionary user experience.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 2
+        },
+        {
+            "link": "https://www.bloomberg.com/news/articles/2022-09-08/google-s-cloud-gaming-service-stadia-is-shutting-down",
+            "title": "Google Announces Shutdown of Stadia Service",
+            "source": "Bloomberg",
+            "summary": "Google's cloud gaming service Stadia is set to shut down, marking an end to the tech giant's gaming experiment.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 2
+        },
+        {
+            "link": "https://www.cnbc.com/2022/09/07/google-antitrust-case-focuses-on-search-defaults.html",
+            "title": "Google Faces Antitrust Case Over Search Defaults",
+            "source": "CNBC",
+            "summary": "Google is in the spotlight as antitrust regulators focus on its search default agreements with device manufacturers.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 2
+        },
+        # Articles for Microsoft
+        {
+            "link": "https://www.engadget.com/microsoft-365-copilot-ai-productivity-143545869.html",
+            "title": "Microsoft Introduces AI Copilot for 365 Suite",
+            "source": "Engadget",
+            "summary": "Microsoft unveils an AI-powered copilot feature for its Microsoft 365 suite, aiming to enhance productivity.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 3
+        },
+        {
+            "link": "https://www.techradar.com/news/microsoft-edge-is-getting-a-huge-upgrade-to-challenge-chrome",
+            "title": "Microsoft Edge to Receive Significant Upgrades",
+            "source": "TechRadar",
+            "summary": "Microsoft plans a series of significant updates for its Edge browser to better compete with Chrome.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 3
+        },
+        {
+            "link": "https://www.zdnet.com/article/microsoft-confirms-layoffs-across-multiple-divisions/",
+            "title": "Microsoft Confirms Layoffs Across Divisions",
+            "source": "ZDNet",
+            "summary": "Microsoft announces layoffs affecting various divisions within the company, as part of its restructuring plan.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 3
+        },
+        # Articles for Tesla
+        {
+            "link": "https://www.bloomberg.com/news/articles/2022-09-09/tesla-faces-fresh-challenge-from-mercedes-ev-push",
+            "title": "Tesla Faces New Competition from Mercedes",
+            "source": "Bloomberg",
+            "summary": "Mercedes steps up its EV game, presenting a new challenge to Tesla's dominance in the electric vehicle market.",
+            "analysis": "Neutral",
+            "effect": 1,
+            "companyID": 4
+        },
+        {
+            "link": "https://www.reuters.com/business/autos-transportation/tesla-recalls-nearly-12-million-vehicles-due-software-glitch-2022-09-05/",
+            "title": "Tesla Recalls Vehicles Over Software Glitch",
+            "source": "Reuters",
+            "summary": "Tesla is recalling nearly 1.2 million vehicles to fix a software issue that may impact the car's safety features.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 4
+        },
+        {
+            "link": "https://www.cnbc.com/2022/09/08/tesla-to-unveil-updated-self-driving-beta-software.html",
+            "title": "Tesla to Unveil New Self-Driving Software",
+            "source": "CNBC",
+            "summary": "Tesla is set to release an updated version of its self-driving beta software, promising enhanced autonomous driving capabilities.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 4
+        },
+        # Articles for JPMorgan
+        {
+            "link": "https://www.ft.com/content/285d6884-aedb-4310-bf15-2de65a0b55b7",
+            "title": "JPMorgan Acquires Fintech Startup",
+            "source": "Financial Times",
+            "summary": "JPMorgan Chase & Co. has acquired a leading fintech startup, signaling a stronger move into the financial technology space.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 5
+        },
+        {
+            "link": "https://www.wsj.com/articles/jpmorgan-to-hire-thousands-for-its-new-uk-bank-11631021489",
+            "title": "JPMorgan to Hire Thousands in the UK",
+            "source": "The Wall Street Journal",
+            "summary": "JPMorgan announces plans to hire thousands of new employees for its expanding UK digital bank.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 5
+        },
+        {
+            "link": "https://www.bloomberg.com/news/articles/2022-09-08/jpmorgan-faces-probe-over-client-money-management",
+            "title": "JPMorgan Under Probe for Client Money Management",
+            "source": "Bloomberg",
+            "summary": "Regulators are investigating JPMorgan over how it manages and safeguards client funds, amid broader scrutiny on bank practices.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 5
+        },
+        # Articles for Walmart
+        {
+            "link": "https://www.cnbc.com/2022/09/07/walmart-to-test-drone-delivery-in-six-states.html",
+            "title": "Walmart Expands Drone Delivery Test to Six States",
+            "source": "CNBC",
+            "summary": "Walmart is set to expand its drone delivery pilot program to six more states, aiming for broader coverage and faster delivery times.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 6
+        },
+        {
+            "link": "https://www.reuters.com/business/retail-consumer/walmart-raises-wages-store-workers-2022-09-08/",
+            "title": "Walmart Raises Wages for Store Workers",
+            "source": "Reuters",
+            "summary": "Walmart announces wage increases for its store employees, part of its ongoing efforts to improve worker compensation and benefits.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 6
+        },
+        {
+            "link": "https://www.bloomberg.com/news/articles/2022-09-09/walmart-faces-lawsuit-over-alleged-disability-discrimination",
+            "title": "Walmart Faces Lawsuit Over Disability Discrimination Allegations",
+            "source": "Bloomberg",
+            "summary": "A new lawsuit accuses Walmart of discriminating against disabled employees, a claim that the company denies and vows to fight.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 6
+        },
+        # Articles for Coca-Cola
+        {
+            "link": "https://www.forbes.com/sites/forbesbusinesscouncil/2022/09/07/how-coca-cola-is-reshaping-its-brand-identity-for-the-modern-consumer/",
+            "title": "Coca-Cola's Brand Reshaping Strategy",
+            "source": "Forbes",
+            "summary": "Coca-Cola is actively reshaping its brand identity to connect with modern consumers, focusing on sustainability and innovation.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 7
+        },
+        {
+            "link": "https://www.cnn.com/2022/09/08/business/coca-cola-new-flavor/index.html",
+            "title": "Coca-Cola Launches New Flavor",
+            "source": "CNN",
+            "summary": "Coca-Cola announces the launch of a new flavor, aiming to expand its product portfolio and cater to diverse consumer tastes.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 7
+        },
+        {
+            "link": "https://www.businessinsider.com/coca-cola-lawsuit-challenge-to-sugar-tax-2022-09",
+            "title": "Coca-Cola Challenges New Sugar Tax",
+            "source": "Business Insider",
+            "summary": "Coca-Cola is challenging a newly implemented sugar tax, arguing it unfairly targets soda manufacturers.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 7
+        },
+        # Articles for Pfizer
+        {
+            "link": "https://www.nytimes.com/2022/09/08/health/pfizer-covid-vaccine-booster.html",
+            "title": "Pfizer's New COVID Booster Gets FDA Nod",
+            "source": "The New York Times",
+            "summary": "The FDA has authorized Pfizer's latest COVID-19 booster, designed to protect against new variants of the virus.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 8
+        },
+        {
+            "link": "https://www.wsj.com/articles/pfizer-buys-biotech-firm-in-11-billion-deal-11631678407",
+            "title": "Pfizer Acquires Biotech Firm in $11 Billion Deal",
+            "source": "The Wall Street Journal",
+            "summary": "Pfizer has completed an $11 billion acquisition of a biotech firm, bolstering its portfolio in cancer treatments.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 8
+        },
+        {
+            "link": "https://www.reuters.com/business/healthcare-pharmaceuticals/pfizer-recalls-some-batches-its-antismoking-drug-over-impurity-2022-09-09/",
+            "title": "Pfizer Recalls Antismoking Drug Over Impurity",
+            "source": "Reuters",
+            "summary": "Pfizer is recalling specific batches of its antismoking medication due to the presence of an impurity.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 8
+        },
+        # Articles for Netflix
+        {
+            "link": "https://variety.com/2022/tv/news/netflix-new-series-announcement-1235058329/",
+            "title": "Netflix Announces Exciting New Series Lineup",
+            "source": "Variety",
+            "summary": "Netflix has unveiled its new series lineup, featuring diverse genres and star-studded casts, aimed at captivating audiences worldwide.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 9
+        },
+        {
+            "link": "https://www.theverge.com/2022/9/9/23344334/netflix-video-game-expansion-cloud-gaming",
+            "title": "Netflix Expands into Video Gaming",
+            "source": "The Verge",
+            "summary": "Netflix is making a major push into video gaming, planning to offer cloud gaming services to its subscribers.",
+            "analysis": "Positive",
+            "effect": 2,
+            "companyID": 9
+        },
+        {
+            "link": "https://www.cnbc.com/2022/09/08/netflix-shares-drop-on-weak-subscriber-growth-forecast.html",
+            "title": "Netflix Faces Headwinds with Subscriber Growth",
+            "source": "CNBC",
+            "summary": "Netflix's latest earnings report shows weak subscriber growth, causing concerns among investors and analysts.",
+            "analysis": "Negative",
+            "effect": 0,
+            "companyID": 9
+        }
+    ]
 
-    articleList = [
-        Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 1", "BBC", "Summary1", 1), 
-        Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 2", "BBC", "Summary2", -1), 
-        Articles(datetime.datetime.now(),"https://www.bbc.co.uk/", "Story 3", "BBC", "Summary3", 0)
-    ]
-    
-    affectedList = [
-        AffectedCompanies(1, 1, -1, "Analysis1", "Justification1"), 
-        AffectedCompanies(2, 2, 1, "Analysis2", "Justification2"), 
-        AffectedCompanies(3, 3, 0, "Analysis3", "Justification3")
-    ]
+    articleList = []
+    affectedList = []
+
+    for i in range(len(articles_data)):
+        article=articles_data[i]
+
+        articleList.append(
+            Articles(
+                datetime.now(timezone.utc), 
+                article["link"],
+                article["title"],
+                article["source"],
+                article["summary"],
+                id=i
+            ) 
+        )
+
+        affectedList.append(
+            AffectedCompanies(
+                article["companyID"],
+                i,
+                article["effect"],
+                article["analysis"]
+            )
+        )
 
     db.session.add_all(userList)
     for i in range(0,len(companyList)):

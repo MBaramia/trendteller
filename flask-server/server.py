@@ -15,6 +15,7 @@ import atexit
 from flask import Flask, render_template,request,session,redirect,flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime, timezone
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
@@ -55,19 +56,8 @@ def queryFollowedCompanies(userID):
     resultset = db.session.execute(followedCompaniesQry)
     values = resultset.fetchall()
     allCompanies = []
-    # print(userID)
-    # print(values)
 
     for company in values:
-        # getFollowing = text("SELECT * FROM FollowedCompanies WHERE userID=:userID AND companyID=:companyID")
-        # getFollowingQry = getFollowing.bindparams(userID = userID, companyID = company[0])
-        # followingResult = db.session.execute(getFollowingQry)
-        # followingValues = followingResult.fetchall()
-        # following = False
-        # if len(followingValues) != 0:
-        #     following = True
-        # print(company)
-
         # waiting for real data to produce price
         item = {
             "id":company[0], 
@@ -96,97 +86,52 @@ def queryFollowedCompanies(userID):
     #Testing - delete above
     result = {"data":allCompanies}
     return result
-    
-def insert_dummy_articles():
-    # Expanded list of dummy articles for each company, with three articles each
-    articles_data = [
-        # Articles for Apple
-        {"link": "https://www.bloomberg.com/news/articles/2022-09-07/apple-unveils-iphone-14-lineup", "title": "Apple Unveils iPhone 14 Lineup", "source": "Bloomberg", "summary": "Apple's latest iPhone 14 lineup introduces groundbreaking features and improvements.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.cnbc.com/2022/09/07/apple-september-2022-event-live-updates.html", "title": "Apple's September Event Highlights", "source": "CNBC", "summary": "Apple reveals new products and updates at its annual September event.", "analysis": "Neutral", "effect": 1},
-        {"link": "https://www.macrumors.com/2022/09/07/apple-fall-2022-event-what-to-expect/", "title": "Expectations from Apple's Fall Event", "source": "MacRumors", "summary": "Speculations on what Apple might unveil at its highly anticipated fall event.", "analysis": "Positive", "effect": 2},
-        # Articles for Amazon
-        {"link": "https://www.reuters.com/business/retail-consumer/amazon-sets-up-first-ever-physical-store-outside-us-2022-09-05/", "title": "Amazon Opens Its First Physical Store Abroad", "source": "Reuters", "summary": "Amazon expands its retail presence with its first-ever physical store outside the United States.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.cnet.com/tech/services-and-software/amazons-new-alexa-features-aim-to-protect-your-home/", "title": "Amazon Enhances Alexa for Home Safety", "source": "CNET", "summary": "New features in Amazon's Alexa are designed to offer users enhanced home security and peace of mind.", "analysis": "Positive", "effect": 2},
-        {"link": "https://techcrunch.com/2022/09/06/amazon-aws-to-invest-12-billion-in-india-by-2030/", "title": "Amazon's Major Investment in India with AWS", "source": "TechCrunch", "summary": "Amazon announces a significant $12 billion investment in India to expand its AWS services.", "analysis": "Positive", "effect": 2},
-        # Articles for Alphabet (Google)
-        {"link": "https://www.theverge.com/2022/9/6/23339804/google-search-updates-ai-features-mum-algorithm", "title": "Google Unveils AI-Powered Search Updates", "source": "The Verge", "summary": "Google introduces new AI-powered features in its search engine, promising a revolutionary user experience.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.bloomberg.com/news/articles/2022-09-08/google-s-cloud-gaming-service-stadia-is-shutting-down", "title": "Google Announces Shutdown of Stadia Service", "source": "Bloomberg", "summary": "Google's cloud gaming service Stadia is set to shut down, marking an end to the tech giant's gaming experiment.", "analysis": "Negative", "effect": 0},
-        {"link": "https://www.cnbc.com/2022/09/07/google-antitrust-case-focuses-on-search-defaults.html", "title": "Google Faces Antitrust Case Over Search Defaults", "source": "CNBC", "summary": "Google is in the spotlight as antitrust regulators focus on its search default agreements with device manufacturers.", "analysis": "Negative", "effect": 0},
-        # Articles for Microsoft
-        {"link": "https://www.engadget.com/microsoft-365-copilot-ai-productivity-143545869.html", "title": "Microsoft Introduces AI Copilot for 365 Suite", "source": "Engadget", "summary": "Microsoft unveils an AI-powered copilot feature for its Microsoft 365 suite, aiming to enhance productivity.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.techradar.com/news/microsoft-edge-is-getting-a-huge-upgrade-to-challenge-chrome", "title": "Microsoft Edge to Receive Significant Upgrades", "source": "TechRadar", "summary": "Microsoft plans a series of significant updates for its Edge browser to better compete with Chrome.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.zdnet.com/article/microsoft-confirms-layoffs-across-multiple-divisions/", "title": "Microsoft Confirms Layoffs Across Divisions", "source": "ZDNet", "summary": "Microsoft announces layoffs affecting various divisions within the company, as part of its restructuring plan.", "analysis": "Negative", "effect": 0},
-        # Articles for Tesla
-        {"link": "https://www.bloomberg.com/news/articles/2022-09-09/tesla-faces-fresh-challenge-from-mercedes-ev-push", "title": "Tesla Faces New Competition from Mercedes", "source": "Bloomberg", "summary": "Mercedes steps up its EV game, presenting a new challenge to Tesla's dominance in the electric vehicle market.", "analysis": "Neutral", "effect": 1},
-        {"link": "https://www.reuters.com/business/autos-transportation/tesla-recalls-nearly-12-million-vehicles-due-software-glitch-2022-09-05/", "title": "Tesla Recalls Vehicles Over Software Glitch", "source": "Reuters", "summary": "Tesla is recalling nearly 1.2 million vehicles to fix a software issue that may impact the car's safety features.", "analysis": "Negative", "effect": 0},
-        {"link": "https://www.cnbc.com/2022/09/08/tesla-to-unveil-updated-self-driving-beta-software.html", "title": "Tesla to Unveil New Self-Driving Software", "source": "CNBC", "summary": "Tesla is set to release an updated version of its self-driving beta software, promising enhanced autonomous driving capabilities.", "analysis": "Positive", "effect": 2},
-        # Articles for JPMorgan
-        {"link": "https://www.ft.com/content/285d6884-aedb-4310-bf15-2de65a0b55b7", "title": "JPMorgan Acquires Fintech Startup", "source": "Financial Times", "summary": "JPMorgan Chase & Co. has acquired a leading fintech startup, signaling a stronger move into the financial technology space.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.wsj.com/articles/jpmorgan-to-hire-thousands-for-its-new-uk-bank-11631021489", "title": "JPMorgan to Hire Thousands in the UK", "source": "The Wall Street Journal", "summary": "JPMorgan announces plans to hire thousands of new employees for its expanding UK digital bank.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.bloomberg.com/news/articles/2022-09-08/jpmorgan-faces-probe-over-client-money-management", "title": "JPMorgan Under Probe for Client Money Management", "source": "Bloomberg", "summary": "Regulators are investigating JPMorgan over how it manages and safeguards client funds, amid broader scrutiny on bank practices.", "analysis": "Negative", "effect": 0},
-        # Articles for Walmart
-        {"link": "https://www.cnbc.com/2022/09/07/walmart-to-test-drone-delivery-in-six-states.html", "title": "Walmart Expands Drone Delivery Test to Six States", "source": "CNBC", "summary": "Walmart is set to expand its drone delivery pilot program to six more states, aiming for broader coverage and faster delivery times.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.reuters.com/business/retail-consumer/walmart-raises-wages-store-workers-2022-09-08/", "title": "Walmart Raises Wages for Store Workers", "source": "Reuters", "summary": "Walmart announces wage increases for its store employees, part of its ongoing efforts to improve worker compensation and benefits.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.bloomberg.com/news/articles/2022-09-09/walmart-faces-lawsuit-over-alleged-disability-discrimination", "title": "Walmart Faces Lawsuit Over Disability Discrimination Allegations", "source": "Bloomberg", "summary": "A new lawsuit accuses Walmart of discriminating against disabled employees, a claim that the company denies and vows to fight.", "analysis": "Negative", "effect": 0},
-        # Articles for Coca-Cola
-        {"link": "https://www.forbes.com/sites/forbesbusinesscouncil/2022/09/07/how-coca-cola-is-reshaping-its-brand-identity-for-the-modern-consumer/", "title": "Coca-Cola's Brand Reshaping Strategy", "source": "Forbes", "summary": "Coca-Cola is actively reshaping its brand identity to connect with modern consumers, focusing on sustainability and innovation.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.cnn.com/2022/09/08/business/coca-cola-new-flavor/index.html", "title": "Coca-Cola Launches New Flavor", "source": "CNN", "summary": "Coca-Cola announces the launch of a new flavor, aiming to expand its product portfolio and cater to diverse consumer tastes.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.businessinsider.com/coca-cola-lawsuit-challenge-to-sugar-tax-2022-09", "title": "Coca-Cola Challenges New Sugar Tax", "source": "Business Insider", "summary": "Coca-Cola is challenging a newly implemented sugar tax, arguing it unfairly targets soda manufacturers.", "analysis": "Negative", "effect": 0},
-        # Articles for Pfizer
-        {"link": "https://www.nytimes.com/2022/09/08/health/pfizer-covid-vaccine-booster.html", "title": "Pfizer's New COVID Booster Gets FDA Nod", "source": "The New York Times", "summary": "The FDA has authorized Pfizer's latest COVID-19 booster, designed to protect against new variants of the virus.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.wsj.com/articles/pfizer-buys-biotech-firm-in-11-billion-deal-11631678407", "title": "Pfizer Acquires Biotech Firm in $11 Billion Deal", "source": "The Wall Street Journal", "summary": "Pfizer has completed an $11 billion acquisition of a biotech firm, bolstering its portfolio in cancer treatments.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.reuters.com/business/healthcare-pharmaceuticals/pfizer-recalls-some-batches-its-antismoking-drug-over-impurity-2022-09-09/", "title": "Pfizer Recalls Antismoking Drug Over Impurity", "source": "Reuters", "summary": "Pfizer is recalling specific batches of its antismoking medication due to the presence of an impurity.", "analysis": "Negative", "effect": 0},
-        # Articles for Netflix
-        {"link": "https://variety.com/2022/tv/news/netflix-new-series-announcement-1235058329/", "title": "Netflix Announces Exciting New Series Lineup", "source": "Variety", "summary": "Netflix has unveiled its new series lineup, featuring diverse genres and star-studded casts, aimed at captivating audiences worldwide.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.theverge.com/2022/9/9/23344334/netflix-video-game-expansion-cloud-gaming", "title": "Netflix Expands into Video Gaming", "source": "The Verge", "summary": "Netflix is making a major push into video gaming, planning to offer cloud gaming services to its subscribers.", "analysis": "Positive", "effect": 2},
-        {"link": "https://www.cnbc.com/2022/09/08/netflix-shares-drop-on-weak-subscriber-growth-forecast.html", "title": "Netflix Faces Headwinds with Subscriber Growth", "source": "CNBC", "summary": "Netflix's latest earnings report shows weak subscriber growth, causing concerns among investors and analysts.", "analysis": "Negative", "effect": 0}
-    ]
-    # Create Article objects and add them to the session
-    for article in articles_data:
-        new_article = Articles(
-            dateTime=datetime.utcnow(),
-            link=article["link"],
-            title=article["title"],
-            source=article["source"],
-            summary=article["summary"],
-            analysis=article["analysis"],
-            effect=article["effect"]
-        )
-        db.session.add(new_article)
-    # Commit the session to save the articles to the database
-    db.session.commit()
 
-# waiting on dummy data for news articles/analysis etc.
+# integrated
 def queryAllNews():
-    getNews = text("SELECT * FROM Articles ORDER BY datetime DESC LIMIT 15")
+    getNews = text("""
+        SELECT id, dateTime, link, title, source, summary 
+        FROM Articles ORDER BY datetime DESC LIMIT 20
+    """)
     getNewsQry = getNews.bindparams()
     resultset = db.session.execute(getNewsQry)
     values = resultset.fetchall()
     resultList = []
-    # for article in values:
-    #     # this query gets the affected companies by an article
-    #     getAffected = text("SELECT * FROM AffectedCompanies WHERE articleID=:articleID")
-    #     getAffectedQry = getAffected.bindparams(articleID = article[0])
-    #     affectedResult = db.session.execute(getAffectedQry)
-    #     affectedValue = affectedResult.fetchall()
 
-    #     #getting the company code based on the affected company ID
-    #     getCode = text("SELECT symbol FROM CompanyData WHERE id=:companyID")
-    #     getCodeQry = getCode.bindparams(companyID = affectedValue[0][0])
-    #     codeResult = db.session.execute(getCodeQry)
-    #     codeValue = codeResult.fetchall()
+    for article in values:
+        # this query gets the affected companies by an article
+        getAffected = text("""
+            SELECT companyID, symbol, effect, justification
+            FROM AffectedCompanies JOIN CompanyData
+            ON AffectedCompanies.companyID = CompanyData.id
+            WHERE articleID=:articleID
+        """)
+        getAffectedQry = getAffected.bindparams(articleID = article[0])
+        affectedResult = db.session.execute(getAffectedQry)
+        affectedValue = affectedResult.fetchall()[0]
 
-    #     item = {"id":article[0], "title":article[3], "companyID":affectedValue[0][0], "companyCode":codeValue[0][0], "source":"", "date":article[1], "perception":article[5]}
-    #     resultList.append(item)
+        item = {
+            "id":article[0],
+            "date": datetime.strptime(article[1], '%Y-%m-%d %H:%M:%S.%f').strftime('%d/%m/%Y'),
+            "title":article[3],
+            "source":article[4],
+            "summary":article[5],
+            "companyID":affectedValue[0],
+            "companyCode":affectedValue[1],
+            "perception": affectedValue[2],
+            "justification": affectedValue[3]
+        }
+
+        resultList.append(item)
 
     #Testing - delete below
-    resultList.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
-    resultList.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":3, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
-    resultList.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":4, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
-    resultList.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":5, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
-    resultList.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":6, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
-    resultList.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":7, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
-    resultList.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":11, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
+    # resultList.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":7, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
+    # resultList.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":3, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
+    # resultList.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":4, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
+    # resultList.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":5, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
+    # resultList.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":6, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
+    # resultList.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":7, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
+    # resultList.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":11, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
     #Testing - delete above
 
     finalResult = {"data":resultList}
@@ -237,53 +182,70 @@ def queryAllCompanies(userID):
     finalResult = {"data":allCompanies}
     return finalResult
 
+# hopefully integrated but not tested
 # waiting on dummy data for news articles/analysis etc.
 def queryNotifications(userID):
-    notifications = text("SELECT * FROM Notifications WHERE userID=:userID AND viewed=False")
+    notifications = text("SELECT articleID FROM Notifications WHERE userID=:userID AND viewed=False")
     notificationsQry = notifications.bindparams(userID=userID)
     resultset = db.session.execute(notificationsQry)
     values = resultset.fetchall()
     notifications = []
-    # for notification in values:
-    #     #gets title of article
-    #     getTitle = text("SELECT title, source, date, effect FROM Articles WHERE articleID=:articleID")
-    #     getTitleQry = getTitle.bindparams(articleID = notification[1])
-    #     getTitleResult = db.session.execute(getTitleQry)
-    #     getTitleQryValues = getTitleResult.fetchall()
+    
+    for value in values:
+        articleID = value[0]
 
+        getInfo = text("""
+            SELECT articleID, title, source, date, effect, companyID, symbol
+            FROM Articles           
+            JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
+            JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id
+            WHERE Articles.id=:articleID
+        """)
+        getInfoQry = getInfo.bindparams(articleID = articleID)
+        getInfoResult = db.session.execute(getInfoQry)
+        notification = getInfoResult.fetchall()[0]
 
-    #     #get companyID and code
-    #     getCompanyData = text("SELECT CompanyData.id, CompanyData.symbol FROM AffectedCompanies JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id WHERE articleID=:articleID")
-    #     companyDataQry = getCompanyData.bindparams(articleID = notification[1])
-    #     companyDataResult = db.session.execute(companyDataQry)
-    #     companyDataValue = companyDataResult.fetchall()
+        #get companyID and code
+        # getCompanyData = text("SELECT CompanyData.id, CompanyData.symbol FROM AffectedCompanies JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id WHERE articleID=:articleID")
+        # companyDataQry = getCompanyData.bindparams(articleID = notification[1])
+        # companyDataResult = db.session.execute(companyDataQry)
+        # companyDataValue = companyDataResult.fetchall()
 
-
-    #     item = {"id":notification[0],"companyCode":companyDataValue[0][1],"companyID":companyDataValue[0][0],"title":getTitleQryValues[0][0],"source":getTitleQryValues[0][1],"date":getTitleQryValues[0][2], "perception":getTitleQryValues[0][3]}
-    #     notifications.append(item)
+        item = {
+            "id": notification[0],
+            "title":notification[1],
+            "source":notification[2],
+            "date": datetime.strptime(notification[3], '%Y-%m-%d %H:%M:%S.%f').strftime('%d/%m/%Y'),
+            "perception":notification[4],
+            "companyID":notification[5],
+            "companyCode":notification[6]
+        }
+        notifications.append(item)
 
     #Testing - delete below
-    notifications.append({"id":0,"companyCode":"MSFT","companyID":5,"title":"Microsoft unveils new Windows 12 operating system","source":"BBC","date":"20/02/2024", "perception":1})
-    notifications.append({"id":1,"companyCode":"AAPL","companyID":3,"title":"Apple announces new iPhone 13 with advanced features","source":"TechCrunch","date":"09/15/2021", "perception":1})
-    notifications.append({"id":2,"companyCode":"AMZN","companyID":4,"title":"Amazon launches new delivery drone technology","source":"CNN","date":"09/14/2021", "perception":2})
-    notifications.append({"id":3,"companyCode":"MSFT","companyID":5,"title":"Microsoft acquires leading AI startup","source":"The Verge","date":"09/13/2021", "perception":2})
-    notifications.append({"id":4,"companyCode":"FB","companyID":6,"title":"Facebook introduces new privacy features","source":"Reuters","date":"09/12/2021", "perception":1})
-    notifications.append({"id":5,"companyCode":"NFLX","companyID":7,"title":"Netflix announces partnership with top Hollywood studio","source":"Variety","date":"09/11/2021", "perception":0})
-    notifications.append({"id":6,"companyCode":"INTC","companyID":11,"title":"Intel unveils breakthrough processor technology","source":"PCMag","date":"09/10/2021", "perception":0})
-    notifications.append({"id":7,"companyCode":"PYPL","companyID":2,"title":"PayPal introduces new payment platform","source":"Forbes","date":"09/09/2021", "perception":1})
-    notifications.append({"id":8,"companyCode":"NVDA","companyID":12,"title":"Nvidia launches new graphics card series","source":"Tom's Hardware","date":"09/08/2021", "perception":2})
-    notifications.append({"id":9,"companyCode":"IBM","companyID":13,"title":"IBM announces breakthrough in quantum computing","source":"ZDNet","date":"09/07/2021", "perception":1})
-    notifications.append({"id":10,"companyCode":"TWTR","companyID":14,"title":"Twitter introduces new feature to combat misinformation","source":"The Guardian","date":"09/06/2021", "perception":2})
+    # notifications = []
+    # notifications.append({"id":0,"companyCode":"MSFT","companyID":5,"title":"Microsoft unveils new Windows 12 operating system","source":"BBC","date":"20/02/2024", "perception":1})
+    # notifications.append({"id":1,"companyCode":"AAPL","companyID":3,"title":"Apple announces new iPhone 13 with advanced features","source":"TechCrunch","date":"09/15/2021", "perception":1})
+    # notifications.append({"id":2,"companyCode":"AMZN","companyID":4,"title":"Amazon launches new delivery drone technology","source":"CNN","date":"09/14/2021", "perception":2})
+    # notifications.append({"id":3,"companyCode":"MSFT","companyID":5,"title":"Microsoft acquires leading AI startup","source":"The Verge","date":"09/13/2021", "perception":2})
+    # notifications.append({"id":4,"companyCode":"FB","companyID":6,"title":"Facebook introduces new privacy features","source":"Reuters","date":"09/12/2021", "perception":1})
+    # notifications.append({"id":5,"companyCode":"NFLX","companyID":7,"title":"Netflix announces partnership with top Hollywood studio","source":"Variety","date":"09/11/2021", "perception":0})
+    # notifications.append({"id":6,"companyCode":"INTC","companyID":11,"title":"Intel unveils breakthrough processor technology","source":"PCMag","date":"09/10/2021", "perception":0})
+    # notifications.append({"id":7,"companyCode":"PYPL","companyID":2,"title":"PayPal introduces new payment platform","source":"Forbes","date":"09/09/2021", "perception":1})
+    # notifications.append({"id":8,"companyCode":"NVDA","companyID":12,"title":"Nvidia launches new graphics card series","source":"Tom's Hardware","date":"09/08/2021", "perception":2})
+    # notifications.append({"id":9,"companyCode":"IBM","companyID":13,"title":"IBM announces breakthrough in quantum computing","source":"ZDNet","date":"09/07/2021", "perception":1})
+    # notifications.append({"id":10,"companyCode":"TWTR","companyID":14,"title":"Twitter introduces new feature to combat misinformation","source":"The Guardian","date":"09/06/2021", "perception":2})
     # Testing - delete above
 
     finalResult = {"data":notifications}
-    notificationUpdate = text("UPDATE Notifications SET viewed = :viewed WHERE userID = :userID")
-    notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
-    db.session.execute(notificationQry)
-    db.session.commit()
+    # UNCOMMENT EVENTUALLY
+    # notificationUpdate = text("UPDATE Notifications SET viewed = :viewed WHERE userID = :userID")
+    # notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
+    # db.session.execute(notificationQry)
+    # db.session.commit()
     return finalResult     
 
-# integrated
+# integrated (need to change)
 # need perception data for perception
 def queryCompanyInfo(companyID, userID):
     getCompanies = text("SELECT id, name, symbol, description FROM CompanyData WHERE id=:companyID")
@@ -310,50 +272,79 @@ def queryCompanyInfo(companyID, userID):
     }
     return item
 
-# waiting on dummy data for news articles/analysis etc.
+# integrated
 def queryCompanyNews(companyID):
-    getCompaniesNews = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id WHERE CompanyData.id=:companyID")
+    getCompaniesNews = text("""
+        SELECT articleID, dateTime, title, source, effect, symbol
+        FROM Articles
+        JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
+        JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id
+        WHERE CompanyData.id=:companyID
+    """)
     getCompaniesNewsQry = getCompaniesNews.bindparams(companyID = companyID)
     resultset = db.session.execute(getCompaniesNewsQry)
     values = resultset.fetchall()
     allArticles = []
-    # for article in values:
-    #     item = {"id":article[0], "title":article[3], "companyID":companyID, "companyCode":article[16], "source":article[4], "date":article[1], "perception":article[6]}
-    #     allArticles.append(item)
+
+    for article in values:
+        item = {
+            "id":article[0],
+            "date":datetime.strptime(article[1], '%Y-%m-%d %H:%M:%S.%f').strftime('%d/%m/%Y'),
+            "title":article[2],
+            "source":article[3],
+            "perception":article[4],
+            "companyID":companyID,
+            "companyCode":article[5]
+        }
+        allArticles.append(item)
 
     #Testing - delete below
-    print(len(allArticles))
-    allArticles.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":companyID, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
-    allArticles.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":companyID, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
-    allArticles.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":companyID, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
-    allArticles.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":companyID, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
-    allArticles.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":companyID, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
-    allArticles.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":companyID, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
-    allArticles.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":companyID, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
+    # allArticles = []
+    # allArticles.append({"id":1, "title":"Microsoft unveils new Windows 12 operating system", "companyID":companyID, "companyCode":"MSFT", "source":"BBC", "date":"20/02/2024", "perception":2})
+    # allArticles.append({"id":2, "title":"Apple announces new iPhone 13 with advanced features", "companyID":companyID, "companyCode":"AAPL", "source":"TechCrunch", "date":"09/15/2021", "perception":1})
+    # allArticles.append({"id":3, "title":"Amazon launches new delivery drone technology", "companyID":companyID, "companyCode":"AMZN", "source":"CNN", "date":"09/14/2021", "perception":2})
+    # allArticles.append({"id":4, "title":"Microsoft acquires leading AI startup", "companyID":companyID, "companyCode":"MSFT", "source":"The Verge", "date":"09/13/2021", "perception":2})
+    # allArticles.append({"id":5, "title":"Facebook introduces new privacy features", "companyID":companyID, "companyCode":"FB", "source":"Reuters", "date":"09/12/2021", "perception":1})
+    # allArticles.append({"id":6, "title":"Netflix announces partnership with top Hollywood studio", "companyID":companyID, "companyCode":"NFLX", "source":"Variety", "date":"09/11/2021", "perception":0})
+    # allArticles.append({"id":7, "title":"Intel unveils breakthrough processor technology", "companyID":companyID, "companyCode":"INTC", "source":"PCMag", "date":"09/10/2021", "perception":0})
     #Testing - delete above
 
     finalResult = {"data":allArticles}
     return finalResult
 
-# waiting on dummy data for news articles/analysis etc.
+# integrated
 def queryArticleInfo(articleID, companyID):
-    getArticles = text("SELECT * FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID")
-    getArticlesQry = getArticles.bindparams(companyID = companyID)
-    resultset = db.session.execute(getArticlesQry)
-    values = resultset.fetchall()
+    getInfo = text("""
+        SELECT dateTime, link, title, source, summary, effect, justification, name, symbol
+        FROM Articles
+        JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
+        JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id
+        WHERE AffectedCompanies.articleID=:articleID AND AffectedCompanies.companyID=:companyID
+    """)
+    getInfoQry = getInfo.bindparams(articleID=articleID, companyID=companyID)
+    resultset = db.session.execute(getInfoQry)
+    info = resultset.fetchall()[0]
+    
+    item = {
+        "date": datetime.strptime(info[0], '%Y-%m-%d %H:%M:%S.%f').strftime("%d %B %Y"), 
+        "link": info[1],
+        "title": info[2],
+        "source": info[3],
+        "summary": info[4],
+        "perception": info[5],
+        "analysis": info[6],
+        "companyID": str(companyID),
+        "companyName": info[7],
+        "companyCode": info[8],
+    }
 
-    getCompanyData = text("SELECT * FROM CompanyData WHERE id=:id")
-    getCompanyDataQry = getCompanyData.bindparams(id = companyID)
-    companyResults = db.session.execute(getCompanyDataQry)
-    companyValues = companyResults.fetchall()
-    for article in values:
-        item = {"title":article[3],"source":article[4],"companyID":str(companyID),"companyName":companyValues[1], "companyCode":companyValues[3], "date":article[1], "summary":article[6], "perception":article[7], "analysis":article[11], "link":article[2]}
-        return item
     #Testing - delete below
-    item = {"title":"Elon Musk eats humble pie over unpaid bakery bill","source":"BBC","companyID":0,"companyName":"Tesla", "companyCode":"TSLA", "date":"28/02/2024", "summary":"Elon Musk has covered the cost of 4,000 mini pies for Giving Pies bakery in San Jose after Tesla canceled a last-minute order, leaving the small business $2,000 short. Musk responded to the bakery's social media complaint, stating he would resolve the issue. Tesla placed a new order for 3,600 pies, but the overwhelmed bakery, flooded with business from well-wishers, had to decline. The owner expressed gratitude, and even the mayor of San Jose acknowledged the community's support and thanked Musk for covering the cost.", "perception":2, "analysis":"This article may elicit a mixed response regarding public opinion of Tesla. Elon Musk's prompt intervention and willingness to cover the cost of the canceled bakery order could be viewed positively, showcasing a sense of responsibility and commitment to customer satisfaction. However, the initial cancellation might raise concerns about Tesla's reliability and communication with suppliers. The overwhelming support the bakery received after Musk's involvement may shed light on the power dynamics between large corporations and small businesses, potentially sparking discussions about fair business practices. Ultimately, while the incident highlights the scrutiny faced by prominent companies like Tesla, Musk's swift resolution is likely to leave a more positive impression on public perception.", "link":"https://www.bbc.co.uk/news/technology-68404698"}
-    return item
+    # item = {"title":"Elon Musk eats humble pie over unpaid bakery bill","source":"BBC","companyID":0,"companyName":"Tesla", "companyCode":"TSLA", "date":"28/02/2024", "summary":"Elon Musk has covered the cost of 4,000 mini pies for Giving Pies bakery in San Jose after Tesla canceled a last-minute order, leaving the small business $2,000 short. Musk responded to the bakery's social media complaint, stating he would resolve the issue. Tesla placed a new order for 3,600 pies, but the overwhelmed bakery, flooded with business from well-wishers, had to decline. The owner expressed gratitude, and even the mayor of San Jose acknowledged the community's support and thanked Musk for covering the cost.", "perception":2, "analysis":"This article may elicit a mixed response regarding public opinion of Tesla. Elon Musk's prompt intervention and willingness to cover the cost of the canceled bakery order could be viewed positively, showcasing a sense of responsibility and commitment to customer satisfaction. However, the initial cancellation might raise concerns about Tesla's reliability and communication with suppliers. The overwhelming support the bakery received after Musk's involvement may shed light on the power dynamics between large corporations and small businesses, potentially sparking discussions about fair business practices. Ultimately, while the incident highlights the scrutiny faced by prominent companies like Tesla, Musk's swift resolution is likely to leave a more positive impression on public perception.", "link":"https://www.bbc.co.uk/news/technology-68404698"}
     #Testing - delete above
 
+    return item
+
+# integrated
 def querySearchCompanies(query, userID):
     query = db.session.query(CompanyData).filter(CompanyData.name.like(f"%{query}%")) # find all of the instances where the name has the query string as a substring
     results = query.all()
@@ -363,7 +354,7 @@ def querySearchCompanies(query, userID):
     result = {"data":companies}
     return result
 
-# integrated(ish)
+# kind of integrated
 # waiting on recommendation system to be finished
 def queryRecommendedCompanies(userID):
     gettingCompaniesQry = text("""
@@ -466,10 +457,17 @@ def queryStockDates(companyID):
 
 # waiting on dummy data for news articles/analysis etc.
 def queryRecentAnalysis(companyID):
-    getAnalysis = text("SELECT analysis FROM Articles JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID WHERE AffectedCompanies.companyID=:companyID ORDER BY Articles.dateTime DESC LIMIT 1")
+    getAnalysis = text("""
+        SELECT justification
+        FROM Articles
+        JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
+        WHERE AffectedCompanies.companyID=:companyID
+        ORDER BY Articles.dateTime DESC LIMIT 1
+    """)
     getAnalysisQry = getAnalysis.bindparams(companyID = companyID)
     results = db.session.execute(getAnalysisQry)
     values = results.fetchall()
+    # print(values)
     if len(values) != 0:
         return values[0][0]
     return "No analysis"
@@ -498,7 +496,6 @@ if resetdb:
         db.drop_all()
         db.create_all()
         dbinit()
-        insert_dummy_articles()
 login_manager = LoginManager()
 login_manager.init_app(app)
 
