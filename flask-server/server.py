@@ -1,6 +1,6 @@
 #from flask import 
 
-from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, Prediction, HistoricData, insert_historic_data
+from db_schema import db, dbinit, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, Prediction, HistoricData
 
 # import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
