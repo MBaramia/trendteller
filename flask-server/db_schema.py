@@ -655,11 +655,43 @@ def dbinit():
             )
         )
 
+    notifications_data = [
+        {
+            "userID": 1,
+            "articleID": 0,
+            "viewed": False
+        },
+        {
+            "userID": 1,
+            "articleID": 1,
+            "viewed": False
+        },
+        {
+            "userID": 1,
+            "articleID": 2,
+            "viewed": False
+        }
+    ]
+
+    notificationsList = []
+
+    for i in range(len(notifications_data)):
+        notification = notifications_data[i]
+
+        notificationsList.append(
+            Notifications(
+                notification["userID"],
+                notification["articleID"],
+                notification["viewed"]
+            )
+        )
+
     db.session.add_all(userList)
     for i in range(0,len(companyList)):
         db.session.add(companyList[i])
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
     db.session.add_all(followedCompanies)
+    db.session.add_all(notificationsList)
     # db.session.add_all(predictionsList)
     db.session.commit()

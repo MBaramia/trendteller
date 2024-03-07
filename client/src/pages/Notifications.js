@@ -4,12 +4,17 @@ import { getNotifications, setUpSocketListener } from "../Auth";
 
 function Notifications() {
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState(null);
 
   useEffect(() => {
     fetchPageData();
-    return setUpSocketListener(fetchPageData);
   }, []);
+
+  useEffect(() => {
+    if (notifications !== null) {
+      return setUpSocketListener(fetchNewPageData);
+    }
+  }, [notifications]);
 
   const fetchPageData = () => {
     getNotifications()
@@ -19,10 +24,18 @@ function Notifications() {
     });
   }
 
+  const fetchNewPageData = () => {
+    console.log("old page data: " + notifications)
+    getNotifications()
+    .then((result) => {
+      setNotifications(notifications.concat(result.data.data));
+    });
+  }
+
   return (
     <>
       <div id="notifications-pg">
-        <NewsListView hasLoaded={hasLoaded} title={"Notifications"} data={notifications} />
+        <NewsListView hasLoaded={hasLoaded} title={"Notifications"} data={notifications ?? []} />
         <div className="bottom-space"/>
       </div>
     </>

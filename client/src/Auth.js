@@ -675,7 +675,7 @@ export function getCompanyAnalysis(companyID) {
 }
 
 export const setUpSocketListener = (callback) => {
-  const socket = io("http://127.0.0.1:5000", { withCredentials: true });
+  const socket = io("http://127.0.0.1:5001", { withCredentials: true });
   socket.on("database_updated", (data) => {
     console.log(data);
     callback();

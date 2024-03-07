@@ -195,7 +195,7 @@ def queryNotifications(userID):
         articleID = value[0]
 
         getInfo = text("""
-            SELECT articleID, title, source, date, effect, companyID, symbol
+            SELECT articleID, title, source, dateTime, effect, companyID, symbol
             FROM Articles           
             JOIN AffectedCompanies ON Articles.id = AffectedCompanies.articleID
             JOIN CompanyData ON AffectedCompanies.companyID = CompanyData.id
@@ -243,6 +243,10 @@ def queryNotifications(userID):
     notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
     db.session.execute(notificationQry)
     db.session.commit()
+
+    if len(values) != 0:
+        socketio.emit("database_updated", {"data": "News viewed"})
+
     return finalResult     
 
 def queryNoOfNotifications(userID):
@@ -517,16 +521,17 @@ def queryPredictedStockDates(companyID):
     return predictedDates
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
 
 # add cors policy
-CORS(app)
+CORS(app, resources={r"/*":{"origins":"*"}})
 
 # create websocket
-socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
+
 
 db.init_app(app)
 
@@ -773,4 +778,4 @@ def get_predictions(company_id):
     return jsonify(predictions_list)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True, port=5001)
