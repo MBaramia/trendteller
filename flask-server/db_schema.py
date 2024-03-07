@@ -699,6 +699,7 @@ def dbinit():
                 db.session.add(new_prediction)
     for company in companyList:
         for timeframe in timeframes:
+            api_key = '8WATTBIUUCY9LFYZ'
             historic_data_df = fetch_historic_data(company.symbol, api_key, timeframe)
             for index, row in historic_data_df.iterrows():
                 historic_data_entry = HistoricData(
