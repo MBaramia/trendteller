@@ -96,7 +96,37 @@ def queryFollowedCompanies(userID):
     #Testing - delete above
     result = {"data":allCompanies}
     return result
+    
+def insert_dummy_articles():
+    # List of dummy articles for each company, with real URLs
+    articles_data = [
+        {"link": "https://www.bloomberg.com/news/articles/2022-09-07/apple-unveils-iphone-14-lineup", "title": "Apple Unveils Innovative New Product", "source": "Bloomberg", "summary": "Apple has released a groundbreaking new product, revolutionizing the tech industry.", "analysis": "Positive", "effect": 2},
+        {"link": "https://www.cnbc.com/2021/11/18/amazon-expands-its-presence-in-metaverse.html", "title": "Amazon Expands Its Market Reach", "source": "CNBC", "summary": "Amazon is expanding its global presence by entering new markets.", "analysis": "Positive", "effect": 2},
+        {"link": "https://www.reuters.com/technology/alphabet-ceo-says-he-is-focused-ai-search-cloud-computing-2022-02-01/", "title": "Alphabet to Invest in New Tech Startups", "source": "Reuters", "summary": "Alphabet announces a new venture to invest in tech startups, boosting innovation.", "analysis": "Positive", "effect": 2},
+        {"link": "https://techcrunch.com/2022/06/24/microsoft-expands-its-cloud-services/", "title": "Microsoft's Latest Cloud Service Outperforms Competitors", "source": "TechCrunch", "summary": "Microsoft's new cloud service sets a benchmark in the industry, outperforming competitors.", "analysis": "Positive", "effect": 2},
+        {"link": "https://www.forbes.com/sites/alanohnsman/2022/07/02/tesla-deliveries-fall-in-second-quarter-amid-china-shutdowns/", "title": "Tesla's Sales Surge Ahead of Expectations", "source": "Forbes", "summary": "Tesla's latest sales figures exceed expectations, indicating strong market demand.", "analysis": "Positive", "effect": 2},
+        {"link": "https://www.wsj.com/articles/jpmorgan-chase-co-posts-higher-profit-11647592800", "title": "JPMorgan Announces Record Profits", "source": "The Wall Street Journal", "summary": "JPMorgan reports record-breaking profits, surpassing market analysts' predictions.", "analysis": "Positive", "effect": 2},
+        {"link": "https://www.reuters.com/business/sustainable-business/walmart-aims-full-sustainability-its-supply-chain-2022-03-23/", "title": "Walmart's New Sustainability Plan", "source": "Reuters", "summary": "Walmart releases an ambitious new plan to become more sustainable.", "analysis": "Positive", "effect": 2},
+        {"link": "https://www.adweek.com/brand-marketing/coca-cola-marketing-strategy-aims-to-double-worldwide-consumption/", "title": "Coca-Cola's Marketing Strategy Wins Big", "source": "AdWeek", "summary": "Coca-Cola's latest marketing strategy boosts sales and brand recognition.", "analysis": "Positive", "effect": 2},
+        {"link": "https://www.healthline.com/health-news/pfizer-vaccine-shows-high-efficacy-in-latest-trial", "title": "Pfizer's Vaccine Shows Promising Results", "source": "Healthline", "summary": "Pfizer's latest vaccine trials show promising results, with high effectiveness rates.", "analysis": "Positive", "effect": 2},
+        {"link": "https://variety.com/2022/tv/news/netflix-q1-earnings-subscriber-growth-1235220477/", "title": "Netflix's Subscriber Growth Soars", "source": "Variety", "summary": "Netflix reports significant growth in subscriber numbers, beating forecasts.", "analysis": "Positive", "effect": 2}
+    ]
 
+    # Create Article objects and add them to the session
+    for article in articles_data:
+        new_article = Articles(
+            dateTime=datetime.utcnow(),
+            link=article["link"],
+            title=article["title"],
+            source=article["source"],
+            summary=article["summary"],
+            analysis=article["analysis"],
+            effect=article["effect"]
+        )
+        db.session.add(new_article)
+
+    # Commit the session to save the articles to the database
+    db.session.commit()
 # waiting on dummy data for news articles/analysis etc.
 def queryAllNews():
     getNews = text("SELECT * FROM Articles ORDER BY datetime DESC LIMIT 15")
@@ -439,6 +469,7 @@ if resetdb:
         db.drop_all()
         db.create_all()
         dbinit()
+        insert_dummy_articles()
 login_manager = LoginManager()
 login_manager.init_app(app)
 
