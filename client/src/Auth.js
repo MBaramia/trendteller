@@ -1,3 +1,5 @@
+import io from "socket.io-client";
+
 export function processRegister(username, password) {
   let status = true;
   return fetch("/processRegister", {
@@ -643,4 +645,14 @@ export function getCompanyAnalysis(companyID) {
         data: data,
       };
     });
+}
+
+export const setUpSocketListener = (callback) => {
+  const socket = io("http://127.0.0.1:5000", { withCredentials: true });
+  socket.on("database_updated", (data) => {
+    console.log(data);
+    callback();
+  });
+
+  return () => socket.disconnect();
 }

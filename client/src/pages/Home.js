@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import CompanyListView from "../components/CompanyListView";
 import NewsListView from "../components/NewsListView";
 import RecommendedCompanyView from "../components/RecommendedCompanyView";
-import { getFollowedCompanies, getAllNews, getRecommendedCompanies, processToggleFollowing } from "../Auth";
-import io from "socket.io-client";
+import { getFollowedCompanies, getAllNews, getRecommendedCompanies, processToggleFollowing, setUpSocketListener } from "../Auth";
 
 function Home() {
   const [hasLoaded, setHasLoaded] = useState(false);
@@ -15,7 +14,7 @@ function Home() {
 
   useEffect(() => {
     fetchPageData();
-    return setUpSocketListener();
+    return setUpSocketListener(fetchPageData);
   }, []);
 
   const fetchPageData = () => {
@@ -37,16 +36,6 @@ function Home() {
         setIdToFollowing(produceInitialAllFollowing(companies))
         setHasLoaded(true);
       });
-  }
-
-  const setUpSocketListener = () => {
-    const socket = io("http://127.0.0.1:5000");
-    socket.on("database_updated", (data) => {
-      console.log(data);
-      fetchPageData();
-    });
-
-    return () => socket.disconnect();
   }
 
   const produceInitialAllFollowing = (companies) => {
