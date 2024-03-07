@@ -744,7 +744,6 @@ def getStockChanges():
 def getStockDates():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = queryStockDates(companyID)
     return jsonify(query)
 
@@ -753,7 +752,6 @@ def getStockDates():
 def toggleFollowing():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = switchFollowing(current_user.id, companyID)
     return jsonify(query)
 
@@ -762,7 +760,6 @@ def toggleFollowing():
 def getPredictedStockDates():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = queryPredictedStockDates(companyID)
     return jsonify(query)
 
@@ -771,30 +768,8 @@ def getPredictedStockDates():
 def getCompanyAnalysis():
     data = request.get_json()
     companyID = data.get("companyID")
-
     query = queryRecentAnalysis(companyID)
     return jsonify(query)
     
-@app.route('/getPredictions/<int:company_id>', methods=['GET'])
-def get_predictions(company_id):
-    # Query the database for predictions related to the company_id
-    predictions = Prediction.query.filter_by(companyID=company_id).order_by(Prediction.date_predicted.desc()).limit(7).all()
-
-    # Format the predictions into a JSON-serializable list
-    predictions_list = []
-    for prediction in predictions:
-        prediction_data = {
-            'date_predicted': prediction.date_predicted.strftime("%Y-%m-%d %H:%M:%S"),
-            'open': prediction.open,
-            'high': prediction.high,
-            'low': prediction.low,
-            'close': prediction.close,
-            'volume': prediction.volume
-        }
-        predictions_list.append(prediction_data)
-
-    # Return the data as a JSON response
-    return jsonify(predictions_list)
-
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=5001)
