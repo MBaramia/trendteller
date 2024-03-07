@@ -243,7 +243,43 @@ def getRecommendedCompanies(userID):
             return recommended
     return recommended
 
+def fetch_historic_data_from_alpha_vantage(symbol, api_key):
+    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&outputsize=compact&apikey={api_key}"
+    response = requests.get(url)
+    data = response.json()
+    time_series_key = 'Time Series (Daily)'
+    if time_series_key not in data:
+        return []
+    historical_data = []
+    for date_str, daily_data in data[time_series_key].items():
+        date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+        historical_data.append({
+            'date': date,
+            'open': float(daily_data['1. open']),
+            'high': float(daily_data['2. high']),
+            'low': float(daily_data['3. low']),
+            'close': float(daily_data['4. close']),
+            'volume': int(daily_data['5. volume'])
+        })
+    return historical_data
+def insert_historic_data():
+    api_key = "8WATTBIUUCY9LFYZ"  
+    symbols = ['AAPL', 'AMZN', 'GOOGL', 'MSFT', 'TSLA', 'JPM', 'WMT', 'KO', 'PFE', 'NFLX']
 
+    for index, symbol in enumerate(symbols):
+        historic_data = fetch_historic_data_from_alpha_vantage(symbol, api_key)
+        for data in historic_data:
+            new_record = HistoricData(
+                companyID=index,  
+                date=data['date'],
+                open=data['open'],
+                high=data['high'],
+                low=data['low'],
+                close=data['close'],
+                volume=data['volume']
+            )
+            db.session.add(new_record)
+    db.session.commit()
 
 # put some data into the tables
 def dbinit():
