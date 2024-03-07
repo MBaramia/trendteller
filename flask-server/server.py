@@ -239,10 +239,10 @@ def queryNotifications(userID):
 
     finalResult = {"data":notifications}
     # UNCOMMENT EVENTUALLY
-    # notificationUpdate = text("UPDATE Notifications SET viewed = :viewed WHERE userID = :userID")
-    # notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
-    # db.session.execute(notificationQry)
-    # db.session.commit()
+    notificationUpdate = text("UPDATE Notifications SET viewed = :viewed WHERE userID = :userID")
+    notificationQry = notificationUpdate.bindparams(viewed = True, userID = userID)
+    db.session.execute(notificationQry)
+    db.session.commit()
     return finalResult     
 
 def queryNoOfNotifications(userID):
