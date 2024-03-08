@@ -3,7 +3,6 @@ from newspaper import Article
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.tokenize import sent_tokenize
-api_key = 'c8b60645ebf34d9693635b377b63afbf'
 
 # Ensure the necessary NLTK data packages are downloaded
 nltk.download('punkt', quiet=True)
@@ -60,7 +59,8 @@ def assign_company_id(summary):
             return company_id
     return None  # Return None if no company symbol is found in the summary
 
-def process_articles(api_key, pageSize=20):
+def process_articles(pageSize):
+    api_key = 'c8b60645ebf34d9693635b377b63afbf'
     """Fetch, process, and return article data."""
     articles_data = []
     companies = list(company_symbols.values())
