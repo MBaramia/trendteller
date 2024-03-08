@@ -6,7 +6,7 @@ import "./Company.css";
 import { useParams } from "react-router-dom";
 import NewsListView from "../components/NewsListView";
 import StockChart from "../components/StockChart";
-import { getCompanyInfo, getCompanyNews, getCompanyAnalysis } from "../Auth";
+import { getCompanyInfo, getCompanyNews, getCompanyAnalysis, processToggleFollowing } from "../Auth";
 import Loading from "../components/Loading";
 
 function Company() {
@@ -19,11 +19,20 @@ function Company() {
   const [news, setNews] = useState(null);
   const [companyAnalysis, setCompanyAnalysis] = useState(null);
 
+  let [isFollowing, setIsFollowing] = useState(true);
+
+  const toggleCompanyFollow = () => {
+    processToggleFollowing(companyID).then(() => {
+      setIsFollowing(!isFollowing);
+    });
+  };
+
   useEffect(() => {
     getCompanyInfo(companyID)
       .then((result) => {
         if (result.data) {
           setCompany(result.data);
+          setIsFollowing(result.data.following)
         }
         return getCompanyNews(companyID);
       }).then((result) => {
@@ -112,12 +121,6 @@ function Company() {
     },
   ];
   */
-
-  let [isFollowing, setIsFollowing] = useState(true);
-
-  const toggleCompanyFollow = () => {
-    setIsFollowing(!isFollowing);
-  };
 
   return (
     <>

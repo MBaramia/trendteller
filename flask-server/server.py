@@ -465,7 +465,7 @@ def queryRecommendedCompanies(userID):
     # print(userID)
     # print(values)
     allCompanies = []
-    print("length" + str(len(values)))
+    # print("length" + str(len(values)))
     for company in values:
         print(company[0])
         getCompanyInfo = text("SELECT name, symbol FROM CompanyData WHERE id=:id")
@@ -482,7 +482,7 @@ def queryRecommendedCompanies(userID):
             "following":False
         }
         allCompanies.append(item)
-        print(json.dumps(item, indent=2))
+        # print(json.dumps(item, indent=2))
 
     #Placeholder - replace with actual logic (should return exactly 3 companies)
     # allCompanies = []

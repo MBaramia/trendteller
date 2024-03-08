@@ -198,6 +198,28 @@ def afterCompanyInsert(mapper, connection, target):
         )
         db.session.add(new_entry)
 
+@event.listens_for(AffectedCompanies, 'after_insert')
+def afterAffectedCompanyInsert(mapper, connection, target):
+    print(f"Inserting AffectedCompanies: companyID={target.companyID}, articleID={target.articleID}")
+    # Retrieve all existing users
+    getPerception = text("""
+        SELECT userID
+        FROM FollowedCompanies
+        WHERE FollowedCompanies.companyID=:companyID
+    """)
+    getPerceptionQry = getPerception.bindparams(companyID = target.companyID)
+    results = db.session.execute(getPerceptionQry)
+    all_users = results.fetchall()
+
+    # Iterate through all existing companies and add entries to CompanyWeights
+    for existing_user in all_users:
+        new_entry = Notifications(
+            userID=existing_user.id,
+            articleID=target.articleID,
+            viewed=False  # This new company has just been added, so there will be no mutual followers
+        )
+        db.session.add(new_entry)
+
 
 def getRecommendedCompanies(userID):
     # gets all the companies that a user follows
