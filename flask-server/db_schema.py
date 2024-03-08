@@ -9,6 +9,7 @@ from sqlalchemy import text, UniqueConstraint
 from datetime import datetime, timezone, timedelta
 from stock_price_prediction import fetch_stock_prediction
 from historic import fetch_historic_data
+from news import process_articles
 import requests
 
 # create the database interface
@@ -774,7 +775,17 @@ def dbinit():
                 notification["viewed"]
             )
         )
-
+    articles_data = process_articles(pageSize=30)  # Fetch articles data
+    for article in articles_data:
+        new_article = Articles(
+            dateTime=article['date'],
+            link=article['link'],
+            title=article['title'],
+            source=article['source'],
+            summary=article['summary'],
+            company_id=article['company_id']
+        )
+        db.session.add(new_article)
     db.session.add_all(followedCompanies)
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
