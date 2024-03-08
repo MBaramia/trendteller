@@ -9,9 +9,9 @@ import numpy as np
 def fetch_stock_prediction(company_id, timeframe):
     def build_model(input_shape):
         model = Sequential()
-        model.add(LSTM(units=40, return_sequences=True, input_shape=input_shape))
+        model.add(LSTM(units=35, return_sequences=True, input_shape=input_shape))
         model.add(Dropout(0.2))
-        model.add(LSTM(units=40, return_sequences=False))
+        model.add(LSTM(units=35, return_sequences=False))
         model.add(Dropout(0.2))
         model.add(Dense(5))  # Predicting 5 values: open, high, low, close, volume
         model.compile(optimizer='adam', loss='mean_squared_error')
@@ -63,14 +63,14 @@ def fetch_stock_prediction(company_id, timeframe):
 
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(stock_data[['Open', 'High', 'Low', 'Close', 'Volume']])
-    sequence_length = 10  # Changed from 10 to 20
+    sequence_length = 5  # Changed from 10 to 20
     X, y = create_sequences(scaled_data, sequence_length)
 
     model = build_model((sequence_length, X.shape[2]))
     early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 
     # Assuming X and y are defined properly from the preprocessed dataset
-    model.fit(X, y, epochs=25, batch_size=40, validation_split=0.1, callbacks=[early_stopping])
+    model.fit(X, y, epochs=5, batch_size=40, validation_split=0.1, callbacks=[early_stopping])
 
     current_batch = X[-1:].reshape(1, sequence_length, X.shape[2])
     predicted = []
