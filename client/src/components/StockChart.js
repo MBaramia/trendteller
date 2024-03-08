@@ -100,7 +100,7 @@ function StockChart({ company }) {
         let normal = normalChartData[timeScaleToInfo[timeScale].type];
         normal = normal.slice(0, Math.min(normal.length, timeScaleToInfo[timeScale].count)).reverse();
 
-        const predicted = predictedChartData[timeScaleToInfo[timeScale].type];
+        const predicted = predictedChartData[timeScaleToInfo[timeScale].type].reverse();
         return normal.concat(predicted);
     }
     const chartData = getChartData();

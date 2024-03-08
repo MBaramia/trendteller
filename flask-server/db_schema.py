@@ -219,6 +219,11 @@ def afterAffectedCompanyInsert(mapper, connection, target):
             viewed=False  # This new company has just been added, so there will be no mutual followers
         )
         db.session.add(new_entry)
+        db.session.commit()
+
+@event.listens_for(Notifications, 'after_insert')
+def afterNotificationInsert(mapper, connection, target):
+    print(f"Inserting Notification: userID={target.userID}, articleID={target.articleID}, viewed={target.viewed}")
 
 
 def getRecommendedCompanies(userID):
@@ -735,8 +740,41 @@ def dbinit():
                     timeframe=timeframe
                 )
                 db.session.add(historic_data_entry)
+
+    notifications_data = [
+        {
+            "userID": 1,
+            "articleID": 0,
+            "viewed": False
+        },
+        {
+            "userID": 1,
+            "articleID": 1,
+            "viewed": False
+        },
+        {
+            "userID": 1,
+            "articleID": 2,
+            "viewed": False
+        }
+    ]
+
+    notificationsList = []
+
+    for i in range(len(notifications_data)):
+        notification = notifications_data[i]
+
+        notificationsList.append(
+            Notifications(
+                notification["userID"],
+                notification["articleID"],
+                notification["viewed"]
+            )
+        )
+
+    db.session.add_all(followedCompanies)
     db.session.add_all(articleList)
     db.session.add_all(affectedList)
-    db.session.add_all(followedCompanies)
+    db.session.add_all(notificationsList)
     # db.session.add_all(predictionsList)
     db.session.commit()

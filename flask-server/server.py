@@ -215,8 +215,8 @@ def queryAllCompanies(userID):
 # hopefully integrated but not tested
 # waiting on dummy data for news articles/analysis etc.
 def queryNotifications(userID):
-    notifications = text("SELECT articleID FROM Notifications WHERE userID=:userID AND viewed=False")
-    notificationsQry = notifications.bindparams(userID=userID)
+    notifications = text("SELECT articleID FROM Notifications WHERE userID=:userID AND viewed=:viewed")
+    notificationsQry = notifications.bindparams(userID=userID, viewed=False)
     resultset = db.session.execute(notificationsQry)
     values = resultset.fetchall()
     notifications = []
@@ -280,8 +280,8 @@ def queryNotifications(userID):
     return finalResult     
 
 def queryNoOfNotifications(userID):
-    notifications = text("SELECT articleID FROM Notifications WHERE userID=:userID AND viewed=False")
-    notificationsQry = notifications.bindparams(userID=userID)
+    notifications = text("SELECT articleID FROM Notifications WHERE userID=:userID AND viewed=:viewed")
+    notificationsQry = notifications.bindparams(userID=userID, viewed=False)
     resultset = db.session.execute(notificationsQry)
     values = resultset.fetchall()
     notifications = []
