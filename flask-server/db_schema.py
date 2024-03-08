@@ -50,21 +50,23 @@ class CompanyData(db.Model):
 
 # this table stores all of the data relating to an article
 class Articles(db.Model):
-    __tablename__='Articles'
+    __tablename__ = 'Articles'
     id = db.Column(db.Integer, primary_key=True)
-    dateTime = db.Column(DateTime(timezone=True),default=func.now(), nullable=False)
+    dateTime = db.Column(db.DateTime(timezone=True), default=func.now(), nullable=False)
     link = db.Column(db.String(255))
     title = db.Column(db.String(100))
     source = db.Column(db.String(100))
-    summary =  db.Column(db.String(500))
-
-    def __init__(self,dateTime,link,title,source,summary, id=None): 
+    summary = db.Column(db.String(500))
+    company_id = db.Column(db.Integer, db.ForeignKey('CompanyData.id'), nullable=True)  # Assuming there is a Company table
+    def __init__(self, dateTime, link, title, source, summary, company_id=None, id=None): 
         self.id = id
         self.dateTime = dateTime
         self.link = link
         self.title = title
         self.source = source
         self.summary = summary
+        self.company_id = company_id
+
 
 # this is a table of companies that a user tracks
 class FollowedCompanies(db.Model):
@@ -111,6 +113,7 @@ class CompanyWeights(db.Model):
         self.relationOne = relationOne
         self.relationTwo = relationTwo
         self.mutualFollowers = mutualFollowers
+        
 # this table stores prediction data
 class Prediction(db.Model):
     __tablename__ = 'Prediction'
