@@ -799,6 +799,34 @@ def getCompanyAnalysis():
     companyID = data.get("companyID")
     query = queryRecentAnalysis(companyID)
     return jsonify(query)
+
+@app.route('/api/historic_data/<int:company_id>/<string:timeframe>', methods=['GET'])
+def get_historic_data(company_id, timeframe):
+    historic_data = HistoricData.query.filter_by(companyID=company_id, timeframe=timeframe).all()
+    data_list = [{
+        'date': item.date.strftime("%Y-%m-%d %H:%M:%S"),
+        'open': item.open,
+        'high': item.high,
+        'low': item.low,
+        'close': item.close,
+        'volume': item.volume,
+        'timeframe': item.timeframe
+    } for item in historic_data]
+    return jsonify(data_list)
+
+@app.route('/api/predictions/<int:company_id>/<string:timeframe>', methods=['GET'])
+def get_prediction_data(company_id, timeframe):
+    prediction_data = Prediction.query.filter_by(companyID=company_id, timeframe=timeframe).all()
+    data_list = [{
+        'date_predicted': item.date_predicted.strftime("%Y-%m-%d %H:%M:%S"),
+        'open': item.open,
+        'high': item.high,
+        'low': item.low,
+        'close': item.close,
+        'volume': item.volume,
+        'timeframe': item.timeframe
+    } for item in prediction_data]
+    return jsonify(data_list)
     
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=5001)
