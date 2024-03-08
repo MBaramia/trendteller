@@ -165,9 +165,9 @@ function StockChart({ company }) {
                         
                     </div>
                     <div className='right-side'>
-                        <p>£{mainData.open}</p>
-                        <p>£{mainData.high}</p>
-                        <p>£{mainData.low}</p>
+                        <p>${mainData.open}</p>
+                        <p>${mainData.high}</p>
+                        <p>${mainData.low}</p>
                        
                     </div>
                 </div>
@@ -178,7 +178,7 @@ function StockChart({ company }) {
                         <p>Volume:</p>
                     </div>
                     <div className='right-side'>
-                        <p>£{mainData.price}</p>
+                        <p>${mainData.price}</p>
                         <p>{changes[timeScale]}</p>
                         <p>{mainData.volume}</p>
                     </div>
@@ -204,7 +204,7 @@ function StockChart({ company }) {
 
                         <CartesianGrid opacity={0.5}/>
                         <XAxis dataKey="date" />
-                        <YAxis tickFormatter={(num)=>`$${num.toFixed(2)}`} />
+                        <YAxis tickFormatter={(num)=>`$${num.toFixed(2)}`} /> 
                         <Tooltip content={<CustomTooltip />} />
                         {/* <Legend /> */}
                         <Area type="monotone" dataKey="close" stroke="#0d1f2d" fill="url(#close-colour)"  activeDot={{ r: 8 }} />
