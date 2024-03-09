@@ -827,6 +827,27 @@ def get_prediction_data(company_id, timeframe):
         'timeframe': item.timeframe
     } for item in prediction_data]
     return jsonify(data_list)
-    
+
+@app.route('/get_articles', methods=['GET'])
+def get_articles():
+    try:
+        articles = Articles.query.all()  # Fetch all articles from the database
+        articles_list = []
+        for article in articles:
+            article_data = {
+                'id': article.id,
+                'dateTime': article.dateTime.isoformat(),  # Convert datetime to string in ISO format
+                'link': article.link,
+                'title': article.title,
+                'source': article.source,
+                'summary': article.summary,
+                'company_id': article.company_id
+            }
+            articles_list.append(article_data)
+
+        return jsonify(articles_list), 200  # Return the list of articles as JSON with a 200 OK status
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500  # Return an error message and a 500 Internal Server Error status
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=5001)
