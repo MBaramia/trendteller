@@ -58,16 +58,14 @@ class Articles(db.Model):
     title = db.Column(db.String(100))
     source = db.Column(db.String(100))
     summary = db.Column(db.String(500))
-    company_id = db.Column(db.Integer, db.ForeignKey('CompanyData.id'), nullable=True)  # Assuming there is a Company table
-    def __init__(self, dateTime, link, title, source, summary, company_id=None, id=None): 
+
+    def __init__(self, dateTime, link, title, source, summary, id=None): 
         self.id = id
         self.dateTime = dateTime
         self.link = link
         self.title = title
         self.source = source
         self.summary = summary
-        self.company_id = company_id
-
 
 # this is a table of companies that a user tracks
 class FollowedCompanies(db.Model):
@@ -229,6 +227,15 @@ def afterAffectedCompanyInsert(mapper, connection, target):
 def afterNotificationInsert(mapper, connection, target):
     print(f"Inserting Notification: userID={target.userID}, articleID={target.articleID}, viewed={target.viewed}")
 
+def addNewArticle(dateTime, link, title, source, summary, companyID, effect, justification):
+    if companyID is None:
+        print("No affected company for article: " + title)
+        return
+    new_article = Articles(dateTime, link, title, source, summary)
+    db.session.add(new_article)
+    new_affected_company = AffectedCompanies(companyID, new_article.id, effect, justification)
+    db.session.add(new_affected_company)
+    db.session.commit()
 
 def getRecommendedCompanies(userID):
     # gets all the companies that a user follows
