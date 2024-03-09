@@ -485,17 +485,6 @@ def dbinit():
                 notification["viewed"]
             )
         )
-    articles_data = process_articles(pageSize=30)  # Fetch articles data
-    for article in articles_data:
-        new_article = Articles(
-            dateTime=datetime.strptime(article['date'], '%Y-%m-%dT%H:%M:%SZ'),
-            link=article['link'],
-            title=article['title'],
-            source=article['source'],
-            summary=article['summary'],
-            company_id=article['company_id']
-        )
-        db.session.add(new_article)
     db.session.add_all(followedCompanies)
     db.session.add_all(notificationsList)
     # db.session.add_all(predictionsList)
