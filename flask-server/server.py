@@ -16,6 +16,7 @@ from flask import Flask, render_template,request,session,redirect,flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone
+from stock_data import get_combined_stock_data, get_historic_stock_dates, get_prediction_stock_dates, get_main_stock_data, get_changes_data, get_change_percentage, get_price
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
@@ -93,8 +94,8 @@ def queryFollowedCompanies(userID):
             "id":company[0], 
             "name":company[1], 
             "code":company[2], 
-            "price":random.randint(50, 200), 
-            "change": "-14.9%",
+            "price":get_price(company[0]), 
+            "change": get_change_percentage(company[0]),
             "perception":queryCompanyPerception(company[0]), 
             "following":True
         }
@@ -191,8 +192,8 @@ def queryAllCompanies(userID):
             "id":company[0], 
             "name":company[1], 
             "code":company[2], 
-            "price":random.randint(50, 200), 
-            "change": "-14.9%",
+            "price":get_price(company[0]), 
+            "change": get_change_percentage(company[0]),
             "perception":queryCompanyPerception(company[0]), 
             "following":queryCompanyFollowing(userID, company[0])
         }
@@ -476,8 +477,8 @@ def queryRecommendedCompanies(userID):
             "id":str(company[0]), 
             "name":companyValues[0][0], 
             "code":companyValues[0][1], 
-            "price":random.randint(50, 200), 
-            "change": "-14.9%",
+            "price":get_price(company[0]), 
+            "change": get_change_percentage(company[0]),
             "perception":queryCompanyPerception(company[0]), 
             "following":False
         }
@@ -517,36 +518,39 @@ def switchFollowing(userID, companyID):
         return "Company followed"
 
 def queryStockData(companyID):
-    return combinedData
+    return get_combined_stock_data(companyID)
 
 def queryPredictedStockData(companyID):
     return fakePredicton
 
 def queryMainStockData(companyID):
     #Placeholder - replace with actual logic
-    data = {
-        "open": "145.4100",  
-        "high": "148.1000", 
-        "low": "145.2100", 
-        "price": "147.9400", 
-        "volume": "15198607"
-    }
+    # data = {
+    #     "open": "145.4100",  
+    #     "high": "148.1000", 
+    #     "low": "145.2100", 
+    #     "price": "147.9400", 
+    #     "volume": "15198607"
+    # }
     #Placeholder - replace with actual logic
-    return data
+    return get_main_stock_data(companyID)
 
 def queryStockChanges(companyID):
     #Placeholder - replace with actual logic
-    data = {
-        "data": [
-            "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)",
-            "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)"
-        ]
-    }
+    # data = {
+    #     "data": [
+    #         "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)",
+    #         "+18.32 (0.49%)", "+12.04 (6.38%)", "-1.87 (-0.92%)", "+181.25 (922.39%)"
+    #     ]
+    # }
     #Placeholder - replace with actual logic
-    return data
+    return get_changes_data(companyID)
 
 def queryStockDates(companyID):
-    return dates
+    return get_historic_stock_dates(companyID)
+
+def queryPredictedStockDates(companyID):
+    return get_prediction_stock_dates(companyID)
 
 # integrated
 def queryRecentAnalysis(companyID):
@@ -564,9 +568,6 @@ def queryRecentAnalysis(companyID):
     if len(values) != 0:
         return values[0][0]
     return "No analysis"
-
-def queryPredictedStockDates(companyID):
-    return predictedDates
     
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
@@ -576,6 +577,9 @@ CORS(app, resources={r"/*":{"origins":"*"}})
 
 # create websocket
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+def emit_database_updated(data):
+    socketio.emit("database_updated", {"data": data})
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -800,33 +804,33 @@ def getCompanyAnalysis():
     query = queryRecentAnalysis(companyID)
     return jsonify(query)
 
-@app.route('/api/historic_data/<int:company_id>/<string:timeframe>', methods=['GET'])
-def get_historic_data(company_id, timeframe):
-    historic_data = HistoricData.query.filter_by(companyID=company_id, timeframe=timeframe).all()
-    data_list = [{
-        'date': item.date.strftime("%Y-%m-%d %H:%M:%S"),
-        'open': item.open,
-        'high': item.high,
-        'low': item.low,
-        'close': item.close,
-        'volume': item.volume,
-        'timeframe': item.timeframe
-    } for item in historic_data]
-    return jsonify(data_list)
+# @app.route('/api/historic_data/<int:company_id>/<string:timeframe>', methods=['GET'])
+# def get_historic_data(company_id, timeframe):
+#     historic_data = HistoricData.query.filter_by(companyID=company_id, timeframe=timeframe).all()
+#     data_list = [{
+#         'date': item.date.strftime("%Y-%m-%d %H:%M:%S"),
+#         'open': item.open,
+#         'high': item.high,
+#         'low': item.low,
+#         'close': item.close,
+#         'volume': item.volume,
+#         'timeframe': item.timeframe
+#     } for item in historic_data]
+#     return jsonify(data_list)
 
-@app.route('/api/predictions/<int:company_id>/<string:timeframe>', methods=['GET'])
-def get_prediction_data(company_id, timeframe):
-    prediction_data = Prediction.query.filter_by(companyID=company_id, timeframe=timeframe).all()
-    data_list = [{
-        'date_predicted': item.date_predicted.strftime("%Y-%m-%d %H:%M:%S"),
-        'open': item.open,
-        'high': item.high,
-        'low': item.low,
-        'close': item.close,
-        'volume': item.volume,
-        'timeframe': item.timeframe
-    } for item in prediction_data]
-    return jsonify(data_list)
+# @app.route('/api/predictions/<int:company_id>/<string:timeframe>', methods=['GET'])
+# def get_prediction_data(company_id, timeframe):
+#     prediction_data = Prediction.query.filter_by(companyID=company_id, timeframe=timeframe).all()
+#     data_list = [{
+#         'date_predicted': item.date_predicted.strftime("%Y-%m-%d %H:%M:%S"),
+#         'open': item.open,
+#         'high': item.high,
+#         'low': item.low,
+#         'close': item.close,
+#         'volume': item.volume,
+#         'timeframe': item.timeframe
+#     } for item in prediction_data]
+#     return jsonify(data_list)
     
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=5001)
