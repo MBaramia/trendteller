@@ -469,7 +469,7 @@ def dbinit():
     articles_data = process_articles(pageSize=30)  # Fetch articles data
     for article in articles_data:
         new_article = Articles(
-            dateTime=article['date'],
+            dateTime=datetime.strptime(article['date'], '%Y-%m-%dT%H:%M:%SZ'),
             link=article['link'],
             title=article['title'],
             source=article['source'],
