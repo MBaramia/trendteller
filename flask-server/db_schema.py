@@ -227,14 +227,26 @@ def afterAffectedCompanyInsert(mapper, connection, target):
 def afterNotificationInsert(mapper, connection, target):
     print(f"Inserting Notification: userID={target.userID}, articleID={target.articleID}, viewed={target.viewed}")
 
-def addNewArticle(dateTime, link, title, source, summary, companyID, effect, justification):
-    if companyID is None:
-        print("No affected company for article: " + title)
-        return
-    new_article = Articles(dateTime, link, title, source, summary)
-    db.session.add(new_article)
-    new_affected_company = AffectedCompanies(companyID, new_article.id, effect, justification)
-    db.session.add(new_affected_company)
+def add_articles_to_database():
+    # Fetch articles using the function from news.py
+    articles = process_articles(pageSize=20)  
+    for article in articles:
+        dateTime = article['date']
+        link = article['link']
+        title = article['title']
+        source = article['source']
+        summary = article['summary']
+        companyID = article['company_id']
+        effect = article['effect_score']
+        justification = article['analysis']
+        if companyID is None:
+            print("No affected company for article: " + title)
+        else:
+            new_article = Articles(dateTime, link, title, source, summary)
+            db.session.add(new_article)
+            db.session.flush()  # This will populate new_article.id after committing the current transactions
+            new_affected_company = AffectedCompanies(companyID, new_article.id, effect, justification)
+            db.session.add(new_affected_company)
     db.session.commit()
 
 def getRecommendedCompanies(userID):
