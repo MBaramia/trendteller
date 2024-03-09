@@ -78,7 +78,8 @@ def fetch_stock_prediction(company_id, timeframe):
         current_batch = np.append(current_batch[:, 1:, :], predicted_step, axis=1)
 
     predicted_prices = scaler.inverse_transform(predicted)
-
+    predicted_prices[:, 4] = np.abs(predicted_prices[:, 4])
+    predicted_prices[:, :4] = np.abs(predicted_prices[:, :4])
     # Dates for the predictions
     last_date = stock_data.index[-1]
     prediction_dates = []
