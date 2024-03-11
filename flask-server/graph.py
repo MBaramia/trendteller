@@ -1,6 +1,6 @@
 from sqlalchemy_schemadisplay import create_schema_graph
 from sqlalchemy import MetaData
-from db_schema import UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, CompanyWeights, Prediction, HistoricData
+from db_schema import engine, UserData, CompanyData, Articles, FollowedCompanies, Notifications, AffectedCompanies, CompanyWeights, Prediction, HistoricData
 import os
 
 def generate_erd(path='erd.png'):
@@ -10,7 +10,6 @@ def generate_erd(path='erd.png'):
 
     graph = create_schema_graph(
         metadata=metadata,
-        engine=engine,
         show_datatypes=True,  # Show column data types
         show_indexes=True,  # Show index (non-unique)
         rankdir='LR',  # Left to right alignment of tables
