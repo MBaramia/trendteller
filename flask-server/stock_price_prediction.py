@@ -64,7 +64,7 @@ def fetch_stock_prediction(company_id, timeframe):
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(stock_data[['Open', 'High', 'Low', 'Close', 'Volume']])
     sequence_length = 10
-    X, _ = create_sequences(scaled_data, sequence_length)
+    X, y = create_sequences(scaled_data, sequence_length)
 
     model = build_model((sequence_length, X.shape[2]))
 
