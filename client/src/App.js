@@ -17,6 +17,7 @@ import Article from "./pages/Article";
 import Profile from "./pages/Profile";
 import Tutorial from "./pages/Tutorial";
 import Login from "./pages/Login";
+import Legal from "./pages/Legal";
 import { useState, useEffect } from "react";
 import Signup from "./pages/Signup";
 import { processLogin, checkLoggedIn } from "./Auth";
@@ -87,6 +88,7 @@ function App() {
                       />
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/tutorial" element={<Tutorial />} />
+                      <Route path="/legal" element={<Legal />} />
 
                       <Route path="/*" element={<Navigate to="/" />} />
                     </Routes>

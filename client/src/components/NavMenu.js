@@ -4,6 +4,7 @@ import { ReactComponent as BrowseIcon } from "../images/browse_icon_navmenu.svg"
 import { ReactComponent as NotificationsIcon } from "../images/bell_icon_white.svg";
 import { ReactComponent as ProfileIcon } from "../images/profile_icon_navmenu.svg";
 import { ReactComponent as TutorialIcon } from "../images/tutorial_icon_navmenu.svg";
+import { ReactComponent as LegalIcon } from "../images/legal_icon.svg"
 import { Link } from "react-router-dom";
 import HeaderLogo from "../images/header_logo.svg";
 import NavItem from "./NavItem";
@@ -60,6 +61,11 @@ function NavMenu({ logOutUser }) {
               <li>
                 <NavItem url="/tutorial" navIcon={<TutorialIcon />}>
                   Tutorial
+                </NavItem>
+              </li>
+              <li>
+                <NavItem url="/legal" navIcon={<LegalIcon />}>
+                  Legal
                 </NavItem>
               </li>
             </ul>
