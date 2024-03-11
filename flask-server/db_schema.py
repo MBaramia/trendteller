@@ -216,7 +216,7 @@ def afterAffectedCompanyInsert(mapper, connection, target):
     # Iterate through all existing companies and add entries to CompanyWeights
     for existing_user in all_users:
         new_entry = Notifications(
-            userID=existing_user.id,
+            userID=existing_user[0],
             articleID=target.articleID,
             viewed=False  # This new company has just been added, so there will be no mutual followers
         )
@@ -231,7 +231,7 @@ def add_articles_to_database():
     # Fetch articles using the function from news.py
     articles = process_articles(pageSize=20)  
     for article in articles:
-        dateTime = article['date']
+        dateTime = datetime.strptime(article['date'], "%Y-%m-%dT%H:%M:%SZ")
         link = article['link']
         title = article['title']
         source = article['source']
@@ -244,7 +244,7 @@ def add_articles_to_database():
         else:
             new_article = Articles(dateTime, link, title, source, summary)
             db.session.add(new_article)
-            db.session.flush()  # This will populate new_article.id after committing the current transactions
+            db.session.commit()  # This will populate new_article.id after committing the current transactions
             new_affected_company = AffectedCompanies(companyID, new_article.id, effect, justification)
             db.session.add(new_affected_company)
     db.session.commit()
@@ -429,12 +429,12 @@ def dbinit():
             for prediction in predictions:
                 new_prediction = Prediction(
                     companyID=company.id,
-                    date_predicted=datetime.now(timezone.utc),
-                    open=prediction[0],
-                    high=prediction[1],
-                    low=prediction[2],
-                    close=prediction[3],
-                    volume=prediction[4],
+                    date_predicted=prediction[0],
+                    open=prediction[1],
+                    high=prediction[2],
+                    low=prediction[3],
+                    close=prediction[4],
+                    volume=prediction[5],
                     timeframe=timeframe
                 )
                 db.session.add(new_prediction)
@@ -488,4 +488,5 @@ def dbinit():
     db.session.add_all(followedCompanies)
     db.session.add_all(notificationsList)
     # db.session.add_all(predictionsList)
+    add_articles_to_database()
     db.session.commit()
