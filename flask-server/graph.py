@@ -10,6 +10,7 @@ def generate_erd(output_filename='erd.png'):
 
     graph = create_schema_graph(
         metadata=metadata,
+        engine=engine,
         show_datatypes=True,  # Shows the datatypes of columns in the diagram.
         show_indexes=True,    # Shows index (non-unique) in the diagram.
         rankdir='LR',         # Left to right alignment of tables
