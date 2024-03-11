@@ -17,6 +17,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone
 from stock_data import get_combined_stock_data, get_historic_stock_dates, get_prediction_stock_dates, get_main_stock_data, get_changes_data, get_change_percentage, get_price
+from app import app, socketio
 
 # fake stock data
 from fake_data import fakeData, fakePredicton, dates, combinedData, predictedDates
@@ -569,20 +570,7 @@ def queryRecentAnalysis(companyID):
         return values[0][0]
     return "No analysis"
     
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "fdhsbfdsh3274y327432"
 
-# add cors policy
-CORS(app, resources={r"/*":{"origins":"*"}})
-
-# create websocket
-socketio = SocketIO(app, cors_allowed_origins="*")
-
-def emit_database_updated(data):
-    socketio.emit("database_updated", {"data": data})
-
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///db.sqlite'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)

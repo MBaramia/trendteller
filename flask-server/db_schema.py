@@ -12,6 +12,9 @@ from historic import fetch_historic_data
 from news import process_articles
 import requests
 
+from app import socketio
+from flask_socketio import emit
+
 # create the database interface
 db = SQLAlchemy()
 
@@ -226,6 +229,8 @@ def afterAffectedCompanyInsert(mapper, connection, target):
 @event.listens_for(Notifications, 'after_insert')
 def afterNotificationInsert(mapper, connection, target):
     print(f"Inserting Notification: userID={target.userID}, articleID={target.articleID}, viewed={target.viewed}")
+    #Alert frontend
+    socketio.emit("database_updated", {"data": "Notification added"})
 
 def add_articles_to_database():
     # Fetch articles using the function from news.py
