@@ -1,5 +1,6 @@
 import './Tutorial.css'
 import SummaryTextView from '../components/SummaryTextView';
+import Vimeo from '@u-wave/react-vimeo';
 
 function Tutorial() {
 
@@ -10,6 +11,10 @@ function Tutorial() {
     <div id='tutorial-pg'>
       <div className='video-area narrow-content'>
           <h2>Video</h2>
+
+          <Vimeo
+            video={921874448}
+          />
 
       </div>
       <SummaryTextView hasLoaded={true} title={"Transcript"} text={transcript} />
