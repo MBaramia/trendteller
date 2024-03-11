@@ -569,8 +569,6 @@ def queryRecentAnalysis(companyID):
     if len(values) != 0:
         return values[0][0]
     return "No analysis"
-    
-
 
 
 db.init_app(app)
@@ -585,11 +583,26 @@ if resetdb:
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
-
 @login_manager.user_loader
 def load_user(user_id):
-    return UserData.query.get(int(user_id))
+    getUserQuery = text("""
+        SELECT id, username, password
+        FROM UserData 
+        WHERE id = :userId
+    """)
+    getUserQuery = getUserQuery.bindparams(userId=int(user_id))
+    results = db.session.execute(getUserQuery)
+    user_row = results.fetchone()
+
+    if user_row:
+        user = UserData(
+            username=user_row[1],
+            password=user_row[2],
+            id=user_row[0]
+        )
+        return user
+    else:
+        return None 
 
 @app.route('/processLogin', methods=['POST'])
 def processLogin():
@@ -597,12 +610,22 @@ def processLogin():
     username = data.get("username")
     password = data.get("password")
 
-    user = UserData.query.filter(UserData.username == username).first()
-    if (not user):
+    # user = UserData.query.filter(UserData.username == username).first()
+
+    getUser = text("""
+        SELECT id, password
+        FROM UserData
+        WHERE username=:username
+    """)
+    getUserQry = getUser.bindparams(username=username)
+    results = db.session.execute(getUserQry)
+    values = results.fetchall()
+
+    if len(values)==0:
         return jsonify({"message": "No such user exists"}), 401
-    if not check_password_hash(user.password,password): # this means that the password provided upon registering and the password entered are different
+    if not check_password_hash(values[0][1],password): # this means that the password provided upon registering and the password entered are different
         return jsonify({"message": "Incorrect password"}), 401
-    login_user(user)
+    login_user(load_user(values[0][0]))
     return jsonify({"message": "Login successful"})
 
 @app.route("/processLogout", methods=["POST"])
@@ -634,17 +657,36 @@ def processUpdate():
     username = data.get("username")
     password = data.get("password")
 
-    user = UserData.query.filter(UserData.id == current_user.id).first()
-    user.updateDetails(username, password)
+    # user = UserData.query.filter(UserData.id == current_user.id).first()
+    # user.updateDetails(username, password)
+
+    updateUser = text("""
+        UPDATE UserData 
+        SET username = :newUsername, password = :newPassword 
+        WHERE id = :userId
+    """)
+    updateUserQry = updateUser.bindparams(newUsername=username, newPassword=password, userId=current_user.id)
+    db.session.execute(updateUserQry)
     db.session.commit()
+
     return jsonify({"message": "Update successful", "success":True})
 
 @app.route('/getUserData', methods=['POST'])
 @login_required
 def getUserData():
-    user = UserData.query.filter(UserData.id == current_user.id).first()
-    username = user.username
-    return jsonify({"username": username})
+    # user = UserData.query.filter(UserData.id == current_user.id).first()
+    # username = user.username
+
+    getUsername = text("""
+        SELECT username 
+        FROM UserData 
+        WHERE id = :userId
+    """)
+    getUsernameQry = getUsername.bindparams(userId=current_user.id)
+    results = db.session.execute(getUsernameQry)
+    values = results.fetchall()
+
+    return jsonify({"username": values[0][0]})
 
 @app.route("/checkLoggedIn", methods=["POST"])
 @login_required
@@ -823,7 +865,16 @@ def get_prediction_data(company_id, timeframe):
 @app.route('/get_articles', methods=['GET'])
 def get_articles():
     try:
-        articles = Articles.query.all()  # Fetch all articles from the database
+        # articles = Articles.query.all()  # Fetch all articles from the database
+
+        # SQL query to fetch all articles from the database
+        getArticlesQuery = text("""
+            SELECT * 
+            FROM Articles
+        """)
+        results = db.session.execute(getArticlesQuery)
+        articles = results.fetchall()
+
         articles_list = []
         for article in articles:
             article_data = {
